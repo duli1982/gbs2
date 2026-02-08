@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>The Academy — AI Hub v2.0 | Randstad GBS</title>
+
+    <meta name="description" content="AI-Ready Sourcer Program. 8 weeks from task-doer to outcome-owner. Structured training that produces behavior change and reusable assets.">
+    <meta name="author" content="Randstad GBS">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="The Academy — AI Hub v2.0">
+    <meta property="og:description" content="AI-Ready Sourcer Program. 8 weeks from task-doer to outcome-owner.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/sidebar.css">
+    <link rel="stylesheet" href="../shared/v2-buttons.css">
+    <link rel="stylesheet" href="../shared/v2-cards.css">
+
+    <style>
+        /* --- Page Header --- */
+        .academy-header {
+            margin-bottom: var(--space-8);
+        }
+
+        .academy-header__label {
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+            font-weight: var(--weight-medium);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: var(--space-2);
+        }
+
+        .academy-header__title {
+            font-size: var(--font-4xl);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .academy-header__title span {
+            color: var(--accent-cyan);
+        }
+
+        .academy-header__subtitle {
+            font-size: var(--font-lg);
+            color: var(--text-secondary);
+            margin-top: var(--space-2);
+            font-weight: var(--weight-medium);
+        }
+
+        .academy-header__desc {
+            font-size: var(--font-base);
+            color: var(--text-secondary);
+            margin-top: var(--space-3);
+            max-width: 720px;
+            line-height: var(--leading-relaxed);
+        }
+
+        /* --- Tab Navigation --- */
+        .academy-tabs {
+            margin-bottom: var(--space-6);
+        }
+
+        /* --- Timeline Navigation (sticky) --- */
+        .timeline-nav {
+            position: sticky;
+            top: 0;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            z-index: var(--z-sticky);
+            padding: var(--space-4) var(--space-5);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-6);
+        }
+
+        .timeline-nav::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .timeline-nav::-webkit-scrollbar-thumb {
+            background: var(--border-subtle);
+            border-radius: var(--radius-full);
+        }
+
+        .timeline-bar {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            min-width: max-content;
+            justify-content: center;
+        }
+
+        .timeline-connector {
+            width: 32px;
+            height: 2px;
+            background: var(--border-default);
+            flex-shrink: 0;
+        }
+
+        .timeline-connector.completed {
+            background: var(--accent-green);
+        }
+
+        .timeline-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-2);
+            cursor: pointer;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .timeline-node__circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            font-family: var(--font-mono);
+            background: var(--bg-primary);
+            color: var(--text-muted);
+            border: 2px solid var(--border-default);
+            transition: all var(--transition-fast);
+        }
+
+        .timeline-node:hover .timeline-node__circle {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            background: var(--accent-cyan-dim);
+        }
+
+        .timeline-node.active .timeline-node__circle {
+            background: var(--accent-cyan);
+            color: var(--text-inverse);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
+        }
+
+        .timeline-node.completed .timeline-node__circle {
+            background: var(--accent-green);
+            color: var(--text-inverse);
+            border-color: var(--accent-green);
+            box-shadow: 0 0 12px rgba(0, 214, 143, 0.3);
+        }
+
+        .timeline-node.completed .timeline-node__number {
+            display: none;
+        }
+
+        .timeline-node__check {
+            display: none;
+        }
+
+        .timeline-node.completed .timeline-node__check {
+            display: block;
+        }
+
+        .timeline-node__check svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .timeline-node__label {
+            font-size: 10px;
+            font-weight: var(--weight-medium);
+            color: var(--text-muted);
+            white-space: nowrap;
+            transition: color var(--transition-fast);
+            max-width: 72px;
+            text-align: center;
+            line-height: var(--leading-tight);
+        }
+
+        .timeline-node.active .timeline-node__label {
+            color: var(--accent-cyan);
+        }
+
+        .timeline-node.completed .timeline-node__label {
+            color: var(--accent-green);
+        }
+
+        /* --- Week Detail Card --- */
+        .week-detail {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .week-detail__card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            animation: fadeInUp 0.3s ease both;
+        }
+
+        .week-detail__header {
+            margin-bottom: var(--space-6);
+        }
+
+        .week-detail__number {
+            font-family: var(--font-mono);
+            font-size: var(--font-xs);
+            color: var(--accent-cyan);
+            font-weight: var(--weight-bold);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-2);
+        }
+
+        .week-detail__title {
+            font-size: var(--font-2xl);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        /* --- Outcome --- */
+        .week-detail__outcome {
+            margin-bottom: var(--space-6);
+        }
+
+        .week-detail__outcome-label {
+            font-size: var(--font-xs);
+            font-weight: var(--weight-semibold);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-2);
+        }
+
+        .week-detail__outcome-text {
+            font-size: var(--font-lg);
+            font-weight: var(--weight-semibold);
+            color: var(--accent-cyan);
+            line-height: var(--leading-snug);
+        }
+
+        /* --- Focus Section --- */
+        .week-detail__section {
+            margin-bottom: var(--space-6);
+        }
+
+        .week-detail__section-label {
+            font-size: var(--font-xs);
+            font-weight: var(--weight-semibold);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-3);
+        }
+
+        .week-detail__section-text {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+        }
+
+        /* --- Deliverable Box --- */
+        .week-detail__deliverable {
+            background: var(--accent-green-dim);
+            border-left: 3px solid var(--accent-green);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: var(--space-5);
+            margin-bottom: var(--space-6);
+        }
+
+        .week-detail__deliverable-label {
+            font-size: var(--font-xs);
+            font-weight: var(--weight-semibold);
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-2);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .week-detail__deliverable-label svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .week-detail__deliverable-text {
+            font-size: var(--font-sm);
+            color: var(--text-primary);
+            font-weight: var(--weight-medium);
+            line-height: var(--leading-relaxed);
+        }
+
+        /* --- Exercises --- */
+        .week-detail__exercises {
+            margin-bottom: var(--space-6);
+        }
+
+        .week-detail__exercises-list {
+            list-style: none;
+            counter-reset: exercise;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .week-detail__exercises-list li {
+            counter-increment: exercise;
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-3);
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+            padding: var(--space-3) var(--space-4);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+        }
+
+        .week-detail__exercises-list li::before {
+            content: counter(exercise);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--accent-cyan-dim);
+            color: var(--accent-cyan);
+            font-size: var(--font-xs);
+            font-weight: var(--weight-bold);
+            font-family: var(--font-mono);
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* --- Self Check --- */
+        .week-detail__self-check {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: var(--space-5);
+            margin-bottom: var(--space-6);
+        }
+
+        .week-detail__self-check-label {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-4);
+        }
+
+        .self-check-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .self-check-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .self-check-item input[type="checkbox"] {
+            display: none;
+        }
+
+        .self-check-box {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-default);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all var(--transition-fast);
+            background: var(--bg-surface);
+        }
+
+        .self-check-box svg {
+            width: 12px;
+            height: 12px;
+            opacity: 0;
+            color: var(--text-inverse);
+            transition: opacity var(--transition-fast);
+        }
+
+        .self-check-item input:checked + .self-check-box {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .self-check-item input:checked + .self-check-box svg {
+            opacity: 1;
+        }
+
+        .self-check-item:hover .self-check-box {
+            border-color: var(--accent-cyan);
+        }
+
+        .self-check-text {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-normal);
+        }
+
+        .self-check-item input:checked ~ .self-check-text {
+            color: var(--accent-green);
+        }
+
+        /* --- Week Navigation --- */
+        .week-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: var(--space-6);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .week-nav__btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: 10px 20px;
+            font-size: var(--font-sm);
+            font-weight: var(--weight-medium);
+            color: var(--text-secondary);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-decoration: none;
+            transition: all var(--transition-fast);
+            font-family: var(--font-family);
+        }
+
+        .week-nav__btn:hover {
+            background: var(--bg-surface-hover);
+            border-color: var(--border-default);
+            color: var(--text-primary);
+        }
+
+        .week-nav__btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .week-nav__btn--disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* --- Tool Skills Tab --- */
+        .tool-skills-section {
+            display: none;
+        }
+
+        .tool-skills-section.active {
+            display: block;
+            animation: fadeInUp 0.3s ease both;
+        }
+
+        .program-section {
+            display: none;
+        }
+
+        .program-section.active {
+            display: block;
+            animation: fadeInUp 0.3s ease both;
+        }
+
+        .tool-skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-4);
+        }
+
+        .tool-skill-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .tool-skill-card:hover {
+            border-color: var(--border-default);
+            background: var(--bg-surface-hover);
+        }
+
+        .tool-skill-card__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-3);
+        }
+
+        .tool-skill-card__title {
+            font-size: var(--font-base);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+        }
+
+        .tool-skill-card__chevron {
+            width: 20px;
+            height: 20px;
+            color: var(--text-muted);
+            transition: transform var(--transition-fast);
+            flex-shrink: 0;
+        }
+
+        .tool-skill-card.expanded .tool-skill-card__chevron {
+            transform: rotate(180deg);
+        }
+
+        .tool-skill-card__desc {
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+            line-height: var(--leading-relaxed);
+            margin-top: var(--space-2);
+        }
+
+        .tool-skill-card__topics {
+            display: none;
+            margin-top: var(--space-4);
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .tool-skill-card.expanded .tool-skill-card__topics {
+            display: block;
+        }
+
+        .tool-skill-card__topics-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .tool-skill-card__topics-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-3);
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-normal);
+        }
+
+        .tool-skill-card__topics-list li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            flex-shrink: 0;
+            margin-top: 7px;
+        }
+
+        /* --- Bottom Links --- */
+        .academy-bottom {
+            margin-top: var(--space-12);
+            padding-top: var(--space-8);
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            gap: var(--space-4);
+            flex-wrap: wrap;
+        }
+
+        .academy-bottom__link {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-4) var(--space-6);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: var(--font-sm);
+            font-weight: var(--weight-medium);
+            transition: all var(--transition-fast);
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .academy-bottom__link:hover {
+            border-color: var(--accent-cyan);
+            color: var(--text-primary);
+            background: var(--bg-surface-hover);
+        }
+
+        .academy-bottom__link svg {
+            width: 20px;
+            height: 20px;
+            color: var(--accent-cyan);
+            flex-shrink: 0;
+        }
+
+        .academy-bottom__link-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .academy-bottom__link-title {
+            color: var(--text-primary);
+            font-weight: var(--weight-semibold);
+        }
+
+        .academy-bottom__link-sub {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+        }
+
+        .badge--soon {
+            font-size: 10px;
+            font-weight: var(--weight-medium);
+            color: var(--text-muted);
+            background: var(--bg-primary);
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-subtle);
+            margin-left: var(--space-2);
+        }
+
+        /* --- Loading State --- */
+        .academy-loading {
+            text-align: center;
+            padding: var(--space-16) 0;
+            color: var(--text-muted);
+            font-size: var(--font-sm);
+        }
+
+        .academy-loading__spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border-default);
+            border-top-color: var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto var(--space-3);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 1024px) {
+            .tool-skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .week-detail__card {
+                padding: var(--space-5);
+            }
+
+            .timeline-nav {
+                padding: var(--space-3);
+            }
+
+            .timeline-connector {
+                width: 16px;
+            }
+
+            .timeline-node__circle {
+                width: 32px;
+                height: 32px;
+                font-size: var(--font-xs);
+            }
+
+            .timeline-node__label {
+                font-size: 9px;
+                max-width: 56px;
+            }
+
+            .week-nav {
+                flex-direction: column;
+                gap: var(--space-3);
+            }
+
+            .week-nav__btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .tool-skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .academy-bottom {
+                flex-direction: column;
+            }
+
+            .academy-bottom__link {
+                min-width: unset;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .timeline-connector {
+                width: 10px;
+            }
+
+            .timeline-node__circle {
+                width: 28px;
+                height: 28px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <main class="app-main">
+            <div class="content-container">
+
+                <!-- Page Header -->
+                <header class="academy-header fade-in-up">
+                    <div class="academy-header__label">AI Hub v2.0</div>
+                    <h1 class="academy-header__title">The <span>Academy</span></h1>
+                    <p class="academy-header__subtitle" id="programSubtitle"></p>
+                    <p class="academy-header__desc" id="programDesc"></p>
+                </header>
+
+                <!-- Tab Navigation -->
+                <div class="academy-tabs fade-in-up fade-in-up-delay-1">
+                    <div class="pill-toggle" role="tablist" id="mainTabs">
+                        <button class="pill active" role="tab" aria-selected="true" data-tab="program">8-Week Program</button>
+                        <button class="pill" role="tab" aria-selected="false" data-tab="toolSkills">Tool Skills</button>
+                    </div>
+                </div>
+
+                <!-- Program Section -->
+                <div class="program-section active" id="programSection">
+                    <!-- Timeline -->
+                    <nav class="timeline-nav fade-in-up fade-in-up-delay-2" id="timelineNav" aria-label="Program week navigation">
+                        <div class="academy-loading" id="timelineLoading">
+                            <div class="academy-loading__spinner"></div>
+                            Loading program...
+                        </div>
+                    </nav>
+
+                    <!-- Week Detail -->
+                    <div id="weekDetail" class="fade-in-up fade-in-up-delay-3"></div>
+                </div>
+
+                <!-- Tool Skills Section -->
+                <div class="tool-skills-section" id="toolSkillsSection">
+                    <div id="toolSkillsGrid" class="tool-skills-grid fade-in-up fade-in-up-delay-2"></div>
+                </div>
+
+                <!-- Bottom Links -->
+                <section class="academy-bottom fade-in-up fade-in-up-delay-4">
+                    <a href="/library/" class="academy-bottom__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><path d="M2 10h20"/></svg>
+                        <span class="academy-bottom__link-text">
+                            <span class="academy-bottom__link-title">See all templates and deliverables</span>
+                            <span class="academy-bottom__link-sub">Asset Library — reusable assets from each week</span>
+                        </span>
+                    </a>
+                    <a href="/profile/" class="academy-bottom__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 8 3 12 0v-5"/></svg>
+                        <span class="academy-bottom__link-text">
+                            <span class="academy-bottom__link-title">Track your AI-Ready Sourcer Badge progress<span class="badge--soon">Coming Soon</span></span>
+                            <span class="academy-bottom__link-sub">Profile — certification tracking and showcase</span>
+                        </span>
+                    </a>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../shared/sidebar.js"></script>
+    <script src="../shared/v2-footer.js"></script>
+    <script src="../shared/export-utils.js"></script>
+    <script>
+    (function() {
+        'use strict';
+
+        var data = null;
+        var activeWeek = 1;
+        var activeMainTab = 'program';
+        var TOTAL_WEEKS = 8;
+        var STORAGE_PREFIX = 'academy-week-';
+
+        /* --- Self-check items per week --- */
+        var SELF_CHECKS = {
+            1: [
+                'I can name the 5 Quality Proof Points from memory',
+                'I can distinguish an evidence-based candidate from a surface-level one',
+                'I can score a submission against the Proof Points standard'
+            ],
+            2: [
+                'I can write an Intake Clarifier prompt that produces crisp requirements',
+                'I can build a Persona Card for any role in under 10 minutes',
+                'I can generate and evaluate outreach angles with reasoning'
+            ],
+            3: [
+                'I can build a 4-lane sourcing strategy without relying on Boolean alone',
+                'I can create a must-have evidence checklist for any role',
+                'I can produce Boolean variants (strict, balanced, broad) using AI'
+            ],
+            4: [
+                'I can run a 10-12 minute Truth Check with evidence questions',
+                'I can score candidates as Strong/OK/Risk with consistency',
+                'I can identify and replace questions that produce zero useful signal'
+            ],
+            5: [
+                'I can write a Confidence Pack with 3 match reasons, 1 risk, and a mitigation',
+                'I can explain to an HM why a Confidence Pack is more useful than a CV forward',
+                'I can identify common candidate risks and propose standard mitigations'
+            ],
+            6: [
+                'I can identify my top time-wasting tasks and rank them by impact',
+                'I can write an AI prompt that automates 80% of a repetitive workflow',
+                'I have contributed at least one reusable template to the team'
+            ],
+            7: [
+                'I can explain a pass/reject decision using only evidence, not opinions',
+                'I can write a trade-off proposal when requirements conflict',
+                'I can push back on unrealistic expectations with data and alternatives'
+            ],
+            8: [
+                'I have completed all 5 required deliverables for certification',
+                'I can present my best work and explain the measurable impact',
+                'I can articulate what changed in how I work over the 8 weeks'
+            ]
+        };
+
+        /* --- Fetch Data --- */
+        function init() {
+            fetch('academy.json')
+                .then(function(res) {
+                    if (!res.ok) throw new Error('Failed to load academy.json');
+                    return res.json();
+                })
+                .then(function(json) {
+                    data = json;
+                    renderHeader();
+                    buildTimeline();
+                    renderWeek(activeWeek);
+                    buildToolSkills();
+                    bindMainTabs();
+                })
+                .catch(function(err) {
+                    console.error(err);
+                    document.getElementById('weekDetail').innerHTML =
+                        '<div class="academy-loading" style="color: var(--accent-red);">Failed to load program data. Please refresh.</div>';
+                });
+        }
+
+        /* --- Render Header --- */
+        function renderHeader() {
+            var p = data.program;
+            document.getElementById('programSubtitle').textContent = p.subtitle;
+            document.getElementById('programDesc').textContent = p.description;
+        }
+
+        /* --- Build Timeline --- */
+        function buildTimeline() {
+            var nav = document.getElementById('timelineNav');
+            var html = '<div class="timeline-bar">';
+
+            for (var i = 1; i <= TOTAL_WEEKS; i++) {
+                var week = getWeek(i);
+                if (!week) continue;
+
+                if (i > 1) {
+                    var connCompleted = isWeekCompleted(i - 1) ? ' completed' : '';
+                    html += '<div class="timeline-connector' + connCompleted + '"></div>';
+                }
+
+                var isActive = i === activeWeek;
+                var isCompleted = isWeekCompleted(i);
+                var nodeClasses = 'timeline-node';
+                if (isActive && !isCompleted) nodeClasses += ' active';
+                if (isCompleted) nodeClasses += ' completed';
+
+                html += '<div class="' + nodeClasses + '" data-week="' + i + '">';
+                html += '<div class="timeline-node__circle">';
+                html += '<span class="timeline-node__number">' + i + '</span>';
+                html += '<span class="timeline-node__check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>';
+                html += '</div>';
+                html += '<span class="timeline-node__label">' + escapeHtml(week.shortLabel) + '</span>';
+                html += '</div>';
+            }
+
+            html += '</div>';
+            nav.innerHTML = html;
+
+            // Bind click events
+            var nodes = nav.querySelectorAll('.timeline-node');
+            nodes.forEach(function(node) {
+                node.addEventListener('click', function() {
+                    var weekNum = parseInt(this.getAttribute('data-week'), 10);
+                    navigateToWeek(weekNum);
+                });
+            });
+        }
+
+        /* --- Navigate to Week --- */
+        function navigateToWeek(weekNum) {
+            activeWeek = weekNum;
+            updateTimelineActive();
+            renderWeek(weekNum);
+        }
+
+        /* --- Update Timeline Active State --- */
+        function updateTimelineActive() {
+            var nodes = document.querySelectorAll('.timeline-node');
+            nodes.forEach(function(node) {
+                var w = parseInt(node.getAttribute('data-week'), 10);
+                var completed = isWeekCompleted(w);
+                node.classList.remove('active');
+                node.classList.remove('completed');
+                if (completed) {
+                    node.classList.add('completed');
+                } else if (w === activeWeek) {
+                    node.classList.add('active');
+                }
+            });
+
+            // Update connectors
+            var connectors = document.querySelectorAll('.timeline-connector');
+            connectors.forEach(function(conn, idx) {
+                if (isWeekCompleted(idx + 1)) {
+                    conn.classList.add('completed');
+                } else {
+                    conn.classList.remove('completed');
+                }
+            });
+        }
+
+        /* --- Render Week Detail --- */
+        function renderWeek(weekNum) {
+            var week = getWeek(weekNum);
+            if (!week) return;
+
+            var container = document.getElementById('weekDetail');
+            var checks = SELF_CHECKS[weekNum] || [];
+            var savedChecks = getSavedChecks(weekNum);
+
+            var html = '<div class="week-detail">';
+            html += '<div class="week-detail__card">';
+
+            // Header
+            html += '<div class="week-detail__header">';
+            html += '<div class="week-detail__number">Week ' + week.id + ' of ' + TOTAL_WEEKS + '</div>';
+            html += '<h2 class="week-detail__title">Week ' + week.id + ' — ' + escapeHtml(week.title) + '</h2>';
+            html += '</div>';
+
+            // Outcome
+            html += '<div class="week-detail__outcome">';
+            html += '<div class="week-detail__outcome-label">Outcome</div>';
+            html += '<div class="week-detail__outcome-text">' + escapeHtml(week.outcome) + '</div>';
+            html += '</div>';
+
+            // Focus
+            html += '<div class="week-detail__section">';
+            html += '<div class="week-detail__section-label">Focus</div>';
+            html += '<div class="week-detail__section-text">' + escapeHtml(week.focus) + '</div>';
+            html += '</div>';
+
+            // How to Run
+            html += '<div class="week-detail__section">';
+            html += '<div class="week-detail__section-label">How to Run It</div>';
+            html += '<div class="week-detail__section-text">' + escapeHtml(week.howToRun) + '</div>';
+            html += '</div>';
+
+            // Deliverable
+            html += '<div class="week-detail__deliverable">';
+            html += '<div class="week-detail__deliverable-label">';
+            html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+            html += 'Deliverable';
+            html += '</div>';
+            html += '<div class="week-detail__deliverable-text">' + escapeHtml(week.deliverable) + '</div>';
+            html += '</div>';
+
+            // Exercises
+            html += '<div class="week-detail__exercises">';
+            html += '<div class="week-detail__section-label">Practice Exercises</div>';
+            html += '<ol class="week-detail__exercises-list">';
+            for (var i = 0; i < week.exercises.length; i++) {
+                html += '<li>' + escapeHtml(week.exercises[i]) + '</li>';
+            }
+            html += '</ol>';
+            html += '</div>';
+
+            // Self-Check
+            if (checks.length > 0) {
+                html += '<div class="week-detail__self-check">';
+                html += '<div class="week-detail__self-check-label">Self-Check: Can you do these things?</div>';
+                html += '<div class="self-check-list">';
+                for (var j = 0; j < checks.length; j++) {
+                    var isChecked = savedChecks.indexOf(j) !== -1;
+                    html += '<label class="self-check-item">';
+                    html += '<input type="checkbox" data-week="' + weekNum + '" data-check="' + j + '"' + (isChecked ? ' checked' : '') + '>';
+                    html += '<span class="self-check-box"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>';
+                    html += '<span class="self-check-text">' + escapeHtml(checks[j]) + '</span>';
+                    html += '</label>';
+                }
+                html += '</div>';
+                html += '</div>';
+            }
+
+            // Navigation
+            html += '<div class="week-nav">';
+
+            if (weekNum > 1) {
+                var prevWeek = getWeek(weekNum - 1);
+                html += '<button class="week-nav__btn" data-nav-week="' + (weekNum - 1) + '">';
+                html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
+                html += '<span>Week ' + (weekNum - 1) + ': ' + (prevWeek ? escapeHtml(prevWeek.shortLabel) : 'Previous') + '</span>';
+                html += '</button>';
+            } else {
+                html += '<div class="week-nav__btn week-nav__btn--disabled">';
+                html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
+                html += '<span>Previous Week</span>';
+                html += '</div>';
+            }
+
+            if (weekNum < TOTAL_WEEKS) {
+                var nextWeek = getWeek(weekNum + 1);
+                html += '<button class="week-nav__btn" data-nav-week="' + (weekNum + 1) + '">';
+                html += '<span>Week ' + (weekNum + 1) + ': ' + (nextWeek ? escapeHtml(nextWeek.shortLabel) : 'Next') + '</span>';
+                html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+                html += '</button>';
+            } else {
+                html += '<div class="week-nav__btn week-nav__btn--disabled">';
+                html += '<span>Next Week</span>';
+                html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+                html += '</div>';
+            }
+
+            html += '</div>';
+
+            html += '</div>';
+            html += '</div>';
+
+            container.innerHTML = html;
+
+            // Bind checkbox events
+            var checkboxes = container.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(function(cb) {
+                cb.addEventListener('change', function() {
+                    var w = parseInt(this.getAttribute('data-week'), 10);
+                    var c = parseInt(this.getAttribute('data-check'), 10);
+                    toggleCheck(w, c, this.checked);
+                    updateTimelineActive();
+                });
+            });
+
+            // Bind nav events
+            var navBtns = container.querySelectorAll('[data-nav-week]');
+            navBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var w = parseInt(this.getAttribute('data-nav-week'), 10);
+                    navigateToWeek(w);
+                    scrollToTimeline();
+                });
+            });
+        }
+
+        /* --- Build Tool Skills --- */
+        function buildToolSkills() {
+            var grid = document.getElementById('toolSkillsGrid');
+            var skills = data.toolSkills;
+            var html = '';
+
+            for (var i = 0; i < skills.length; i++) {
+                var skill = skills[i];
+                html += '<div class="tool-skill-card" data-skill-id="' + skill.id + '">';
+
+                // Header
+                html += '<div class="tool-skill-card__header">';
+                html += '<span class="tool-skill-card__title">' + escapeHtml(skill.title) + '</span>';
+                html += '<svg class="tool-skill-card__chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+                html += '</div>';
+
+                // Description
+                html += '<p class="tool-skill-card__desc">' + escapeHtml(skill.description) + '</p>';
+
+                // Topics (expandable)
+                html += '<div class="tool-skill-card__topics">';
+                html += '<ul class="tool-skill-card__topics-list">';
+                for (var t = 0; t < skill.topics.length; t++) {
+                    html += '<li>' + escapeHtml(skill.topics[t]) + '</li>';
+                }
+                html += '</ul>';
+                html += '</div>';
+
+                html += '</div>';
+            }
+
+            grid.innerHTML = html;
+
+            // Bind expand/collapse
+            var cards = grid.querySelectorAll('.tool-skill-card');
+            cards.forEach(function(card) {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('expanded');
+                });
+            });
+        }
+
+        /* --- Main Tab Switching --- */
+        function bindMainTabs() {
+            var tabs = document.querySelectorAll('#mainTabs .pill');
+            tabs.forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    var tabKey = this.getAttribute('data-tab');
+                    activeMainTab = tabKey;
+
+                    // Update pill states
+                    tabs.forEach(function(t) {
+                        t.classList.remove('active');
+                        t.setAttribute('aria-selected', 'false');
+                    });
+                    this.classList.add('active');
+                    this.setAttribute('aria-selected', 'true');
+
+                    // Show/hide sections
+                    var programEl = document.getElementById('programSection');
+                    var toolsEl = document.getElementById('toolSkillsSection');
+
+                    if (tabKey === 'program') {
+                        programEl.classList.add('active');
+                        toolsEl.classList.remove('active');
+                    } else {
+                        programEl.classList.remove('active');
+                        toolsEl.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        /* --- localStorage: Self-Checks --- */
+        function getSavedChecks(weekNum) {
+            try {
+                var raw = localStorage.getItem(STORAGE_PREFIX + weekNum);
+                if (raw) return JSON.parse(raw);
+            } catch (e) { /* ignore */ }
+            return [];
+        }
+
+        function saveChecks(weekNum, checks) {
+            try {
+                localStorage.setItem(STORAGE_PREFIX + weekNum, JSON.stringify(checks));
+            } catch (e) { /* ignore */ }
+        }
+
+        function toggleCheck(weekNum, checkIndex, isChecked) {
+            var saved = getSavedChecks(weekNum);
+            if (isChecked) {
+                if (saved.indexOf(checkIndex) === -1) {
+                    saved.push(checkIndex);
+                }
+            } else {
+                saved = saved.filter(function(c) { return c !== checkIndex; });
+            }
+            saveChecks(weekNum, saved);
+        }
+
+        function isWeekCompleted(weekNum) {
+            var checks = SELF_CHECKS[weekNum];
+            if (!checks || checks.length === 0) return false;
+            var saved = getSavedChecks(weekNum);
+            return saved.length >= checks.length;
+        }
+
+        /* --- Helpers --- */
+        function getWeek(id) {
+            if (!data || !data.weeks) return null;
+            for (var i = 0; i < data.weeks.length; i++) {
+                if (data.weeks[i].id === id) return data.weeks[i];
+            }
+            return null;
+        }
+
+        function escapeHtml(str) {
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        function scrollToTimeline() {
+            var nav = document.getElementById('timelineNav');
+            if (nav) {
+                nav.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        /* --- Init --- */
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+    </script>
+</body>
+</html>

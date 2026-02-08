@@ -1,0 +1,1882 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>Truth Check — AI Hub v2.0 | Randstad GBS</title>
+
+    <meta name="description" content="Structured pre-HM screening tool. 10-12 minutes. Evidence over impression. Consistent quality across the team.">
+    <meta name="author" content="Randstad GBS">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Truth Check — AI Hub v2.0">
+    <meta property="og:description" content="Guided 10-12 minute pre-HM screening tool that ensures consistent quality before submitting candidates.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/sidebar.css">
+    <link rel="stylesheet" href="../shared/v2-buttons.css">
+    <link rel="stylesheet" href="../shared/v2-cards.css">
+
+    <style>
+        /* --- Page Header --- */
+        .tc-header {
+            margin-bottom: var(--space-8);
+        }
+
+        .tc-header h1 {
+            font-size: var(--font-4xl);
+            font-weight: var(--weight-bold);
+            letter-spacing: -0.02em;
+        }
+
+        .tc-header h1 span {
+            color: var(--accent-cyan);
+        }
+
+        .tc-header p {
+            margin-top: var(--space-2);
+            max-width: 680px;
+            color: var(--text-secondary);
+            font-size: var(--font-base);
+            line-height: var(--leading-relaxed);
+        }
+
+        /* --- Mode Toggle --- */
+        .mode-toggle-wrapper {
+            margin-bottom: var(--space-8);
+        }
+
+        /* --- Panels --- */
+        .mode-panel {
+            display: none;
+        }
+
+        .mode-panel.active {
+            display: block;
+        }
+
+        /* --- Section Titles --- */
+        .section-title {
+            font-size: var(--font-xl);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-4);
+        }
+
+        .section-subtitle {
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+            margin-bottom: var(--space-6);
+        }
+
+        /* --- Form Controls --- */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .form-group--full {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-medium);
+            color: var(--text-secondary);
+        }
+
+        .form-label .required {
+            color: var(--accent-red);
+            margin-left: 2px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 10px var(--space-4);
+            color: var(--text-primary);
+            font-size: var(--font-sm);
+            font-family: var(--font-family);
+            transition: border-color var(--transition-fast);
+            width: 100%;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px var(--accent-cyan-dim);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+            cursor: pointer;
+        }
+
+        .form-select option {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 72px;
+            line-height: var(--leading-normal);
+        }
+
+        /* --- Generate Button Wrapper --- */
+        .generate-wrapper {
+            margin-bottom: var(--space-8);
+        }
+
+        /* --- Script Output --- */
+        .script-output {
+            display: none;
+        }
+
+        .script-output.visible {
+            display: block;
+            animation: fadeInUp 0.5s ease both;
+        }
+
+        .script-section {
+            margin-bottom: var(--space-8);
+        }
+
+        .script-section__header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
+        }
+
+        .script-section__number {
+            font-family: var(--font-mono);
+            font-size: var(--font-xs);
+            font-weight: var(--weight-bold);
+            color: var(--accent-cyan);
+            background: var(--accent-cyan-dim);
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            white-space: nowrap;
+        }
+
+        .script-section__title {
+            font-size: var(--font-lg);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+        }
+
+        .script-section__time {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        .script-line {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+            padding: var(--space-4);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-4);
+        }
+
+        /* --- Evidence Question Card --- */
+        .eq-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+        }
+
+        .eq-card__question {
+            font-size: var(--font-lg);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            line-height: var(--leading-snug);
+            margin-bottom: var(--space-5);
+        }
+
+        .eq-card__indicator {
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-3);
+            font-size: var(--font-sm);
+            line-height: var(--leading-normal);
+        }
+
+        .eq-card__indicator--strong {
+            background: var(--accent-green-dim);
+            border-left: 3px solid var(--accent-green);
+            color: var(--text-secondary);
+        }
+
+        .eq-card__indicator--strong .indicator-label {
+            color: var(--accent-green);
+            font-weight: var(--weight-semibold);
+            font-size: var(--font-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: block;
+            margin-bottom: var(--space-1);
+        }
+
+        .eq-card__indicator--weak {
+            background: var(--accent-red-dim);
+            border-left: 3px solid var(--accent-red);
+            color: var(--text-secondary);
+        }
+
+        .eq-card__indicator--weak .indicator-label {
+            color: var(--accent-red);
+            font-weight: var(--weight-semibold);
+            font-size: var(--font-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: block;
+            margin-bottom: var(--space-1);
+        }
+
+        .eq-card__followup {
+            color: var(--accent-amber);
+            font-size: var(--font-sm);
+            margin-top: var(--space-3);
+            padding-left: var(--space-4);
+            border-left: 2px solid var(--accent-amber-dim);
+            font-style: italic;
+        }
+
+        .eq-card__followup-label {
+            font-style: normal;
+            font-weight: var(--weight-medium);
+            display: block;
+            margin-bottom: var(--space-1);
+            font-size: var(--font-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- Export Bar --- */
+        .export-bar {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-4);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            margin-top: var(--space-6);
+        }
+
+        .export-bar__label {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: var(--weight-medium);
+            margin-right: auto;
+        }
+
+        /* --- Live Check --- */
+        .lc-setup {
+            max-width: 480px;
+        }
+
+        .lc-setup .form-group {
+            margin-bottom: var(--space-4);
+        }
+
+        .lc-flow {
+            display: none;
+        }
+
+        .lc-flow.active {
+            display: block;
+            animation: fadeInUp 0.5s ease both;
+        }
+
+        /* --- Progress Bar --- */
+        .progress-wrapper {
+            margin-bottom: var(--space-6);
+        }
+
+        .progress-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-2);
+        }
+
+        .progress-label__text {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-medium);
+            color: var(--text-secondary);
+        }
+
+        .progress-label__count {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--bg-surface-active);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        .progress-bar__fill {
+            height: 100%;
+            background: var(--accent-cyan);
+            border-radius: var(--radius-full);
+            transition: width var(--transition-base);
+        }
+
+        /* --- Question Card (Live) --- */
+        .lc-question-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            margin-bottom: var(--space-6);
+        }
+
+        .lc-question-card__category {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--font-xs);
+            font-weight: var(--weight-semibold);
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: var(--space-3);
+            background: var(--accent-cyan-dim);
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+        }
+
+        .lc-question-card__text {
+            font-size: var(--font-2xl);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            line-height: var(--leading-snug);
+            margin-bottom: var(--space-6);
+        }
+
+        .lc-question-card__section {
+            margin-bottom: var(--space-5);
+        }
+
+        .lc-question-card__section-label {
+            font-size: var(--font-xs);
+            font-weight: var(--weight-medium);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-2);
+        }
+
+        .lc-question-card__response {
+            width: 100%;
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .lc-question-card__notes {
+            width: 100%;
+            min-height: 56px;
+            resize: vertical;
+        }
+
+        /* --- Score Buttons --- */
+        .score-buttons {
+            display: flex;
+            gap: var(--space-3);
+        }
+
+        .score-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: 12px var(--space-4);
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            font-family: var(--font-family);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: 2px solid transparent;
+            background: var(--bg-surface-hover);
+            color: var(--text-secondary);
+        }
+
+        .score-btn:hover {
+            border-color: var(--border-strong);
+            color: var(--text-primary);
+        }
+
+        .score-btn--strong.selected {
+            background: var(--accent-green-dim);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .score-btn--ok.selected {
+            background: var(--accent-amber-dim);
+            border-color: var(--accent-amber);
+            color: var(--accent-amber);
+        }
+
+        .score-btn--risk.selected {
+            background: var(--accent-red-dim);
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+
+        /* --- Navigation Buttons --- */
+        .lc-nav {
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--space-3);
+        }
+
+        /* --- Results Summary --- */
+        .lc-results {
+            display: none;
+        }
+
+        .lc-results.active {
+            display: block;
+            animation: fadeInUp 0.5s ease both;
+        }
+
+        .results-header {
+            margin-bottom: var(--space-6);
+        }
+
+        .results-header__candidate {
+            font-size: var(--font-2xl);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+        }
+
+        .results-header__role {
+            font-size: var(--font-base);
+            color: var(--text-secondary);
+            margin-top: var(--space-1);
+        }
+
+        .results-header__date {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            margin-top: var(--space-2);
+        }
+
+        /* --- Score Breakdown --- */
+        .score-breakdown {
+            margin-bottom: var(--space-8);
+        }
+
+        .score-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-3) var(--space-4);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .score-row:last-child {
+            border-bottom: none;
+        }
+
+        .score-row__label {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            flex: 1;
+        }
+
+        .score-row__response-preview {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            max-width: 400px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: var(--space-4);
+        }
+
+        .score-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            font-size: var(--font-xs);
+            font-weight: var(--weight-semibold);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        .score-badge--strong {
+            background: var(--accent-green-dim);
+            color: var(--accent-green);
+            border: 1px solid rgba(0, 214, 143, 0.2);
+        }
+
+        .score-badge--ok {
+            background: var(--accent-amber-dim);
+            color: var(--accent-amber);
+            border: 1px solid rgba(255, 184, 0, 0.2);
+        }
+
+        .score-badge--risk {
+            background: var(--accent-red-dim);
+            color: var(--accent-red);
+            border: 1px solid rgba(255, 76, 106, 0.2);
+        }
+
+        /* --- Overall Assessment --- */
+        .assessment-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+        }
+
+        .assessment-card__title {
+            font-size: var(--font-lg);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-5);
+        }
+
+        .confidence-bar-wrapper {
+            margin-bottom: var(--space-5);
+        }
+
+        .confidence-bar-label {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-2);
+        }
+
+        .confidence-bar {
+            height: 8px;
+            background: var(--bg-surface-active);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            display: flex;
+        }
+
+        .confidence-bar__segment {
+            height: 100%;
+            transition: width var(--transition-base);
+        }
+
+        .confidence-bar__segment--strong {
+            background: var(--accent-green);
+        }
+
+        .confidence-bar__segment--ok {
+            background: var(--accent-amber);
+        }
+
+        .confidence-bar__segment--risk {
+            background: var(--accent-red);
+        }
+
+        .assessment-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-4);
+            margin-top: var(--space-5);
+        }
+
+        .assessment-metric {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+
+        .assessment-metric__label {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .assessment-metric__value {
+            font-size: var(--font-lg);
+            font-weight: var(--weight-semibold);
+        }
+
+        .assessment-metric__value--advance {
+            color: var(--accent-green);
+        }
+
+        .assessment-metric__value--hold {
+            color: var(--accent-amber);
+        }
+
+        .assessment-metric__value--pass {
+            color: var(--accent-red);
+        }
+
+        .assessment-metric__value--high {
+            color: var(--accent-green);
+        }
+
+        .assessment-metric__value--medium {
+            color: var(--accent-amber);
+        }
+
+        .assessment-metric__value--low {
+            color: var(--accent-red);
+        }
+
+        /* --- Missing Evidence --- */
+        .missing-evidence {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+        }
+
+        .missing-evidence__title {
+            font-size: var(--font-lg);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-4);
+        }
+
+        .missing-evidence__list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .missing-evidence__item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-3);
+            padding: var(--space-3) 0;
+            border-bottom: 1px solid var(--border-subtle);
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-normal);
+        }
+
+        .missing-evidence__item:last-child {
+            border-bottom: none;
+        }
+
+        .missing-evidence__dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-amber);
+            flex-shrink: 0;
+            margin-top: 7px;
+        }
+
+        /* --- Rubric Panel --- */
+        .rubric-panel {
+            margin-top: var(--space-12);
+            border-top: 1px solid var(--border-subtle);
+            padding-top: var(--space-6);
+        }
+
+        .rubric-toggle {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 10px var(--space-4);
+            color: var(--text-secondary);
+            font-size: var(--font-sm);
+            font-weight: var(--weight-medium);
+            font-family: var(--font-family);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            width: 100%;
+            text-align: left;
+        }
+
+        .rubric-toggle:hover {
+            background: var(--bg-surface-hover);
+            border-color: var(--border-default);
+            color: var(--text-primary);
+        }
+
+        .rubric-toggle svg {
+            width: 16px;
+            height: 16px;
+            transition: transform var(--transition-fast);
+            flex-shrink: 0;
+        }
+
+        .rubric-toggle.expanded svg {
+            transform: rotate(180deg);
+        }
+
+        .rubric-content {
+            display: none;
+            margin-top: var(--space-4);
+        }
+
+        .rubric-content.visible {
+            display: block;
+            animation: fadeInUp 0.3s ease both;
+        }
+
+        .rubric-category {
+            margin-bottom: var(--space-6);
+        }
+
+        .rubric-category__title {
+            font-size: var(--font-base);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-3);
+        }
+
+        .rubric-row {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: var(--space-3);
+            padding: var(--space-3) 0;
+            border-bottom: 1px solid var(--border-subtle);
+            font-size: var(--font-sm);
+        }
+
+        .rubric-row:last-child {
+            border-bottom: none;
+        }
+
+        .rubric-row__score {
+            font-weight: var(--weight-semibold);
+        }
+
+        .rubric-row__desc {
+            color: var(--text-secondary);
+            line-height: var(--leading-normal);
+        }
+
+        /* --- Loading Spinner --- */
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border-default);
+            border-top-color: var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-3);
+            padding: var(--space-12);
+            color: var(--text-muted);
+            font-size: var(--font-sm);
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .score-buttons {
+                flex-direction: column;
+            }
+
+            .lc-question-card {
+                padding: var(--space-5);
+            }
+
+            .lc-question-card__text {
+                font-size: var(--font-xl);
+            }
+
+            .assessment-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .score-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-2);
+            }
+
+            .score-row__response-preview {
+                max-width: 100%;
+            }
+
+            .export-bar {
+                flex-wrap: wrap;
+            }
+
+            .rubric-row {
+                grid-template-columns: 1fr;
+                gap: var(--space-1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <main class="app-main">
+            <div class="content-container">
+
+                <!-- Page Header -->
+                <div class="tc-header fade-in-up">
+                    <h1><span>Truth</span> Check</h1>
+                    <p>Structured pre-HM screening. 10 minutes. Evidence over impression. Consistent quality across the team.</p>
+                    <p style="font-size:var(--font-sm);color:var(--text-muted);margin-top:var(--space-2);max-width:680px;">AI can generate interview questions. It cannot verify whether the candidate actually answered them with evidence. That is what this tool enforces — proof over polish, every time.</p>
+                </div>
+
+                <!-- Mode Toggle -->
+                <div class="mode-toggle-wrapper fade-in-up fade-in-up-delay-1">
+                    <div class="pill-toggle">
+                        <button class="pill active" data-mode="script" type="button">Script Generator</button>
+                        <button class="pill" data-mode="live" type="button">Live Check</button>
+                    </div>
+                </div>
+
+                <!-- =============================== -->
+                <!-- MODE 1: SCRIPT GENERATOR        -->
+                <!-- =============================== -->
+                <div id="panel-script" class="mode-panel active fade-in-up fade-in-up-delay-2">
+
+                    <!-- Configuration Panel -->
+                    <div class="section-title">Configuration</div>
+                    <div class="section-subtitle">Set the role parameters to generate a tailored screening script.</div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="sg-role-type">Role Type</label>
+                            <select id="sg-role-type" class="form-select">
+                                <option value="" disabled selected>Select role type...</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="Product">Product</option>
+                                <option value="Design">Design</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Sales">Sales</option>
+                                <option value="Operations">Operations</option>
+                                <option value="Finance">Finance</option>
+                                <option value="HR">HR</option>
+                                <option value="Data/Analytics">Data/Analytics</option>
+                                <option value="Executive">Executive</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="sg-seniority">Seniority</label>
+                            <select id="sg-seniority" class="form-select">
+                                <option value="" disabled selected>Select seniority...</option>
+                                <option value="Junior (0-2 yrs)">Junior (0-2 yrs)</option>
+                                <option value="Mid (3-5 yrs)">Mid (3-5 yrs)</option>
+                                <option value="Senior (5-8 yrs)">Senior (5-8 yrs)</option>
+                                <option value="Lead/Principal (8+ yrs)">Lead/Principal (8+ yrs)</option>
+                                <option value="Director+">Director+</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="sg-domain">Domain</label>
+                            <input type="text" id="sg-domain" class="form-input" placeholder="e.g., Cloud Infrastructure, B2B SaaS, Pharma...">
+                        </div>
+                        <div class="form-group form-group--full">
+                            <label class="form-label" for="sg-passport">Role Passport Summary <span style="font-weight: var(--weight-normal); color: var(--text-muted);">(optional)</span></label>
+                            <textarea id="sg-passport" class="form-textarea" rows="3" placeholder="Paste key must-haves from Role Passport for targeted questions..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="generate-wrapper">
+                        <button id="btn-generate-script" class="btn btn-primary btn-lg" type="button">
+                            Generate Script
+                        </button>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="sg-loading" class="loading-state" style="display: none;">
+                        <span class="spinner"></span>
+                        Generating screening script...
+                    </div>
+
+                    <!-- Script Output -->
+                    <div id="sg-output" class="script-output">
+                        <div id="sg-content"></div>
+
+                        <!-- Export Bar -->
+                        <div class="export-bar">
+                            <span class="export-bar__label">Export</span>
+                            <button id="btn-copy-script" class="btn btn-copy btn-sm" type="button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                Copy Script
+                            </button>
+                            <button id="btn-print-script" class="btn btn-secondary btn-sm" type="button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                                Print
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =============================== -->
+                <!-- MODE 2: LIVE CHECK              -->
+                <!-- =============================== -->
+                <div id="panel-live" class="mode-panel">
+
+                    <!-- Setup -->
+                    <div id="lc-setup" class="lc-setup">
+                        <div class="section-title">Candidate Details</div>
+                        <div class="section-subtitle">Enter candidate information to begin the live truth check.</div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="lc-candidate-name">Candidate Name <span class="required">*</span></label>
+                            <input type="text" id="lc-candidate-name" class="form-input" placeholder="Full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="lc-role-title">Role Title <span class="required">*</span></label>
+                            <input type="text" id="lc-role-title" class="form-input" placeholder="e.g., Senior Backend Engineer" required>
+                        </div>
+                        <div style="margin-top: var(--space-6);">
+                            <button id="btn-start-check" class="btn btn-primary btn-lg" type="button">
+                                Start Truth Check
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live Flow -->
+                    <div id="lc-flow" class="lc-flow">
+                        <!-- Progress -->
+                        <div class="progress-wrapper">
+                            <div class="progress-label">
+                                <span id="lc-progress-text" class="progress-label__text">Question 1 of 5</span>
+                                <span id="lc-progress-count" class="progress-label__count">20%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div id="lc-progress-fill" class="progress-bar__fill" style="width: 20%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Question Card -->
+                        <div id="lc-question-area"></div>
+
+                        <!-- Navigation -->
+                        <div class="lc-nav">
+                            <button id="btn-lc-next" class="btn btn-primary btn-lg" type="button" disabled>
+                                Next Question
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Results -->
+                    <div id="lc-results" class="lc-results">
+                        <div id="lc-results-content"></div>
+
+                        <!-- Export Bar -->
+                        <div class="export-bar">
+                            <span class="export-bar__label">Export</span>
+                            <button id="btn-copy-assessment" class="btn btn-copy btn-sm" type="button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                Copy Assessment
+                            </button>
+                            <button id="btn-print-assessment" class="btn btn-secondary btn-sm" type="button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                                Print
+                            </button>
+                            <button id="btn-send-confidence" class="btn btn-primary btn-sm" type="button">
+                                Send to Confidence Pack
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =============================== -->
+                <!-- RUBRIC REFERENCE PANEL           -->
+                <!-- =============================== -->
+                <div class="rubric-panel">
+                    <button id="rubric-toggle-btn" class="rubric-toggle" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        Show Scoring Rubric
+                    </button>
+                    <div id="rubric-content" class="rubric-content">
+                        <!-- Evidence Questions -->
+                        <div class="rubric-category">
+                            <div class="rubric-category__title">Evidence Questions</div>
+                            <div class="rubric-row">
+                                <div class="rubric-row__score" style="color: var(--accent-green);">Strong (3)</div>
+                                <div class="rubric-row__desc">Provides specific example with measurable outcome, names tools/methods, explains decision-making</div>
+                            </div>
+                            <div class="rubric-row">
+                                <div class="rubric-row__score" style="color: var(--accent-amber);">OK (2)</div>
+                                <div class="rubric-row__desc">Gives general answer, some specifics but lacks measurable proof</div>
+                            </div>
+                            <div class="rubric-row">
+                                <div class="rubric-row__score" style="color: var(--accent-red);">Risk (1)</div>
+                                <div class="rubric-row__desc">Vague, no specifics, describes tasks not outcomes, can't name tools</div>
+                            </div>
+                        </div>
+
+                        <!-- Constraint Questions -->
+                        <div class="rubric-category">
+                            <div class="rubric-category__title">Constraint Questions</div>
+                            <div class="rubric-row">
+                                <div class="rubric-row__score" style="color: var(--accent-green);">Strong</div>
+                                <div class="rubric-row__desc">Confirmed, aligned, no surprises</div>
+                            </div>
+                            <div class="rubric-row">
+                                <div class="rubric-row__score" style="color: var(--accent-amber);">OK</div>
+                                <div class="rubric-row__desc">Mostly aligned, minor flexibility needed</div>
+                            </div>
+                            <div class="rubric-row">
+                                <div class="rubric-row__score" style="color: var(--accent-red);">Risk</div>
+                                <div class="rubric-row__desc">Misaligned, potential blocker</div>
+                            </div>
+                        </div>
+
+                        <!-- Motivation -->
+                        <div class="rubric-category">
+                            <div class="rubric-category__title">Motivation</div>
+                            <div class="rubric-row">
+                                <div class="rubric-row__score" style="color: var(--accent-green);">Strong</div>
+                                <div class="rubric-row__desc">Clear, specific, genuine pull toward this opportunity</div>
+                            </div>
+                            <div class="rubric-row">
+                                <div class="rubric-row__score" style="color: var(--accent-amber);">OK</div>
+                                <div class="rubric-row__desc">Generic reasons, not specific to this role</div>
+                            </div>
+                            <div class="rubric-row">
+                                <div class="rubric-row__score" style="color: var(--accent-red);">Risk</div>
+                                <div class="rubric-row__desc">Push-only (leaving current job, no pull), or concerning reasons</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /.content-container -->
+        </main>
+    </div><!-- /.app-layout -->
+
+    <!-- Shared Scripts -->
+    <script src="../shared/sidebar.js"></script>
+    <script src="../shared/v2-footer.js"></script>
+    <script src="../shared/export-utils.js"></script>
+    <script src="../shared/ai-service.js"></script>
+
+    <script>
+    (function() {
+        'use strict';
+
+        // ============================
+        // STATE
+        // ============================
+        var scriptOutputData = null; // Stores generated script for export
+
+        var liveCheckState = {
+            candidateName: '',
+            roleTitle: '',
+            currentIndex: 0,
+            questions: [
+                {
+                    category: 'Evidence Question 1',
+                    text: 'Tell me about a specific time you delivered a measurable result in your role. What was the situation, what did you do, and what was the outcome?',
+                    response: '',
+                    score: null,
+                    notes: ''
+                },
+                {
+                    category: 'Evidence Question 2',
+                    text: 'Describe a challenging project you worked on. What was your approach, what obstacles did you face, and what would you do differently?',
+                    response: '',
+                    score: null,
+                    notes: ''
+                },
+                {
+                    category: 'Evidence Question 3',
+                    text: 'Walk me through how you handle a key responsibility in your current role. What tools, methods, or frameworks do you use?',
+                    response: '',
+                    score: null,
+                    notes: ''
+                },
+                {
+                    category: 'Constraint Reality',
+                    text: 'Let\'s cover the practical details: location preferences, availability/start date, compensation expectations, and notice period.',
+                    response: '',
+                    score: null,
+                    notes: ''
+                },
+                {
+                    category: 'Motivation',
+                    text: 'Why are you considering a move right now? What would make this role the right fit for your next step?',
+                    response: '',
+                    score: null,
+                    notes: ''
+                }
+            ]
+        };
+
+        // ============================
+        // DOM REFERENCES
+        // ============================
+        var pillButtons = document.querySelectorAll('.pill-toggle .pill');
+        var panelScript = document.getElementById('panel-script');
+        var panelLive = document.getElementById('panel-live');
+
+        // Script Generator
+        var btnGenerate = document.getElementById('btn-generate-script');
+        var sgLoading = document.getElementById('sg-loading');
+        var sgOutput = document.getElementById('sg-output');
+        var sgContent = document.getElementById('sg-content');
+        var btnCopyScript = document.getElementById('btn-copy-script');
+        var btnPrintScript = document.getElementById('btn-print-script');
+
+        // Live Check
+        var lcSetup = document.getElementById('lc-setup');
+        var lcFlow = document.getElementById('lc-flow');
+        var lcResults = document.getElementById('lc-results');
+        var btnStartCheck = document.getElementById('btn-start-check');
+        var btnLcNext = document.getElementById('btn-lc-next');
+        var lcProgressText = document.getElementById('lc-progress-text');
+        var lcProgressCount = document.getElementById('lc-progress-count');
+        var lcProgressFill = document.getElementById('lc-progress-fill');
+        var lcQuestionArea = document.getElementById('lc-question-area');
+        var lcResultsContent = document.getElementById('lc-results-content');
+        var btnCopyAssessment = document.getElementById('btn-copy-assessment');
+        var btnPrintAssessment = document.getElementById('btn-print-assessment');
+        var btnSendConfidence = document.getElementById('btn-send-confidence');
+
+        // Rubric
+        var rubricToggleBtn = document.getElementById('rubric-toggle-btn');
+        var rubricContent = document.getElementById('rubric-content');
+
+        // ============================
+        // MODE TOGGLE
+        // ============================
+        pillButtons.forEach(function(pill) {
+            pill.addEventListener('click', function() {
+                pillButtons.forEach(function(p) { p.classList.remove('active'); });
+                pill.classList.add('active');
+
+                var mode = pill.getAttribute('data-mode');
+                panelScript.classList.toggle('active', mode === 'script');
+                panelLive.classList.toggle('active', mode === 'live');
+            });
+        });
+
+        // ============================
+        // SCRIPT GENERATOR
+        // ============================
+        btnGenerate.addEventListener('click', async function() {
+            var roleType = document.getElementById('sg-role-type').value;
+            var seniority = document.getElementById('sg-seniority').value;
+            var domain = document.getElementById('sg-domain').value.trim();
+            var passport = document.getElementById('sg-passport').value.trim();
+
+            if (!roleType || !seniority) {
+                ExportUtils.showToast('Please select Role Type and Seniority.', 'error');
+                return;
+            }
+
+            // Show loading, hide output
+            sgLoading.style.display = 'flex';
+            sgOutput.classList.remove('visible');
+            btnGenerate.disabled = true;
+
+            var systemPrompt = 'You are a senior recruiting strategist for Randstad GBS. Generate a structured pre-HM screening script. Return ONLY valid JSON with this exact structure: {"opening":{"script":"...","duration":"1 min"},"evidenceQuestions":[{"question":"...","strongAnswer":"...","weakAnswer":"...","followUp":"..."}],"constraintQuestions":[{"question":"..."}],"motivationQuestions":[{"question":"..."}],"close":{"script":"...","duration":"1 min"}}. The evidenceQuestions array must have exactly 3 items. constraintQuestions should have 3 items (location, comp expectations, notice period). motivationQuestions should have 2 items. All questions must be specific to the role type, seniority, and domain. Do not include markdown formatting, code fences, or any text outside the JSON object.';
+
+            var userPrompt = 'Generate a truth check screening script for:\n- Role Type: ' + roleType + '\n- Seniority: ' + seniority + '\n- Domain: ' + (domain || 'General') + (passport ? '\n- Key must-haves from Role Passport: ' + passport : '') + '\n\nMake the evidence questions highly specific to this role and seniority level. For strong/weak answer indicators, be concrete about what to listen for.';
+
+            try {
+                var result = await AIService.query(userPrompt, {
+                    systemPrompt: systemPrompt,
+                    maxTokens: 2048
+                });
+
+                if (result.error) {
+                    throw new Error(result.error);
+                }
+
+                // Parse JSON from response
+                var responseText = result.text.trim();
+                // Strip markdown code fences if present
+                if (responseText.startsWith('```')) {
+                    responseText = responseText.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
+                }
+
+                var scriptData = JSON.parse(responseText);
+                scriptOutputData = scriptData;
+                renderScript(scriptData, roleType, seniority, domain);
+
+            } catch (err) {
+                console.error('[TruthCheck] Script generation error:', err);
+                // Fallback: generate a default script
+                var fallbackScript = generateFallbackScript(roleType, seniority, domain);
+                scriptOutputData = fallbackScript;
+                renderScript(fallbackScript, roleType, seniority, domain);
+                ExportUtils.showToast('AI unavailable. Using default script template.', 'info');
+            } finally {
+                sgLoading.style.display = 'none';
+                btnGenerate.disabled = false;
+            }
+        });
+
+        function generateFallbackScript(roleType, seniority, domain) {
+            var domainLabel = domain || 'your field';
+            return {
+                opening: {
+                    script: 'Thanks for taking the time today. This is a focused 10-minute screening call to understand your experience and what you\'re looking for. I\'ll ask a few structured questions — there are no trick questions, I just want to hear real examples from your work. Let\'s get started.',
+                    duration: '1 min'
+                },
+                evidenceQuestions: [
+                    {
+                        question: 'Tell me about a specific time you delivered a measurable result as a ' + seniority + ' ' + roleType + ' professional. What was the situation, what actions did you take, and what was the quantifiable outcome?',
+                        strongAnswer: 'Names a specific project, gives numbers or percentages, explains their individual contribution versus team effort, mentions the tools or methods used.',
+                        weakAnswer: 'Speaks in generalities ("I usually handle..."), cannot provide specific metrics, attributes everything to the team without clarifying personal role.',
+                        followUp: 'Can you put a number on that outcome? What specifically was your role versus the broader team?'
+                    },
+                    {
+                        question: 'Describe a challenging project in ' + domainLabel + ' where things didn\'t go as planned. What was your approach to getting it back on track, and what would you do differently today?',
+                        strongAnswer: 'Identifies the specific challenge, explains their diagnostic process, describes concrete actions taken, reflects honestly on lessons learned.',
+                        weakAnswer: 'Blames others, cannot describe what went wrong specifically, no reflection or learning, talks about the problem without explaining their response.',
+                        followUp: 'What was the first thing you did when you realized it was going off-track? Who did you involve?'
+                    },
+                    {
+                        question: 'Walk me through how you approach a core responsibility in your current ' + roleType + ' role. What tools, frameworks, or methods do you rely on?',
+                        strongAnswer: 'Describes a clear, structured approach, names specific tools and technologies, explains why they chose those methods, can discuss alternatives.',
+                        weakAnswer: 'Cannot name specific tools, describes a vague or ad-hoc approach, relies on buzzwords without depth, cannot explain their reasoning.',
+                        followUp: 'Why did you choose that approach over alternatives? What would you use differently in a new environment?'
+                    }
+                ],
+                constraintQuestions: [
+                    { question: 'What are your location preferences? Are you open to on-site, hybrid, or are you looking for fully remote only?' },
+                    { question: 'What are your compensation expectations for this level of role? Is there a range you\'re targeting?' },
+                    { question: 'What is your current notice period, and when would you realistically be available to start?' }
+                ],
+                motivationQuestions: [
+                    { question: 'Why are you considering a move right now? What has changed or what\'s missing in your current situation?' },
+                    { question: 'What would make this the right next step for you? What specifically about this opportunity interests you?' }
+                ],
+                close: {
+                    script: 'Thank you for your time and candid answers. Here\'s what happens next: I\'ll review my notes and share a recommendation with the hiring team. If we move forward, the next step would be a conversation with the hiring manager. You should hear back from me within [timeframe]. Any questions for me before we wrap up?',
+                    duration: '1 min'
+                }
+            };
+        }
+
+        function renderScript(data, roleType, seniority, domain) {
+            var html = '';
+
+            // Opening
+            html += '<div class="script-section">';
+            html += '  <div class="script-section__header">';
+            html += '    <span class="script-section__number">01</span>';
+            html += '    <span class="script-section__title">Opening</span>';
+            html += '    <span class="script-section__time">' + (data.opening.duration || '1 min') + '</span>';
+            html += '  </div>';
+            html += '  <div class="script-line">' + escapeHtml(data.opening.script) + '</div>';
+            html += '</div>';
+
+            // Evidence Questions
+            html += '<div class="script-section">';
+            html += '  <div class="script-section__header">';
+            html += '    <span class="script-section__number">02</span>';
+            html += '    <span class="script-section__title">Evidence Questions</span>';
+            html += '    <span class="script-section__time">5-6 min</span>';
+            html += '  </div>';
+
+            if (data.evidenceQuestions && data.evidenceQuestions.length) {
+                data.evidenceQuestions.forEach(function(eq, i) {
+                    html += '<div class="eq-card">';
+                    html += '  <div class="eq-card__question">' + (i + 1) + '. ' + escapeHtml(eq.question) + '</div>';
+                    html += '  <div class="eq-card__indicator eq-card__indicator--strong">';
+                    html += '    <span class="indicator-label">Strong answer looks like</span>';
+                    html += '    ' + escapeHtml(eq.strongAnswer);
+                    html += '  </div>';
+                    html += '  <div class="eq-card__indicator eq-card__indicator--weak">';
+                    html += '    <span class="indicator-label">Weak answer looks like</span>';
+                    html += '    ' + escapeHtml(eq.weakAnswer);
+                    html += '  </div>';
+                    html += '  <div class="eq-card__followup">';
+                    html += '    <span class="eq-card__followup-label">Follow-up if vague</span>';
+                    html += '    ' + escapeHtml(eq.followUp);
+                    html += '  </div>';
+                    html += '</div>';
+                });
+            }
+            html += '</div>';
+
+            // Constraint Reality
+            html += '<div class="script-section">';
+            html += '  <div class="script-section__header">';
+            html += '    <span class="script-section__number">03</span>';
+            html += '    <span class="script-section__title">Constraint Reality</span>';
+            html += '    <span class="script-section__time">2 min</span>';
+            html += '  </div>';
+
+            if (data.constraintQuestions && data.constraintQuestions.length) {
+                data.constraintQuestions.forEach(function(cq) {
+                    html += '<div class="script-line">' + escapeHtml(cq.question) + '</div>';
+                });
+            }
+            html += '</div>';
+
+            // Motivation Check
+            html += '<div class="script-section">';
+            html += '  <div class="script-section__header">';
+            html += '    <span class="script-section__number">04</span>';
+            html += '    <span class="script-section__title">Motivation Check</span>';
+            html += '    <span class="script-section__time">2 min</span>';
+            html += '  </div>';
+
+            if (data.motivationQuestions && data.motivationQuestions.length) {
+                data.motivationQuestions.forEach(function(mq) {
+                    html += '<div class="script-line">' + escapeHtml(mq.question) + '</div>';
+                });
+            }
+            html += '</div>';
+
+            // Close
+            html += '<div class="script-section">';
+            html += '  <div class="script-section__header">';
+            html += '    <span class="script-section__number">05</span>';
+            html += '    <span class="script-section__title">Close</span>';
+            html += '    <span class="script-section__time">' + (data.close.duration || '1 min') + '</span>';
+            html += '  </div>';
+            html += '  <div class="script-line">' + escapeHtml(data.close.script) + '</div>';
+            html += '</div>';
+
+            sgContent.innerHTML = html;
+            sgOutput.classList.add('visible');
+        }
+
+        // Copy Script
+        btnCopyScript.addEventListener('click', function() {
+            if (!scriptOutputData) return;
+            var text = buildScriptText(scriptOutputData);
+            ExportUtils.copyToClipboard(text, btnCopyScript);
+        });
+
+        // Print Script
+        btnPrintScript.addEventListener('click', function() {
+            if (!scriptOutputData) return;
+            var html = buildScriptPrintHtml(scriptOutputData);
+            ExportUtils.printContent('Truth Check Script', html);
+        });
+
+        function buildScriptText(data) {
+            var lines = [];
+            lines.push('TRUTH CHECK SCREENING SCRIPT');
+            lines.push('=============================\n');
+            lines.push('OPENING (' + (data.opening.duration || '1 min') + ')');
+            lines.push(data.opening.script);
+            lines.push('');
+
+            lines.push('EVIDENCE QUESTIONS (5-6 min)');
+            if (data.evidenceQuestions) {
+                data.evidenceQuestions.forEach(function(eq, i) {
+                    lines.push('\n' + (i + 1) + '. ' + eq.question);
+                    lines.push('   Strong answer: ' + eq.strongAnswer);
+                    lines.push('   Weak answer: ' + eq.weakAnswer);
+                    lines.push('   Follow-up: ' + eq.followUp);
+                });
+            }
+            lines.push('');
+
+            lines.push('CONSTRAINT REALITY (2 min)');
+            if (data.constraintQuestions) {
+                data.constraintQuestions.forEach(function(cq) {
+                    lines.push('- ' + cq.question);
+                });
+            }
+            lines.push('');
+
+            lines.push('MOTIVATION CHECK (2 min)');
+            if (data.motivationQuestions) {
+                data.motivationQuestions.forEach(function(mq) {
+                    lines.push('- ' + mq.question);
+                });
+            }
+            lines.push('');
+
+            lines.push('CLOSE (' + (data.close.duration || '1 min') + ')');
+            lines.push(data.close.script);
+            lines.push('\n---\nGenerated by AI Hub v2.0 -- Truth Check');
+
+            return lines.join('\n');
+        }
+
+        function buildScriptPrintHtml(data) {
+            var html = '';
+            html += '<div class="section"><h2>Opening (' + escapeHtml(data.opening.duration || '1 min') + ')</h2>';
+            html += '<p>' + escapeHtml(data.opening.script) + '</p></div>';
+
+            html += '<div class="section"><h2>Evidence Questions (5-6 min)</h2>';
+            if (data.evidenceQuestions) {
+                data.evidenceQuestions.forEach(function(eq, i) {
+                    html += '<h3>' + (i + 1) + '. ' + escapeHtml(eq.question) + '</h3>';
+                    html += '<p><strong style="color:#065f46;">Strong:</strong> ' + escapeHtml(eq.strongAnswer) + '</p>';
+                    html += '<p><strong style="color:#991b1b;">Weak:</strong> ' + escapeHtml(eq.weakAnswer) + '</p>';
+                    html += '<p><strong style="color:#92400e;">Follow-up:</strong> ' + escapeHtml(eq.followUp) + '</p>';
+                });
+            }
+            html += '</div>';
+
+            html += '<div class="section"><h2>Constraint Reality (2 min)</h2><ul>';
+            if (data.constraintQuestions) {
+                data.constraintQuestions.forEach(function(cq) {
+                    html += '<li>' + escapeHtml(cq.question) + '</li>';
+                });
+            }
+            html += '</ul></div>';
+
+            html += '<div class="section"><h2>Motivation Check (2 min)</h2><ul>';
+            if (data.motivationQuestions) {
+                data.motivationQuestions.forEach(function(mq) {
+                    html += '<li>' + escapeHtml(mq.question) + '</li>';
+                });
+            }
+            html += '</ul></div>';
+
+            html += '<div class="section"><h2>Close (' + escapeHtml(data.close.duration || '1 min') + ')</h2>';
+            html += '<p>' + escapeHtml(data.close.script) + '</p></div>';
+
+            return html;
+        }
+
+        // ============================
+        // LIVE CHECK
+        // ============================
+        btnStartCheck.addEventListener('click', function() {
+            var name = document.getElementById('lc-candidate-name').value.trim();
+            var role = document.getElementById('lc-role-title').value.trim();
+
+            if (!name || !role) {
+                ExportUtils.showToast('Please enter candidate name and role title.', 'error');
+                return;
+            }
+
+            liveCheckState.candidateName = name;
+            liveCheckState.roleTitle = role;
+            liveCheckState.currentIndex = 0;
+
+            // Reset scores
+            liveCheckState.questions.forEach(function(q) {
+                q.response = '';
+                q.score = null;
+                q.notes = '';
+            });
+
+            lcSetup.style.display = 'none';
+            lcResults.classList.remove('active');
+            lcFlow.classList.add('active');
+
+            renderLiveQuestion();
+        });
+
+        function renderLiveQuestion() {
+            var idx = liveCheckState.currentIndex;
+            var q = liveCheckState.questions[idx];
+            var total = liveCheckState.questions.length;
+
+            // Update progress
+            var pct = Math.round(((idx + 1) / total) * 100);
+            lcProgressText.textContent = 'Question ' + (idx + 1) + ' of ' + total;
+            lcProgressCount.textContent = pct + '%';
+            lcProgressFill.style.width = pct + '%';
+
+            // Update next button text
+            btnLcNext.textContent = (idx === total - 1) ? 'Finish' : 'Next Question';
+            btnLcNext.disabled = !q.score;
+
+            // Render question card
+            var html = '';
+            html += '<div class="lc-question-card">';
+            html += '  <div class="lc-question-card__category">' + escapeHtml(q.category) + '</div>';
+            html += '  <div class="lc-question-card__text">' + escapeHtml(q.text) + '</div>';
+
+            // Response
+            html += '  <div class="lc-question-card__section">';
+            html += '    <div class="lc-question-card__section-label">Candidate Response Summary</div>';
+            html += '    <textarea class="form-textarea lc-question-card__response" id="lc-response-' + idx + '" placeholder="Capture the key points of their answer...">' + escapeHtml(q.response) + '</textarea>';
+            html += '  </div>';
+
+            // Score
+            html += '  <div class="lc-question-card__section">';
+            html += '    <div class="lc-question-card__section-label">Score</div>';
+            html += '    <div class="score-buttons">';
+            html += '      <button type="button" class="score-btn score-btn--strong' + (q.score === 'Strong' ? ' selected' : '') + '" data-score="Strong">Strong</button>';
+            html += '      <button type="button" class="score-btn score-btn--ok' + (q.score === 'OK' ? ' selected' : '') + '" data-score="OK">OK</button>';
+            html += '      <button type="button" class="score-btn score-btn--risk' + (q.score === 'Risk' ? ' selected' : '') + '" data-score="Risk">Risk</button>';
+            html += '    </div>';
+            html += '  </div>';
+
+            // Notes
+            html += '  <div class="lc-question-card__section">';
+            html += '    <div class="lc-question-card__section-label">Additional Notes</div>';
+            html += '    <textarea class="form-textarea lc-question-card__notes" id="lc-notes-' + idx + '" placeholder="Any additional observations...">' + escapeHtml(q.notes) + '</textarea>';
+            html += '  </div>';
+
+            html += '</div>';
+
+            lcQuestionArea.innerHTML = html;
+
+            // Bind score buttons
+            var scoreBtns = lcQuestionArea.querySelectorAll('.score-btn');
+            scoreBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    scoreBtns.forEach(function(b) { b.classList.remove('selected'); });
+                    btn.classList.add('selected');
+                    liveCheckState.questions[idx].score = btn.getAttribute('data-score');
+                    btnLcNext.disabled = false;
+                });
+            });
+
+            // Bind textarea changes
+            var responseTextarea = document.getElementById('lc-response-' + idx);
+            if (responseTextarea) {
+                responseTextarea.addEventListener('input', function() {
+                    liveCheckState.questions[idx].response = responseTextarea.value;
+                });
+            }
+
+            var notesTextarea = document.getElementById('lc-notes-' + idx);
+            if (notesTextarea) {
+                notesTextarea.addEventListener('input', function() {
+                    liveCheckState.questions[idx].notes = notesTextarea.value;
+                });
+            }
+        }
+
+        btnLcNext.addEventListener('click', function() {
+            var idx = liveCheckState.currentIndex;
+            var total = liveCheckState.questions.length;
+
+            // Save current textareas
+            var responseEl = document.getElementById('lc-response-' + idx);
+            var notesEl = document.getElementById('lc-notes-' + idx);
+            if (responseEl) liveCheckState.questions[idx].response = responseEl.value;
+            if (notesEl) liveCheckState.questions[idx].notes = notesEl.value;
+
+            if (idx < total - 1) {
+                liveCheckState.currentIndex++;
+                renderLiveQuestion();
+            } else {
+                // Finish -> show results
+                lcFlow.classList.remove('active');
+                renderResults();
+            }
+        });
+
+        function renderResults() {
+            var qs = liveCheckState.questions;
+            var scores = { Strong: 0, OK: 0, Risk: 0 };
+            qs.forEach(function(q) {
+                if (q.score) scores[q.score]++;
+            });
+
+            var total = qs.length;
+            var strongPct = Math.round((scores.Strong / total) * 100);
+            var okPct = Math.round((scores.OK / total) * 100);
+            var riskPct = Math.round((scores.Risk / total) * 100);
+
+            // Recommendation
+            var recommendation, recClass;
+            if (scores.Strong >= 3) {
+                recommendation = 'Advance';
+                recClass = 'advance';
+            } else if (scores.Risk >= 2) {
+                recommendation = 'Pass';
+                recClass = 'pass';
+            } else {
+                recommendation = 'Hold';
+                recClass = 'hold';
+            }
+
+            // Confidence
+            var confidence, confClass;
+            if (scores.Strong >= 4) {
+                confidence = 'High';
+                confClass = 'high';
+            } else if (scores.Risk >= 3) {
+                confidence = 'Low';
+                confClass = 'low';
+            } else {
+                confidence = 'Medium';
+                confClass = 'medium';
+            }
+
+            var now = new Date();
+            var dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            var timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+            var html = '';
+
+            // Header
+            html += '<div class="results-header">';
+            html += '  <div class="results-header__candidate">' + escapeHtml(liveCheckState.candidateName) + '</div>';
+            html += '  <div class="results-header__role">' + escapeHtml(liveCheckState.roleTitle) + '</div>';
+            html += '  <div class="results-header__date">' + dateStr + ' at ' + timeStr + '</div>';
+            html += '</div>';
+
+            // Score Breakdown
+            html += '<div class="score-breakdown">';
+            html += '  <div class="section-title">Score Breakdown</div>';
+            html += '  <div class="card">';
+            qs.forEach(function(q) {
+                var badgeClass = q.score === 'Strong' ? 'strong' : (q.score === 'Risk' ? 'risk' : 'ok');
+                html += '<div class="score-row">';
+                html += '  <div class="score-row__label">' + escapeHtml(q.category) + '</div>';
+                if (q.response) {
+                    html += '  <div class="score-row__response-preview">' + escapeHtml(q.response.substring(0, 80)) + (q.response.length > 80 ? '...' : '') + '</div>';
+                }
+                html += '  <span class="score-badge score-badge--' + badgeClass + '">' + escapeHtml(q.score) + '</span>';
+                html += '</div>';
+            });
+            html += '  </div>';
+            html += '</div>';
+
+            // Overall Assessment
+            html += '<div class="assessment-card">';
+            html += '  <div class="assessment-card__title">Overall Assessment</div>';
+            html += '  <div class="confidence-bar-wrapper">';
+            html += '    <div class="confidence-bar-label">Score Distribution</div>';
+            html += '    <div class="confidence-bar">';
+            if (strongPct > 0) html += '<div class="confidence-bar__segment confidence-bar__segment--strong" style="width: ' + strongPct + '%;"></div>';
+            if (okPct > 0) html += '<div class="confidence-bar__segment confidence-bar__segment--ok" style="width: ' + okPct + '%;"></div>';
+            if (riskPct > 0) html += '<div class="confidence-bar__segment confidence-bar__segment--risk" style="width: ' + riskPct + '%;"></div>';
+            html += '    </div>';
+            html += '  </div>';
+            html += '  <div class="assessment-metrics">';
+            html += '    <div class="assessment-metric">';
+            html += '      <div class="assessment-metric__label">Recommendation</div>';
+            html += '      <div class="assessment-metric__value assessment-metric__value--' + recClass + '">' + recommendation + '</div>';
+            html += '    </div>';
+            html += '    <div class="assessment-metric">';
+            html += '      <div class="assessment-metric__label">Confidence</div>';
+            html += '      <div class="assessment-metric__value assessment-metric__value--' + confClass + '">' + confidence + '</div>';
+            html += '    </div>';
+            html += '  </div>';
+            html += '</div>';
+
+            // Missing Evidence
+            var missingItems = [];
+            qs.forEach(function(q) {
+                if (q.score === 'OK') {
+                    missingItems.push(q.category + ': Needs stronger evidence. Answer was general but lacked specifics or measurable outcomes.');
+                } else if (q.score === 'Risk') {
+                    missingItems.push(q.category + ': Significant gap. Could not provide concrete examples or evidence. Requires verification in next round.');
+                }
+            });
+
+            if (missingItems.length > 0) {
+                html += '<div class="missing-evidence">';
+                html += '  <div class="missing-evidence__title">Missing Evidence -- Verify in Next Round</div>';
+                html += '  <ul class="missing-evidence__list">';
+                missingItems.forEach(function(item) {
+                    html += '<li class="missing-evidence__item">';
+                    html += '  <span class="missing-evidence__dot"></span>';
+                    html += '  <span>' + escapeHtml(item) + '</span>';
+                    html += '</li>';
+                });
+                html += '  </ul>';
+                html += '</div>';
+            }
+
+            lcResultsContent.innerHTML = html;
+            lcResults.classList.add('active');
+        }
+
+        // Copy Assessment
+        btnCopyAssessment.addEventListener('click', function() {
+            var text = buildAssessmentText();
+            ExportUtils.copyToClipboard(text, btnCopyAssessment);
+        });
+
+        // Print Assessment
+        btnPrintAssessment.addEventListener('click', function() {
+            var html = buildAssessmentPrintHtml();
+            ExportUtils.printContent('Truth Check Assessment -- ' + liveCheckState.candidateName, html);
+        });
+
+        // Send to Confidence Pack
+        btnSendConfidence.addEventListener('click', function() {
+            var text = buildAssessmentText();
+            ExportUtils.copyToClipboard(text, btnSendConfidence);
+            ExportUtils.showToast('Assessment copied. Paste into Confidence Pack.', 'success');
+            // Attempt navigation after a short delay
+            setTimeout(function() {
+                window.open('/confidence-pack/', '_blank');
+            }, 500);
+        });
+
+        function buildAssessmentText() {
+            var qs = liveCheckState.questions;
+            var scores = { Strong: 0, OK: 0, Risk: 0 };
+            qs.forEach(function(q) { if (q.score) scores[q.score]++; });
+
+            var recommendation;
+            if (scores.Strong >= 3) recommendation = 'Advance';
+            else if (scores.Risk >= 2) recommendation = 'Pass';
+            else recommendation = 'Hold';
+
+            var lines = [];
+            lines.push('TRUTH CHECK ASSESSMENT');
+            lines.push('======================\n');
+            lines.push('Candidate: ' + liveCheckState.candidateName);
+            lines.push('Role: ' + liveCheckState.roleTitle);
+            lines.push('Date: ' + new Date().toLocaleString());
+            lines.push('Recommendation: ' + recommendation);
+            lines.push('\n--- SCORE BREAKDOWN ---\n');
+
+            qs.forEach(function(q) {
+                lines.push(q.category + ': [' + (q.score || 'N/A') + ']');
+                if (q.response) lines.push('  Response: ' + q.response);
+                if (q.notes) lines.push('  Notes: ' + q.notes);
+                lines.push('');
+            });
+
+            var missingItems = [];
+            qs.forEach(function(q) {
+                if (q.score === 'OK' || q.score === 'Risk') {
+                    missingItems.push(q.category + ': Needs verification');
+                }
+            });
+
+            if (missingItems.length > 0) {
+                lines.push('--- MISSING EVIDENCE ---\n');
+                missingItems.forEach(function(item) {
+                    lines.push('- ' + item);
+                });
+            }
+
+            lines.push('\n---\nGenerated by AI Hub v2.0 -- Truth Check');
+            return lines.join('\n');
+        }
+
+        function buildAssessmentPrintHtml() {
+            var qs = liveCheckState.questions;
+            var scores = { Strong: 0, OK: 0, Risk: 0 };
+            qs.forEach(function(q) { if (q.score) scores[q.score]++; });
+
+            var recommendation;
+            if (scores.Strong >= 3) recommendation = 'Advance';
+            else if (scores.Risk >= 2) recommendation = 'Pass';
+            else recommendation = 'Hold';
+
+            var recColor = recommendation === 'Advance' ? '#065f46' : (recommendation === 'Pass' ? '#991b1b' : '#92400e');
+            var recBg = recommendation === 'Advance' ? '#d1fae5' : (recommendation === 'Pass' ? '#fee2e2' : '#fef3c7');
+
+            var html = '';
+            html += '<p><strong>Candidate:</strong> ' + escapeHtml(liveCheckState.candidateName) + '</p>';
+            html += '<p><strong>Role:</strong> ' + escapeHtml(liveCheckState.roleTitle) + '</p>';
+            html += '<p><strong>Date:</strong> ' + new Date().toLocaleString() + '</p>';
+            html += '<p><strong>Recommendation:</strong> <span class="badge" style="background:' + recBg + ';color:' + recColor + ';">' + recommendation + '</span></p>';
+
+            html += '<div class="section"><h2>Score Breakdown</h2>';
+            qs.forEach(function(q) {
+                var badgeClass = q.score === 'Strong' ? 'badge--strong' : (q.score === 'Risk' ? 'badge--risk' : 'badge--watch');
+                html += '<p><strong>' + escapeHtml(q.category) + ':</strong> <span class="badge ' + badgeClass + '">' + escapeHtml(q.score || 'N/A') + '</span></p>';
+                if (q.response) html += '<p style="margin-left:16px;color:#555;">' + escapeHtml(q.response) + '</p>';
+                if (q.notes) html += '<p style="margin-left:16px;font-style:italic;color:#888;">Notes: ' + escapeHtml(q.notes) + '</p>';
+            });
+            html += '</div>';
+
+            var missingItems = [];
+            qs.forEach(function(q) {
+                if (q.score === 'OK' || q.score === 'Risk') {
+                    missingItems.push(q.category + ': Needs verification in next round');
+                }
+            });
+            if (missingItems.length > 0) {
+                html += '<div class="section"><h2>Missing Evidence</h2><ul>';
+                missingItems.forEach(function(item) {
+                    html += '<li>' + escapeHtml(item) + '</li>';
+                });
+                html += '</ul></div>';
+            }
+
+            return html;
+        }
+
+        // ============================
+        // RUBRIC TOGGLE
+        // ============================
+        rubricToggleBtn.addEventListener('click', function() {
+            var isExpanded = rubricToggleBtn.classList.toggle('expanded');
+            rubricContent.classList.toggle('visible', isExpanded);
+            rubricToggleBtn.innerHTML = (isExpanded
+                ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg> Hide Scoring Rubric'
+                : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg> Show Scoring Rubric'
+            );
+        });
+
+        // ============================
+        // UTILITY
+        // ============================
+        function escapeHtml(text) {
+            if (!text) return '';
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(text));
+            return div.innerHTML;
+        }
+
+    })();
+    </script>
+</body>
+</html>

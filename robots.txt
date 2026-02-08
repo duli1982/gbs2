@@ -1,0 +1,14 @@
+# AI Hub v2.0 — The Confidence Engine
+# Robots.txt
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://gbs-emea-ai-hub.vercel.app/sitemap.xml
+
+# Block API endpoints
+Disallow: /api/
+
+# Block shared assets from indexing
+Disallow: /shared/

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>Team Rituals | AI Hub v2.0 — The Confidence Engine | Randstad GBS</title>
+
+    <meta name="description" content="Team Rituals — Structured weekly ceremonies for Monday kickoff, Wednesday pipeline truth check, and Friday proof & learn.">
+    <meta name="author" content="Randstad GBS">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/sidebar.css">
+    <link rel="stylesheet" href="../shared/v2-buttons.css">
+    <link rel="stylesheet" href="../shared/v2-cards.css">
+
+    <style>
+        .rit-header { margin-bottom: var(--space-8); }
+        .rit-header__label { font-size: var(--font-sm); color: var(--text-muted); font-weight: var(--weight-medium); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--space-2); }
+        .rit-header__title { font-size: var(--font-4xl); font-weight: var(--weight-bold); color: var(--text-primary); letter-spacing: -0.02em; }
+        .rit-header__title span { color: var(--accent-cyan); }
+        .rit-header__subtitle { font-size: var(--font-base); color: var(--text-secondary); margin-top: var(--space-2); max-width: 640px; line-height: 1.6; }
+
+        /* Weekly Selector */
+        .week-selector { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-8); }
+        .week-selector__label { font-size: var(--font-sm); color: var(--text-muted); }
+        .week-selector input[type="week"] { padding: 8px 12px; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-primary); font-size: var(--font-sm); font-family: inherit; outline: none; }
+        .week-selector input:focus { border-color: var(--accent-cyan); }
+
+        /* Ritual Cards */
+        .rituals-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); margin-bottom: var(--space-10); }
+        .ritual-card { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; transition: border-color var(--transition-fast); }
+        .ritual-card:hover { border-color: var(--border-default); }
+
+        .ritual-card__header { padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+        .ritual-card__day { display: flex; align-items: center; gap: var(--space-3); }
+        .ritual-card__dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .ritual-card__dot--mon { background: var(--accent-cyan); }
+        .ritual-card__dot--wed { background: var(--signal-amber); }
+        .ritual-card__dot--fri { background: var(--signal-strong); }
+        .ritual-card__day-label { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--text-primary); }
+        .ritual-card__duration { font-size: var(--font-xs); color: var(--text-muted); }
+        .ritual-card__chevron { width: 16px; height: 16px; color: var(--text-muted); transition: transform var(--transition-fast); }
+        .ritual-card.expanded .ritual-card__chevron { transform: rotate(180deg); }
+        .ritual-card__status { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border-default); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all var(--transition-fast); }
+        .ritual-card__status.done { background: var(--signal-strong); border-color: var(--signal-strong); }
+        .ritual-card__status svg { width: 12px; height: 12px; color: var(--bg-primary); opacity: 0; }
+        .ritual-card__status.done svg { opacity: 1; }
+
+        .ritual-card__name { font-size: var(--font-xs); color: var(--text-muted); margin-top: 2px; }
+
+        .ritual-card__body { display: none; padding: var(--space-5); }
+        .ritual-card.expanded .ritual-card__body { display: block; }
+
+        .ritual-card__agenda { margin-bottom: var(--space-5); }
+        .ritual-card__agenda-title { font-size: var(--font-xs); font-weight: var(--weight-semibold); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--space-3); }
+        .ritual-card__agenda-list { list-style: none; display: flex; flex-direction: column; gap: var(--space-2); }
+        .ritual-card__agenda-list li { font-size: var(--font-sm); color: var(--text-secondary); line-height: 1.5; padding-left: var(--space-4); position: relative; }
+        .ritual-card__agenda-list li::before { content: ''; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: var(--border-default); }
+
+        .ritual-form { display: flex; flex-direction: column; gap: var(--space-4); }
+        .ritual-form__group { display: flex; flex-direction: column; gap: var(--space-2); }
+        .ritual-form__label { font-size: var(--font-xs); font-weight: var(--weight-semibold); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+        .ritual-form__input, .ritual-form__textarea { padding: 8px 12px; background: var(--bg-primary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-primary); font-size: var(--font-sm); font-family: inherit; outline: none; transition: border-color var(--transition-fast); }
+        .ritual-form__input:focus, .ritual-form__textarea:focus { border-color: var(--accent-cyan); }
+        .ritual-form__textarea { min-height: 60px; resize: vertical; }
+        .ritual-form__input::placeholder, .ritual-form__textarea::placeholder { color: var(--text-muted); }
+
+        /* Diagnosis toggle */
+        .diagnosis-toggle { display: flex; gap: var(--space-2); }
+        .diagnosis-btn { padding: 6px 14px; font-size: var(--font-xs); font-weight: var(--weight-medium); border: 1px solid var(--border-subtle); border-radius: var(--radius-full); background: var(--bg-primary); color: var(--text-muted); cursor: pointer; font-family: inherit; transition: all var(--transition-fast); }
+        .diagnosis-btn.active { border-color: var(--accent-cyan); color: var(--accent-cyan); background: rgba(0,229,255,0.08); }
+
+        /* Stuck roles list */
+        .stuck-roles { display: flex; flex-direction: column; gap: var(--space-3); }
+        .stuck-role-item { display: flex; gap: var(--space-3); align-items: center; }
+        .stuck-role-item input { flex: 1; }
+        .add-role-btn { padding: 4px 12px; font-size: var(--font-xs); color: var(--accent-cyan); background: none; border: 1px dashed var(--border-subtle); border-radius: var(--radius-md); cursor: pointer; font-family: inherit; transition: border-color var(--transition-fast); }
+        .add-role-btn:hover { border-color: var(--accent-cyan); }
+
+        .ritual-form__actions { display: flex; gap: var(--space-3); margin-top: var(--space-2); }
+        .btn-save { padding: 8px 20px; background: var(--accent-cyan); color: var(--bg-primary); border: none; border-radius: var(--radius-md); font-size: var(--font-sm); font-weight: var(--weight-semibold); cursor: pointer; font-family: inherit; }
+        .btn-save:hover { opacity: 0.9; }
+        .btn-ghost { padding: 8px 16px; background: none; color: var(--text-muted); border: none; font-size: var(--font-sm); cursor: pointer; font-family: inherit; }
+        .btn-ghost:hover { color: var(--text-secondary); }
+
+        /* Monthly Postmortem */
+        .postmortem-section { margin-top: var(--space-10); padding-top: var(--space-8); border-top: 1px solid var(--border-subtle); }
+        .postmortem-section__title { font-size: var(--font-lg); font-weight: var(--weight-semibold); color: var(--text-primary); margin-bottom: var(--space-6); }
+        .postmortem-form { max-width: 680px; display: flex; flex-direction: column; gap: var(--space-5); }
+
+        /* Ritual Log */
+        .ritual-log { margin-top: var(--space-10); padding-top: var(--space-8); border-top: 1px solid var(--border-subtle); }
+        .ritual-log__title { font-size: var(--font-base); font-weight: var(--weight-semibold); color: var(--text-primary); margin-bottom: var(--space-4); }
+        .log-item { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-3); cursor: pointer; transition: border-color var(--transition-fast); }
+        .log-item:hover { border-color: var(--border-default); }
+        .log-item__header { display: flex; align-items: center; justify-content: space-between; }
+        .log-item__date { font-size: var(--font-sm); font-weight: var(--weight-medium); color: var(--text-primary); }
+        .log-item__badges { display: flex; gap: var(--space-2); }
+        .log-item__badge { font-size: 10px; padding: 2px 8px; border-radius: var(--radius-full); font-weight: var(--weight-medium); }
+        .log-item__badge--mon { background: rgba(0,229,255,0.1); color: var(--accent-cyan); }
+        .log-item__badge--wed { background: rgba(251,191,36,0.1); color: var(--signal-amber); }
+        .log-item__badge--fri { background: rgba(52,211,153,0.1); color: var(--signal-strong); }
+        .log-item__body { display: none; margin-top: var(--space-3); padding-top: var(--space-3); border-top: 1px solid var(--border-subtle); font-size: var(--font-sm); color: var(--text-secondary); line-height: 1.6; }
+        .log-item.expanded .log-item__body { display: block; }
+        .log-empty { text-align: center; padding: var(--space-8); color: var(--text-muted); font-size: var(--font-sm); }
+
+        /* Toast */
+        .toast { position: fixed; bottom: var(--space-6); right: var(--space-6); padding: var(--space-3) var(--space-5); background: var(--signal-strong); color: var(--bg-primary); border-radius: var(--radius-md); font-size: var(--font-sm); font-weight: var(--weight-medium); z-index: 1100; display: none; }
+        .toast.show { display: block; animation: fadeInUp 0.2s ease; }
+
+        @media (max-width: 1024px) { .rituals-grid { grid-template-columns: 1fr; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <main class="app-main">
+            <div class="content-container">
+
+                <header class="rit-header fade-in-up">
+                    <div class="rit-header__label">AI Hub v2.0</div>
+                    <h1 class="rit-header__title">Team <span>Rituals</span></h1>
+                    <p class="rit-header__subtitle">Three weekly ceremonies that keep your team aligned, accountable, and continuously improving. 50 minutes total per week.</p>
+                </header>
+
+                <div class="week-selector fade-in-up">
+                    <span class="week-selector__label">Week:</span>
+                    <input type="week" id="ritualWeek">
+                </div>
+
+                <!-- 3 Ritual Cards -->
+                <div class="rituals-grid fade-in-up" id="ritualsGrid"></div>
+
+                <!-- Monthly Postmortem -->
+                <section class="postmortem-section fade-in-up">
+                    <h2 class="postmortem-section__title">Monthly Postmortem</h2>
+                    <div class="postmortem-form">
+                        <div class="ritual-form__group">
+                            <label class="ritual-form__label">Month</label>
+                            <input type="month" class="ritual-form__input" id="postmortemMonth" style="max-width: 200px;">
+                        </div>
+                        <div class="ritual-form__group">
+                            <label class="ritual-form__label">Top 3 Wins</label>
+                            <textarea class="ritual-form__textarea" id="postmortemWins" rows="3" placeholder="What did the team accomplish? Evidence?"></textarea>
+                        </div>
+                        <div class="ritual-form__group">
+                            <label class="ritual-form__label">Top 3 Misses</label>
+                            <textarea class="ritual-form__textarea" id="postmortemMisses" rows="3" placeholder="What underperformed? What were the root causes?"></textarea>
+                        </div>
+                        <div class="ritual-form__group">
+                            <label class="ritual-form__label">Process Changes for Next Month</label>
+                            <textarea class="ritual-form__textarea" id="postmortemChanges" rows="3" placeholder="Specific changes. Who owns what?"></textarea>
+                        </div>
+                        <div class="ritual-form__actions">
+                            <button class="btn-save" id="savePostmortem">Save Postmortem</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Ritual Log -->
+                <section class="ritual-log fade-in-up">
+                    <h2 class="ritual-log__title">Ritual Log</h2>
+                    <div id="ritualLog"></div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="../shared/sidebar.js"></script>
+    <script src="../shared/v2-footer.js"></script>
+    <script src="../shared/export-utils.js"></script>
+    <script>
+    (function() {
+        'use strict';
+
+        var STORAGE_KEY = 'ritual-entries';
+        var POSTMORTEM_KEY = 'ritual-postmortems';
+        var currentWeek = '';
+
+        var RITUALS = [
+            {
+                id: 'monday',
+                day: 'Monday',
+                dot: 'mon',
+                name: 'Signal Kickoff',
+                duration: '15 min',
+                agenda: [
+                    'Each person shares: Top priority req this week + biggest blocker',
+                    'Team identifies: Shared patterns or overlapping challenges',
+                    'Decide together: What we do differently this week',
+                    'Commit: What we stop doing (one thing)'
+                ],
+                fields: [
+                    { id: 'topReq', label: 'Top Req This Week', type: 'input', placeholder: 'Role or req to prioritize' },
+                    { id: 'topBlocker', label: 'Top Blocker', type: 'input', placeholder: 'What is slowing you down?' },
+                    { id: 'doDifferently', label: 'What We Do Differently', type: 'textarea', placeholder: 'Team-agreed change for this week' },
+                    { id: 'stopDoing', label: 'What We Stop Doing', type: 'input', placeholder: 'One thing to drop this week' }
+                ]
+            },
+            {
+                id: 'wednesday',
+                day: 'Wednesday',
+                dot: 'wed',
+                name: 'Pipeline Truth Check',
+                duration: '15 min',
+                agenda: [
+                    'Review stuck roles (no movement in 5+ business days)',
+                    'Diagnose each: Volume problem or Relevance problem?',
+                    'Assign action per stuck role',
+                    'Flag any roles for escalation to HM'
+                ],
+                fields: [
+                    { id: 'stuckRoles', label: 'Stuck Roles', type: 'stuckRoles' },
+                    { id: 'escalations', label: 'Escalations to HM', type: 'textarea', placeholder: 'Roles that need HM conversation this week' },
+                    { id: 'actionItems', label: 'Action Items', type: 'textarea', placeholder: 'Who does what by when?' }
+                ]
+            },
+            {
+                id: 'friday',
+                day: 'Friday',
+                dot: 'fri',
+                name: 'Proof & Learn',
+                duration: '20 min',
+                agenda: [
+                    'Win demo: One person shares a success story with evidence',
+                    'Miss share: One person shares a failure with honest root cause',
+                    'Asset capture: Document any reusable template or learning',
+                    'Shout-out: Recognize one team member\'s contribution'
+                ],
+                fields: [
+                    { id: 'winDemo', label: 'Win Demo', type: 'textarea', placeholder: 'What worked? What evidence proves it?' },
+                    { id: 'missShare', label: 'Miss Share', type: 'textarea', placeholder: 'What failed? Why? What did we learn?' },
+                    { id: 'assetCapture', label: 'Asset Captured', type: 'input', placeholder: 'Template or learning documented' },
+                    { id: 'shoutout', label: 'Shout-out', type: 'input', placeholder: 'Team member + what they did' }
+                ]
+            }
+        ];
+
+        /* --- Init --- */
+        var now = new Date();
+        var yr = now.getFullYear();
+        var wk = getWeekNumber(now);
+        currentWeek = yr + '-W' + String(wk).padStart(2, '0');
+        document.getElementById('ritualWeek').value = currentWeek;
+
+        renderRituals();
+        renderLog();
+
+        document.getElementById('ritualWeek').addEventListener('change', function() {
+            currentWeek = this.value;
+            renderRituals();
+        });
+
+        /* --- Render Ritual Cards --- */
+        function renderRituals() {
+            var container = document.getElementById('ritualsGrid');
+            var saved = getSaved(currentWeek);
+            var html = '';
+
+            RITUALS.forEach(function(ritual) {
+                var data = saved[ritual.id] || {};
+                var isDone = data._done === true;
+
+                html += '<div class="ritual-card' + (isDone ? '' : ' expanded') + '" data-ritual="' + ritual.id + '">';
+
+                // Header
+                html += '<div class="ritual-card__header">';
+                html += '<div class="ritual-card__day">';
+                html += '<div class="ritual-card__dot ritual-card__dot--' + ritual.dot + '"></div>';
+                html += '<div>';
+                html += '<div class="ritual-card__day-label">' + ritual.day + '</div>';
+                html += '<div class="ritual-card__name">' + ritual.name + ' &middot; ' + ritual.duration + '</div>';
+                html += '</div>';
+                html += '</div>';
+                html += '<div style="display:flex;align-items:center;gap:var(--space-3);">';
+                html += '<div class="ritual-card__status' + (isDone ? ' done' : '') + '" data-done="' + ritual.id + '">';
+                html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+                html += '</div>';
+                html += '<svg class="ritual-card__chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+                html += '</div>';
+                html += '</div>';
+
+                // Body
+                html += '<div class="ritual-card__body">';
+
+                // Agenda
+                html += '<div class="ritual-card__agenda">';
+                html += '<div class="ritual-card__agenda-title">Agenda</div>';
+                html += '<ul class="ritual-card__agenda-list">';
+                ritual.agenda.forEach(function(item) {
+                    html += '<li>' + item + '</li>';
+                });
+                html += '</ul></div>';
+
+                // Form fields
+                html += '<div class="ritual-form">';
+                ritual.fields.forEach(function(field) {
+                    html += '<div class="ritual-form__group">';
+                    html += '<label class="ritual-form__label">' + field.label + '</label>';
+
+                    if (field.type === 'input') {
+                        html += '<input class="ritual-form__input" data-field="' + ritual.id + '.' + field.id + '" placeholder="' + field.placeholder + '" value="' + esc(data[field.id] || '') + '">';
+                    } else if (field.type === 'textarea') {
+                        html += '<textarea class="ritual-form__textarea" data-field="' + ritual.id + '.' + field.id + '" rows="2" placeholder="' + field.placeholder + '">' + esc(data[field.id] || '') + '</textarea>';
+                    } else if (field.type === 'stuckRoles') {
+                        var roles = data.stuckRoles || [''];
+                        html += '<div class="stuck-roles" data-stuck="' + ritual.id + '">';
+                        roles.forEach(function(role, i) {
+                            html += '<div class="stuck-role-item">';
+                            html += '<input class="ritual-form__input stuck-input" placeholder="Role name" value="' + esc(role) + '">';
+                            html += '<div class="diagnosis-toggle">';
+                            var diag = (data.diagnoses || [])[i] || '';
+                            html += '<button class="diagnosis-btn' + (diag === 'volume' ? ' active' : '') + '" data-diag="volume">Volume</button>';
+                            html += '<button class="diagnosis-btn' + (diag === 'relevance' ? ' active' : '') + '" data-diag="relevance">Relevance</button>';
+                            html += '</div>';
+                            html += '</div>';
+                        });
+                        html += '<button class="add-role-btn" data-add-role="' + ritual.id + '">+ Add stuck role</button>';
+                        html += '</div>';
+                    }
+                    html += '</div>';
+                });
+
+                html += '<div class="ritual-form__actions">';
+                html += '<button class="btn-save" data-save="' + ritual.id + '">Save</button>';
+                html += '</div>';
+                html += '</div>';
+
+                html += '</div>'; // body
+                html += '</div>'; // card
+            });
+
+            container.innerHTML = html;
+            bindCardEvents();
+        }
+
+        function bindCardEvents() {
+            // Toggle expand
+            document.querySelectorAll('.ritual-card__header').forEach(function(header) {
+                header.addEventListener('click', function(e) {
+                    if (e.target.closest('.ritual-card__status')) return;
+                    this.closest('.ritual-card').classList.toggle('expanded');
+                });
+            });
+
+            // Done toggle
+            document.querySelectorAll('[data-done]').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    var id = this.dataset.done;
+                    var saved = getSaved(currentWeek);
+                    if (!saved[id]) saved[id] = {};
+                    saved[id]._done = !saved[id]._done;
+                    saveSaved(currentWeek, saved);
+                    this.classList.toggle('done');
+                });
+            });
+
+            // Save buttons
+            document.querySelectorAll('[data-save]').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    saveRitual(this.dataset.save);
+                });
+            });
+
+            // Add stuck role
+            document.querySelectorAll('[data-add-role]').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var container = this.closest('.stuck-roles');
+                    var newItem = document.createElement('div');
+                    newItem.className = 'stuck-role-item';
+                    newItem.innerHTML = '<input class="ritual-form__input stuck-input" placeholder="Role name">' +
+                        '<div class="diagnosis-toggle">' +
+                        '<button class="diagnosis-btn" data-diag="volume">Volume</button>' +
+                        '<button class="diagnosis-btn" data-diag="relevance">Relevance</button>' +
+                        '</div>';
+                    container.insertBefore(newItem, this);
+                    bindDiagnosis(newItem);
+                });
+            });
+
+            // Diagnosis toggles
+            document.querySelectorAll('.diagnosis-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var sibs = this.parentElement.querySelectorAll('.diagnosis-btn');
+                    sibs.forEach(function(s) { s.classList.remove('active'); });
+                    this.classList.add('active');
+                });
+            });
+        }
+
+        function bindDiagnosis(container) {
+            container.querySelectorAll('.diagnosis-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var sibs = this.parentElement.querySelectorAll('.diagnosis-btn');
+                    sibs.forEach(function(s) { s.classList.remove('active'); });
+                    this.classList.add('active');
+                });
+            });
+        }
+
+        function saveRitual(ritualId) {
+            var saved = getSaved(currentWeek);
+            if (!saved[ritualId]) saved[ritualId] = {};
+
+            // Regular fields
+            document.querySelectorAll('[data-field^="' + ritualId + '."]').forEach(function(el) {
+                var key = el.dataset.field.split('.')[1];
+                saved[ritualId][key] = el.value;
+            });
+
+            // Stuck roles (Wednesday)
+            var stuckContainer = document.querySelector('[data-stuck="' + ritualId + '"]');
+            if (stuckContainer) {
+                var roles = [];
+                var diagnoses = [];
+                stuckContainer.querySelectorAll('.stuck-role-item').forEach(function(item) {
+                    var input = item.querySelector('.stuck-input');
+                    var activeBtn = item.querySelector('.diagnosis-btn.active');
+                    roles.push(input ? input.value : '');
+                    diagnoses.push(activeBtn ? activeBtn.dataset.diag : '');
+                });
+                saved[ritualId].stuckRoles = roles;
+                saved[ritualId].diagnoses = diagnoses;
+            }
+
+            saveSaved(currentWeek, saved);
+            renderLog();
+            showToast('Ritual saved');
+        }
+
+        /* --- Storage --- */
+        function getSaved(week) {
+            try {
+                var all = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+                return all[week] || {};
+            } catch(e) { return {}; }
+        }
+
+        function saveSaved(week, data) {
+            try {
+                var all = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+                all[week] = data;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+            } catch(e) {}
+        }
+
+        /* --- Log --- */
+        function renderLog() {
+            var container = document.getElementById('ritualLog');
+            var all;
+            try { all = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch(e) { all = {}; }
+
+            var weeks = Object.keys(all).sort().reverse();
+            if (weeks.length === 0) {
+                container.innerHTML = '<div class="log-empty">No rituals logged yet. Complete your first ritual above.</div>';
+                return;
+            }
+
+            var html = '';
+            weeks.slice(0, 12).forEach(function(week) {
+                var data = all[week];
+                var badges = '';
+                var bodyHtml = '';
+
+                RITUALS.forEach(function(r) {
+                    if (data[r.id] && data[r.id]._done) {
+                        badges += '<span class="log-item__badge log-item__badge--' + r.dot + '">' + r.day + '</span>';
+                    }
+                    if (data[r.id]) {
+                        bodyHtml += '<strong>' + r.day + ' — ' + r.name + ':</strong><br>';
+                        r.fields.forEach(function(f) {
+                            if (f.type === 'stuckRoles') {
+                                var roles = data[r.id].stuckRoles || [];
+                                var diags = data[r.id].diagnoses || [];
+                                if (roles.filter(Boolean).length > 0) {
+                                    bodyHtml += f.label + ': ' + roles.filter(Boolean).map(function(role, i) {
+                                        return role + (diags[i] ? ' (' + diags[i] + ')' : '');
+                                    }).join(', ') + '<br>';
+                                }
+                            } else {
+                                var val = data[r.id][f.id];
+                                if (val) bodyHtml += f.label + ': ' + esc(val) + '<br>';
+                            }
+                        });
+                        bodyHtml += '<br>';
+                    }
+                });
+
+                html += '<div class="log-item">';
+                html += '<div class="log-item__header">';
+                html += '<span class="log-item__date">' + week + '</span>';
+                html += '<div class="log-item__badges">' + badges + '</div>';
+                html += '</div>';
+                html += '<div class="log-item__body">' + bodyHtml + '</div>';
+                html += '</div>';
+            });
+
+            container.innerHTML = html;
+
+            container.querySelectorAll('.log-item').forEach(function(item) {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('expanded');
+                });
+            });
+        }
+
+        /* --- Monthly Postmortem --- */
+        document.getElementById('savePostmortem').addEventListener('click', function() {
+            var month = document.getElementById('postmortemMonth').value;
+            if (!month) { showToast('Select a month'); return; }
+            var pm = {
+                month: month,
+                wins: document.getElementById('postmortemWins').value,
+                misses: document.getElementById('postmortemMisses').value,
+                changes: document.getElementById('postmortemChanges').value,
+                savedAt: new Date().toISOString()
+            };
+            var list;
+            try { list = JSON.parse(localStorage.getItem(POSTMORTEM_KEY)) || []; } catch(e) { list = []; }
+            var idx = list.findIndex(function(p) { return p.month === month; });
+            if (idx >= 0) list[idx] = pm; else list.unshift(pm);
+            localStorage.setItem(POSTMORTEM_KEY, JSON.stringify(list));
+            showToast('Postmortem saved');
+        });
+
+        /* --- Helpers --- */
+        function getWeekNumber(d) {
+            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+            var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+        }
+
+        function esc(s) {
+            if (!s) return '';
+            var d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+        }
+
+        function showToast(msg) {
+            var t = document.getElementById('toast');
+            t.textContent = msg; t.classList.add('show');
+            setTimeout(function() { t.classList.remove('show'); }, 2000);
+        }
+    })();
+    </script>
+</body>
+</html>

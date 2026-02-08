@@ -1,0 +1,189 @@
+{
+  "meta": {
+    "assistantUsage": "fallback-only",
+    "note": "Learning Assistant now uses server-side live corpus retrieval first."
+  },
+  "searchIndex": [
+    {
+      "id": "command-center",
+      "title": "Command Center | AI Hub v2.0",
+      "description": "Your central hub for AI-powered recruiting tools, training, and resources.",
+      "url": "/",
+      "category": "Home",
+      "type": "page",
+      "keywords": "home, dashboard, command center, hub",
+      "content": ""
+    },
+    {
+      "id": "stages",
+      "title": "The 12 Stages | AI Hub v2.0",
+      "description": "Master AI in recruiting through 12 progressive stages from awareness to leadership.",
+      "url": "/stages/",
+      "category": "Training",
+      "type": "page",
+      "keywords": "stages, training, onboarding, learning path, 12 stages"
+    },
+    {
+      "id": "prompts",
+      "title": "Prompt Arsenal | AI Hub v2.0",
+      "description": "Copy-ready AI prompts organized by recruiting workflow category.",
+      "url": "/prompts/",
+      "category": "Tools",
+      "type": "page",
+      "keywords": "prompts, arsenal, templates, copy, recruiting prompts"
+    },
+    {
+      "id": "manifesto",
+      "title": "Manifesto | AI Hub v2.0",
+      "description": "Our vision and principles for AI-powered recruiting at Randstad GBS.",
+      "url": "/manifesto/",
+      "category": "About",
+      "type": "page",
+      "keywords": "manifesto, vision, principles, mission"
+    },
+    {
+      "id": "passport",
+      "title": "Role Passport Builder | AI Hub v2.0",
+      "description": "Build structured AI role passports for any recruiting position.",
+      "url": "/passport/",
+      "category": "Tools",
+      "type": "page",
+      "keywords": "passport, role, job description, builder, JD"
+    },
+    {
+      "id": "truth-check",
+      "title": "Truth Check | AI Hub v2.0",
+      "description": "Validate AI outputs against evidence-based criteria before use.",
+      "url": "/truth-check/",
+      "category": "Tools",
+      "type": "page",
+      "keywords": "truth check, validation, verify, accuracy, hallucination"
+    },
+    {
+      "id": "confidence-pack",
+      "title": "Confidence Pack Builder | AI Hub v2.0",
+      "description": "Generate confidence packs with evidence-based talking points for stakeholder conversations.",
+      "url": "/confidence-pack/",
+      "category": "Tools",
+      "type": "page",
+      "keywords": "confidence pack, stakeholder, talking points, evidence"
+    },
+    {
+      "id": "academy",
+      "title": "Academy | AI Hub v2.0",
+      "description": "Structured video courses and learning modules for AI in recruiting.",
+      "url": "/academy/",
+      "category": "Learning",
+      "type": "page",
+      "keywords": "academy, courses, video, learning, modules"
+    },
+    {
+      "id": "library",
+      "title": "Asset Library | AI Hub v2.0",
+      "description": "Downloadable templates, guides, and resources for AI-powered recruiting.",
+      "url": "/library/",
+      "category": "Resources",
+      "type": "page",
+      "keywords": "library, assets, templates, downloads, resources"
+    },
+    {
+      "id": "telemetry",
+      "title": "Telemetry | AI Hub v2.0",
+      "description": "Track your AI adoption metrics and measure team progress.",
+      "url": "/telemetry/",
+      "category": "Tracking",
+      "type": "page",
+      "keywords": "telemetry, metrics, tracking, progress, analytics, dashboard"
+    },
+    {
+      "id": "rituals",
+      "title": "Team Rituals | AI Hub v2.0",
+      "description": "Structured team activities for building AI confidence together.",
+      "url": "/rituals/",
+      "category": "Team",
+      "type": "page",
+      "keywords": "rituals, team, activities, exercises, workshops"
+    },
+    {
+      "id": "profile",
+      "title": "Profile | AI Hub v2.0",
+      "description": "Your personal AI learning profile, certificates, and progress.",
+      "url": "/profile/",
+      "category": "Profile",
+      "type": "page",
+      "keywords": "profile, certificates, progress, settings"
+    },
+    {
+      "id": "ai-governance",
+      "title": "AI Hiring Governance | AI Hub v2.0",
+      "description": "AI hiring governance: candidate data rules, no automated decisioning, bias guidance, and safe prompt patterns.",
+      "url": "/ai-governance/",
+      "category": "Governance",
+      "type": "page",
+      "keywords": "governance, compliance, hiring, bias, GDPR, data, rules"
+    },
+    {
+      "id": "contact-us",
+      "title": "Contact Us | AI Hub v2.0",
+      "description": "Get in touch with the AI Hub team for support, feedback, or questions.",
+      "url": "/contact-us/",
+      "category": "Support",
+      "type": "page",
+      "keywords": "contact, support, help, email"
+    },
+    {
+      "id": "feedback",
+      "title": "Feedback | AI Hub v2.0",
+      "description": "Share your thoughts and help us improve the AI Hub.",
+      "url": "/feedback/",
+      "category": "Support",
+      "type": "page",
+      "keywords": "feedback, suggestions, report, improve"
+    },
+    {
+      "id": "submit-content",
+      "title": "Submit Content | AI Hub v2.0",
+      "description": "Share your best AI prompts and success stories with the community.",
+      "url": "/submit-content/",
+      "category": "Community",
+      "type": "page",
+      "keywords": "submit, share, prompts, success stories, community"
+    },
+    {
+      "id": "privacy-policy",
+      "title": "Privacy Policy | AI Hub v2.0",
+      "description": "How we collect, use, and protect your personal data.",
+      "url": "/privacy-policy/",
+      "category": "Legal",
+      "type": "page",
+      "keywords": "privacy, GDPR, data protection, personal data"
+    },
+    {
+      "id": "cookie-policy",
+      "title": "Cookie Policy | AI Hub v2.0",
+      "description": "Information about cookies used on the AI Hub platform.",
+      "url": "/cookie-policy/",
+      "category": "Legal",
+      "type": "page",
+      "keywords": "cookies, tracking, consent, analytics"
+    },
+    {
+      "id": "legal-notice",
+      "title": "Legal Notice | AI Hub v2.0",
+      "description": "Legal information, Impressum, and regulatory disclosures.",
+      "url": "/legal-notice/",
+      "category": "Legal",
+      "type": "page",
+      "keywords": "legal, impressum, regulations, disclaimer"
+    },
+    {
+      "id": "terms-of-service",
+      "title": "Terms of Service | AI Hub v2.0",
+      "description": "Terms governing your use of the AI Hub platform.",
+      "url": "/terms-of-service/",
+      "category": "Legal",
+      "type": "page",
+      "keywords": "terms, service, agreement, usage"
+    }
+  ]
+}

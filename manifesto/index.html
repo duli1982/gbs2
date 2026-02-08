@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>The Manifesto | AI Hub v2.0 — The Confidence Engine | Randstad GBS</title>
+
+    <meta name="description" content="The Manifesto — What's actually changing in recruiting, and why AI rewards those who think clearer, not those who work harder.">
+    <meta name="author" content="Randstad GBS">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="The Manifesto — AI Hub v2.0">
+    <meta property="og:description" content="AI will not reward those who work harder. It will reward those who think clearer.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Theme -->
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/sidebar.css">
+    <link rel="stylesheet" href="../shared/v2-buttons.css">
+
+    <style>
+        /* --- Manifesto Page --- */
+
+        .manifesto-breadcrumb {
+            margin-bottom: var(--space-10);
+        }
+
+        .manifesto-breadcrumb a {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        .manifesto-breadcrumb a:hover {
+            color: var(--text-secondary);
+        }
+
+        .manifesto-breadcrumb svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* --- Content Container --- */
+        .manifesto-content {
+            max-width: 720px;
+            margin: 0 auto;
+            padding-bottom: var(--space-16);
+        }
+
+        /* --- Section Base --- */
+        .manifesto-section {
+            padding: var(--space-20) 0;
+            border-bottom: 1px solid var(--border-subtle);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .manifesto-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .manifesto-section:first-child {
+            padding-top: 0;
+        }
+
+        .manifesto-section:last-child {
+            border-bottom: none;
+        }
+
+        /* --- Typography --- */
+        .manifesto-section h2 {
+            font-size: var(--font-5xl);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            line-height: var(--leading-tight);
+            letter-spacing: -0.02em;
+            margin-bottom: var(--space-6);
+        }
+
+        .manifesto-section h3 {
+            font-size: var(--font-3xl);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            line-height: var(--leading-snug);
+            letter-spacing: -0.01em;
+            margin-bottom: var(--space-5);
+        }
+
+        .manifesto-body {
+            font-size: var(--font-xl);
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .manifesto-body p {
+            margin-bottom: var(--space-5);
+            font-size: var(--font-xl);
+            line-height: 1.7;
+        }
+
+        .manifesto-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        .text-accent {
+            color: var(--accent-cyan);
+        }
+
+        .text-strong {
+            color: var(--text-primary);
+            font-weight: var(--weight-semibold);
+        }
+
+        /* --- Hero Section --- */
+        .manifesto-hero h1 {
+            font-size: var(--font-6xl);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            line-height: var(--leading-tight);
+            letter-spacing: -0.03em;
+            margin-bottom: var(--space-6);
+        }
+
+        .manifesto-hero .manifesto-subtitle {
+            font-size: 1.375rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            max-width: 660px;
+        }
+
+        /* --- List Style --- */
+        .manifesto-list {
+            list-style: none;
+            padding: 0;
+            margin: var(--space-6) 0 0 0;
+        }
+
+        .manifesto-list li {
+            position: relative;
+            padding-left: var(--space-6);
+            margin-bottom: var(--space-4);
+            font-size: var(--font-xl);
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .manifesto-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 12px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+        }
+
+        /* --- Comparison Grid --- */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-8);
+            margin-top: var(--space-8);
+        }
+
+        .comparison-col {
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+        }
+
+        .comparison-col--old {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .comparison-col--new {
+            background: rgba(0, 229, 255, 0.04);
+            border: 1px solid rgba(0, 229, 255, 0.12);
+        }
+
+        .comparison-col h4 {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-5);
+            padding-bottom: var(--space-3);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .comparison-col--old h4 {
+            color: var(--text-muted);
+        }
+
+        .comparison-col--new h4 {
+            color: var(--accent-cyan);
+        }
+
+        .comparison-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .comparison-col ul li {
+            font-size: var(--font-base);
+            line-height: var(--leading-relaxed);
+            padding: var(--space-2) 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .comparison-col ul li:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-col--old ul li {
+            color: var(--text-muted);
+        }
+
+        .comparison-col--new ul li {
+            color: var(--text-secondary);
+        }
+
+        /* --- The Line Divider --- */
+        .the-line {
+            display: flex;
+            align-items: center;
+            gap: var(--space-6);
+            margin: var(--space-8) 0;
+        }
+
+        .the-line__label {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .the-line__label--left {
+            color: var(--text-muted);
+        }
+
+        .the-line__label--right {
+            color: var(--accent-cyan);
+        }
+
+        .the-line__rule {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, var(--border-default), var(--accent-cyan));
+            border-radius: var(--radius-full);
+            position: relative;
+        }
+
+        .the-line__rule::after {
+            content: '';
+            position: absolute;
+            right: -4px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan-glow);
+        }
+
+        /* --- Before & After Grid --- */
+        .ba-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            margin-top: var(--space-8);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .ba-grid__header {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: var(--space-4) var(--space-5);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .ba-grid__header--before {
+            color: var(--text-muted);
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border-subtle);
+        }
+
+        .ba-grid__header--after {
+            color: var(--accent-cyan);
+            background: rgba(0, 229, 255, 0.04);
+        }
+
+        .ba-grid__row {
+            display: contents;
+        }
+
+        .ba-grid__cell {
+            padding: var(--space-3) var(--space-5);
+            font-size: var(--font-sm);
+            line-height: var(--leading-relaxed);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .ba-grid__row:last-child .ba-grid__cell {
+            border-bottom: none;
+        }
+
+        .ba-grid__cell--before {
+            color: var(--text-muted);
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border-subtle);
+        }
+
+        .ba-grid__cell--after {
+            color: var(--text-secondary);
+            background: rgba(0, 229, 255, 0.02);
+        }
+
+        /* --- Questions Section --- */
+        .manifesto-questions {
+            list-style: none;
+            padding: 0;
+            margin: var(--space-8) 0 0 0;
+        }
+
+        .manifesto-questions li {
+            font-size: var(--font-2xl);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            line-height: var(--leading-snug);
+            padding: var(--space-5) 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .manifesto-questions li:last-child {
+            border-bottom: none;
+        }
+
+        .manifesto-questions li span {
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+            font-size: var(--font-lg);
+            font-weight: var(--weight-normal);
+            margin-right: var(--space-3);
+        }
+
+        /* --- Closing Section --- */
+        .manifesto-closing {
+            text-align: center;
+            padding: var(--space-24) 0 var(--space-16);
+        }
+
+        .manifesto-closing p {
+            font-size: 1.75rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            max-width: 640px;
+            margin: 0 auto var(--space-6);
+        }
+
+        .manifesto-closing p:last-child {
+            margin-bottom: 0;
+        }
+
+        .manifesto-closing .text-accent {
+            font-weight: var(--weight-semibold);
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .manifesto-hero h1 {
+                font-size: var(--font-4xl);
+            }
+
+            .manifesto-section h2 {
+                font-size: var(--font-3xl);
+            }
+
+            .manifesto-section h3 {
+                font-size: var(--font-2xl);
+            }
+
+            .manifesto-body p,
+            .manifesto-list li {
+                font-size: var(--font-lg);
+            }
+
+            .manifesto-hero .manifesto-subtitle {
+                font-size: var(--font-lg);
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-4);
+            }
+
+            .ba-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ba-grid__header--before {
+                border-right: none;
+            }
+
+            .ba-grid__cell--before {
+                border-right: none;
+            }
+
+            .ba-grid__cell--after {
+                border-bottom: 1px solid var(--border-subtle);
+                padding-bottom: var(--space-4);
+                margin-bottom: var(--space-2);
+            }
+
+            .the-line {
+                flex-direction: column;
+                gap: var(--space-3);
+            }
+
+            .the-line__rule {
+                width: 100%;
+            }
+
+            .manifesto-questions li {
+                font-size: var(--font-xl);
+            }
+
+            .manifesto-closing p {
+                font-size: var(--font-2xl);
+            }
+
+            .manifesto-section {
+                padding: var(--space-12) 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .manifesto-hero h1 {
+                font-size: var(--font-3xl);
+            }
+
+            .manifesto-closing p {
+                font-size: var(--font-xl);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <!-- Sidebar injected by sidebar.js -->
+
+        <main class="app-main">
+            <div class="manifesto-content">
+
+                <!-- Breadcrumb -->
+                <nav class="manifesto-breadcrumb" aria-label="Breadcrumb">
+                    <a href="/">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                        Back to Command Center
+                    </a>
+                </nav>
+
+                <!-- 1. HERO -->
+                <section class="manifesto-section manifesto-hero visible">
+                    <h1>What's Actually Changing</h1>
+                    <p class="manifesto-subtitle">
+                        Randstad is not in the business of filling roles. We are in the business of reducing risk, uncertainty, and regret in hiring. AI does not change that mission. It changes how we deliver it.
+                    </p>
+                </section>
+
+                <!-- 2. WHAT AI IS REPLACING -->
+                <section class="manifesto-section">
+                    <h2>What AI Is Replacing</h2>
+                    <div class="manifesto-body">
+                        <p>
+                            Not people. Never people. What AI is replacing are the parts of the process that never should have depended on human effort in the first place.
+                        </p>
+                        <ul class="manifesto-list">
+                            <li>Manual screening without insight -- scrolling through CVs without a clear framework for what good looks like</li>
+                            <li>Repetitive sourcing that produces volume without signal -- the same Boolean strings, the same shallow results</li>
+                            <li>Status updates without substance -- activity reports that tell the client something happened, but not what it means</li>
+                            <li>Reporting without interpretation -- dashboards full of numbers that no one acts on</li>
+                            <li>Process steps that exist because "we have always done them" -- not because they add value to the outcome</li>
+                        </ul>
+                        <p>
+                            These are the tasks AI was built for. Letting go of them is not a loss. It is a correction.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 3. WHAT AI IS AMPLIFYING -->
+                <section class="manifesto-section">
+                    <h2>What AI Is Amplifying</h2>
+                    <div class="manifesto-body">
+                        <p>
+                            The value that only humans create -- judgment, trust, interpretation -- gets stronger when AI removes the noise around it.
+                        </p>
+                        <ul class="manifesto-list">
+                            <li><span class="text-strong">Better intake quality</span> -- structured conversations with hiring managers that surface real requirements, not wish lists</li>
+                            <li><span class="text-strong">Stronger shortlists</span> -- fewer candidates, each one backed by evidence and rationale</li>
+                            <li><span class="text-strong">Clear risk articulation</span> -- flagging concerns early, with specificity, rather than hoping problems resolve themselves</li>
+                            <li><span class="text-strong">Confident recommendations</span> -- presenting candidates with context the hiring manager can act on immediately</li>
+                            <li><span class="text-strong">Fewer surprises</span> -- the kind that erode trust, delay decisions, and make everyone question the process</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- 4. OLD MODEL VS NEW MODEL -->
+                <section class="manifesto-section">
+                    <h2>The Old Model vs The New Model</h2>
+                    <div class="manifesto-body">
+                        <p>
+                            This is not about technology. It is about what we measure, what we reward, and what we hold ourselves accountable for.
+                        </p>
+                    </div>
+                    <div class="comparison-grid">
+                        <div class="comparison-col comparison-col--old">
+                            <h4>The Old Model</h4>
+                            <ul>
+                                <li>Activity</li>
+                                <li>Responsiveness</li>
+                                <li>Coverage</li>
+                                <li>Volume</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-col comparison-col--new">
+                            <h4>The New Model</h4>
+                            <ul>
+                                <li>Signal over noise</li>
+                                <li>Judgment over throughput</li>
+                                <li>Trust over speed</li>
+                                <li>Outcome ownership over task completion</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. THE LINE THAT MATTERS -->
+                <section class="manifesto-section">
+                    <h2>The Line That Matters</h2>
+                    <div class="manifesto-body">
+                        <p>
+                            There is one dividing line that will define careers in recruiting over the next five years. It is not seniority, tenure, or technical skill. It is the difference between <span class="text-strong">execution roles</span> and <span class="text-strong">decision roles</span>.
+                        </p>
+                    </div>
+
+                    <div class="the-line">
+                        <span class="the-line__label the-line__label--left">Execution</span>
+                        <div class="the-line__rule"></div>
+                        <span class="the-line__label the-line__label--right">Decision</span>
+                    </div>
+
+                    <div class="manifesto-body">
+                        <p>
+                            If your value is running steps, AI competes with you. If your value is owning outcomes, <span class="text-accent">AI works for you</span>.
+                        </p>
+                        <p>
+                            This is not a threat. It is a clarification. And it has always been true -- AI just makes it impossible to ignore.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 5.5 THE VERIFICATION EDGE -->
+                <section class="manifesto-section">
+                    <h2>The Verification Edge</h2>
+                    <div class="manifesto-body">
+                        <p>
+                            Here is what most people miss about AI in recruiting: <span class="text-strong">everyone will have it</span>. Every agency, every RPO, every in-house team. The same sourcing automation, the same candidate engagement tools, the same generative drafts. AI is not a competitive advantage. It is table stakes.
+                        </p>
+                        <p>
+                            So what separates the teams that win from the teams that just move faster? <span class="text-accent">Verification.</span> The discipline to prove what you claim. To catch gaps before they cost you. To score evidence instead of trusting impressions. To submit candidates with proof attached to every claim and a plan for every risk.
+                        </p>
+                        <p>
+                            Speed without verification is just faster failure. AI gives you the speed. <span class="text-strong">You build the proof.</span>
+                        </p>
+                        <p>
+                            That is what every tool in this system is designed to enforce. Not just to generate outputs -- but to demand evidence at every step, catch what is missing, and make sure nothing reaches a hiring manager without having been verified first.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 6. BEFORE & AFTER -->
+                <section class="manifesto-section">
+                    <h2>Before and After</h2>
+                    <div class="manifesto-body">
+                        <p>
+                            The shift is not abstract. It shows up in every workflow, every conversation, every deliverable. Here is what it looks like in practice.
+                        </p>
+                    </div>
+
+                    <div class="ba-grid">
+                        <div class="ba-grid__header ba-grid__header--before">Before</div>
+                        <div class="ba-grid__header ba-grid__header--after">After</div>
+
+                        <div class="ba-grid__row">
+                            <div class="ba-grid__cell ba-grid__cell--before">Success measured by activity and speed</div>
+                            <div class="ba-grid__cell ba-grid__cell--after">Success measured by decision quality and outcomes</div>
+                        </div>
+                        <div class="ba-grid__row">
+                            <div class="ba-grid__cell ba-grid__cell--before">Large pipelines, high candidate volume</div>
+                            <div class="ba-grid__cell ba-grid__cell--after">Smaller pipelines, stronger signal per candidate</div>
+                        </div>
+                        <div class="ba-grid__row">
+                            <div class="ba-grid__cell ba-grid__cell--before">CVs forwarded with limited interpretation</div>
+                            <div class="ba-grid__cell ba-grid__cell--after">Shortlists delivered with rationale and risk flags</div>
+                        </div>
+                        <div class="ba-grid__row">
+                            <div class="ba-grid__cell ba-grid__cell--before">Manual screening, gut-based filtering</div>
+                            <div class="ba-grid__cell ba-grid__cell--after">Screening built on evidence, motivation, and fit</div>
+                        </div>
+                        <div class="ba-grid__row">
+                            <div class="ba-grid__cell ba-grid__cell--before">Reporting focused on volumes and SLAs</div>
+                            <div class="ba-grid__cell ba-grid__cell--after">Reporting focused on insights, patterns, and blockers</div>
+                        </div>
+                        <div class="ba-grid__row">
+                            <div class="ba-grid__cell ba-grid__cell--before">Knowledge trapped in individual experience</div>
+                            <div class="ba-grid__cell ba-grid__cell--after">Knowledge captured, structured, and reused</div>
+                        </div>
+                        <div class="ba-grid__row">
+                            <div class="ba-grid__cell ba-grid__cell--before">Quality corrections discovered late in process</div>
+                            <div class="ba-grid__cell ba-grid__cell--after">Risks and misalignment surfaced early</div>
+                        </div>
+                        <div class="ba-grid__row">
+                            <div class="ba-grid__cell ba-grid__cell--before">GBS operates as an execution engine</div>
+                            <div class="ba-grid__cell ba-grid__cell--after">GBS operates as a confidence and intelligence layer</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 7. WHAT DOESN'T CHANGE -->
+                <section class="manifesto-section">
+                    <h2>What Does Not Change</h2>
+                    <div class="manifesto-body">
+                        <p>
+                            Not everything needs reinventing. Some things are permanent -- not because they are traditional, but because they are fundamental.
+                        </p>
+                        <ul class="manifesto-list">
+                            <li><span class="text-strong">Human trust still matters.</span> Hiring managers and candidates do not want to interact with a system. They want to interact with someone who understands their context and earns their confidence.</li>
+                            <li><span class="text-strong">Candidate experience still matters.</span> How people feel during the process shapes how they perceive Randstad. No algorithm fixes a bad conversation.</li>
+                            <li><span class="text-strong">Hiring managers still need guidance.</span> Most of them are not expert recruiters. They need advisors, not order-takers.</li>
+                            <li><span class="text-strong">Accountability sits with people, not tools.</span> AI generates options. People own the decision and its consequences.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- 8. THE QUESTION -->
+                <section class="manifesto-section">
+                    <h2>The Question</h2>
+                    <div class="manifesto-body">
+                        <p>
+                            The tools are here. The infrastructure is being built. The only question left is personal. When you sit across from a hiring manager, or review a shortlist, or prepare a submission -- ask yourself:
+                        </p>
+                    </div>
+                    <ul class="manifesto-questions">
+                        <li><span>01</span> Can you explain why this candidate?</li>
+                        <li><span>02</span> Can you surface risk early?</li>
+                        <li><span>03</span> Can you guide hiring managers with confidence?</li>
+                        <li><span>04</span> Can you design better decisions, not just faster ones?</li>
+                    </ul>
+                </section>
+
+                <!-- 9. CLOSING -->
+                <section class="manifesto-section manifesto-closing">
+                    <p>
+                        AI will not reward those who work harder. It will reward those who <span class="text-accent">think clearer</span>.
+                    </p>
+                    <p>
+                        The future Randstad professional is not faster. They are more deliberate, more trusted, and more decisive.
+                    </p>
+                    <p>
+                        And that future is already being built -- <span class="text-accent">inside GBS</span>.
+                    </p>
+                </section>
+
+            </div><!-- /manifesto-content -->
+        </main>
+    </div><!-- /app-layout -->
+
+    <!-- Scripts -->
+    <script src="../shared/sidebar.js"></script>
+    <script src="../shared/v2-footer.js"></script>
+    <script>
+        // IntersectionObserver for scroll-triggered section reveals
+        (function() {
+            'use strict';
+
+            var sections = document.querySelectorAll('.manifesto-section');
+
+            if ('IntersectionObserver' in window) {
+                var observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.12,
+                    rootMargin: '0px 0px -40px 0px'
+                });
+
+                sections.forEach(function(section) {
+                    if (!section.classList.contains('visible')) {
+                        observer.observe(section);
+                    }
+                });
+            } else {
+                // Fallback: show all sections immediately
+                sections.forEach(function(section) {
+                    section.classList.add('visible');
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

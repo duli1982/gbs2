@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>Prompt Arsenal — AI Hub v2.0</title>
+    <meta name="description" content="Stage-organized AI prompts for every step of the recruiting pipeline.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/sidebar.css">
+    <link rel="stylesheet" href="../shared/v2-buttons.css">
+    <link rel="stylesheet" href="../shared/v2-cards.css">
+
+    <style>
+        /* --- Prompt Arsenal Layout --- */
+        .arsenal-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr 380px;
+            gap: var(--space-6);
+            min-height: calc(100vh - 120px);
+        }
+
+        /* --- Page Header --- */
+        .arsenal-header {
+            margin-bottom: var(--space-6);
+        }
+
+        .arsenal-header h1 {
+            font-size: var(--font-3xl);
+            font-weight: var(--weight-bold);
+            letter-spacing: -0.02em;
+        }
+
+        .arsenal-header h1 span {
+            color: var(--accent-cyan);
+        }
+
+        .arsenal-header p {
+            margin-top: var(--space-2);
+            max-width: 600px;
+        }
+
+        /* --- Search Bar --- */
+        .arsenal-search {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-6);
+        }
+
+        .search-input {
+            flex: 1;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 10px 16px 10px 40px;
+            color: var(--text-primary);
+            font-size: var(--font-sm);
+            font-family: var(--font-family);
+            transition: border-color var(--transition-fast);
+            position: relative;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px var(--accent-cyan-dim);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-wrapper svg {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .type-filters {
+            display: flex;
+            gap: var(--space-2);
+        }
+
+        /* --- Stage Filter (Left Panel) --- */
+        .stage-filter {
+            position: sticky;
+            top: var(--space-4);
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .stage-filter__title {
+            font-size: var(--font-xs);
+            font-weight: var(--weight-semibold);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: var(--space-2) var(--space-3);
+            margin-bottom: var(--space-1);
+        }
+
+        .stage-filter__cluster {
+            margin-bottom: var(--space-4);
+        }
+
+        .stage-filter__cluster-label {
+            font-size: 10px;
+            font-weight: var(--weight-semibold);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: var(--space-1) var(--space-3);
+            margin-bottom: var(--space-1);
+        }
+
+        .stage-filter__item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: 6px 12px;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: var(--font-sm);
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+
+        .stage-filter__item:hover {
+            background: var(--bg-surface-hover);
+            color: var(--text-primary);
+        }
+
+        .stage-filter__item.active {
+            background: var(--accent-cyan-dim);
+            color: var(--accent-cyan);
+        }
+
+        .stage-filter__item-num {
+            font-family: var(--font-mono);
+            font-size: var(--font-xs);
+            width: 22px;
+            text-align: right;
+            flex-shrink: 0;
+            opacity: 0.6;
+        }
+
+        .stage-filter__item-label {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .stage-filter__item-count {
+            margin-left: auto;
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .stage-filter__all {
+            margin-bottom: var(--space-4);
+        }
+
+        /* --- Prompt List (Center Panel) --- */
+        .prompt-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .prompt-list__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-2);
+        }
+
+        .prompt-list__count {
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+        }
+
+        /* --- Prompt Card Extensions --- */
+        .card--prompt .prompt__content {
+            display: none;
+            margin-top: var(--space-4);
+            padding: var(--space-4);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            font-family: var(--font-mono);
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .card--prompt.expanded .prompt__content {
+            display: block;
+        }
+
+        .card--prompt .prompt__usage {
+            display: none;
+            margin-top: var(--space-3);
+            padding: var(--space-3);
+            background: var(--accent-cyan-dim);
+            border-radius: var(--radius-md);
+            font-size: var(--font-xs);
+            color: var(--accent-cyan);
+            line-height: var(--leading-normal);
+        }
+
+        .card--prompt.expanded .prompt__usage {
+            display: block;
+        }
+
+        .prompt__stage-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-bottom: var(--space-1);
+        }
+
+        /* Type badges */
+        .type-badge {
+            font-size: 10px;
+            font-weight: var(--weight-semibold);
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .type-badge--intake {
+            background: var(--accent-cyan-dim);
+            color: var(--accent-cyan);
+        }
+
+        .type-badge--execution {
+            background: var(--accent-green-dim);
+            color: var(--accent-green);
+        }
+
+        .type-badge--verification {
+            background: var(--accent-amber-dim);
+            color: var(--accent-amber);
+        }
+
+        /* --- Playground (Right Panel) --- */
+        .playground {
+            position: sticky;
+            top: var(--space-4);
+            max-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .playground__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .playground__title {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+        }
+
+        .playground__body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: var(--space-4);
+            gap: var(--space-3);
+            overflow: hidden;
+        }
+
+        .playground__textarea {
+            flex: 1;
+            min-height: 150px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: var(--space-3);
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            font-size: var(--font-sm);
+            line-height: var(--leading-normal);
+            resize: none;
+        }
+
+        .playground__textarea:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+        }
+
+        .playground__textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .playground__response {
+            flex: 1;
+            min-height: 150px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: var(--space-3);
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+            white-space: pre-wrap;
+        }
+
+        .playground__response--empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .playground__actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .playground__actions .btn {
+            flex: 1;
+        }
+
+        /* Engine selector */
+        .engine-select {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 6px 10px;
+            color: var(--text-secondary);
+            font-size: var(--font-xs);
+            font-family: var(--font-family);
+            cursor: pointer;
+        }
+
+        .engine-select:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+        }
+
+        /* --- No Results --- */
+        .no-results {
+            text-align: center;
+            padding: var(--space-12) var(--space-6);
+            color: var(--text-muted);
+        }
+
+        .no-results h3 {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-2);
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 1280px) {
+            .arsenal-layout {
+                grid-template-columns: 200px 1fr;
+            }
+            .playground {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .arsenal-layout {
+                grid-template-columns: 1fr;
+            }
+            .stage-filter {
+                position: static;
+                max-height: none;
+                display: flex;
+                flex-wrap: wrap;
+                gap: var(--space-1);
+                margin-bottom: var(--space-4);
+            }
+            .stage-filter__title,
+            .stage-filter__cluster-label {
+                display: none;
+            }
+            .stage-filter__cluster {
+                display: contents;
+                margin: 0;
+            }
+            .stage-filter__item {
+                width: auto;
+                padding: 4px 10px;
+                font-size: var(--font-xs);
+                border: 1px solid var(--border-subtle);
+                border-radius: var(--radius-full);
+            }
+            .stage-filter__item-count {
+                display: none;
+            }
+            .type-filters {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Loading */
+        .loading-spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-12);
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <main class="app-main">
+            <div class="content-container">
+
+                <!-- Header -->
+                <div class="arsenal-header fade-in-up">
+                    <h1>Prompt <span>Arsenal</span></h1>
+                    <p>Ready-to-use prompts for every stage of the recruiting pipeline. Copy, customize, and execute.</p>
+                </div>
+
+                <!-- Search + Type Filters -->
+                <div class="arsenal-search fade-in-up fade-in-up-delay-1">
+                    <div class="search-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" class="search-input" id="promptSearch" placeholder="Search prompts..." aria-label="Search prompts">
+                    </div>
+                    <div class="type-filters">
+                        <button class="tag active" data-type="all">All</button>
+                        <button class="tag" data-type="intake">Intake</button>
+                        <button class="tag" data-type="execution">Execution</button>
+                        <button class="tag" data-type="verification">Verification</button>
+                    </div>
+                </div>
+
+                <!-- Main Layout -->
+                <div class="arsenal-layout fade-in-up fade-in-up-delay-2">
+
+                    <!-- Left: Stage Filter -->
+                    <aside class="stage-filter" id="stageFilter">
+                        <div class="stage-filter__all">
+                            <button class="stage-filter__item active" data-stage="all">
+                                <span class="stage-filter__item-label">All Stages</span>
+                                <span class="stage-filter__item-count" id="totalCount">--</span>
+                            </button>
+                        </div>
+                        <!-- Populated by JS -->
+                    </aside>
+
+                    <!-- Center: Prompt Cards -->
+                    <section id="promptList" aria-label="Prompt list">
+                        <div class="loading-spinner">Loading prompts...</div>
+                    </section>
+
+                    <!-- Right: Playground -->
+                    <aside class="playground" id="playground">
+                        <div class="playground__header">
+                            <span class="playground__title">Playground</span>
+                            <select class="engine-select" id="engineSelect" aria-label="Select AI engine">
+                                <option value="gemini">Gemini</option>
+                                <option value="copilot" disabled>Copilot (soon)</option>
+                            </select>
+                        </div>
+                        <div class="playground__body">
+                            <textarea class="playground__textarea" id="playgroundInput" placeholder="Paste a prompt here to test it..."></textarea>
+                            <div class="playground__actions">
+                                <button class="btn btn-primary btn-sm" id="playgroundRun">Run Prompt</button>
+                                <button class="btn btn-ghost btn-sm" id="playgroundClear">Clear</button>
+                            </div>
+                            <div class="playground__response playground__response--empty" id="playgroundOutput">
+                                Response will appear here
+                            </div>
+                        </div>
+                    </aside>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../shared/sidebar.js"></script>
+    <script src="../shared/v2-footer.js"></script>
+    <script src="../shared/export-utils.js"></script>
+    <script src="../shared/ai-service.js"></script>
+
+    <script>
+    (function() {
+        'use strict';
+
+        let allPrompts = [];
+        let activeStage = 'all';
+        let activeType = 'all';
+        let searchQuery = '';
+        let searchDebounceTimer = null;
+
+        const SEARCH_STOP_WORDS = new Set([
+            'a','an','and','are','as','at','be','by','for','from','how','i','in','is','it',
+            'of','on','or','that','the','to','was','what','when','where','which','who','why','with','you','your'
+        ]);
+
+        const QUERY_EXPANSIONS = {
+            ai: ['artificial intelligence', 'genai', 'llm'],
+            prompt: ['template', 'playbook'],
+            sourcing: ['boolean', 'talent search', 'blueprint'],
+            outreach: ['email', 'engagement', 'message'],
+            screen: ['screening', 'truth check', 'pre-hm'],
+            submission: ['confidence pack', 'shortlist'],
+            market: ['intelligence', 'competitor', 'mapping']
+        };
+
+        const STAGES = [
+            { num: 1,  label: 'Intake & Role Passport',     cluster: 'Define' },
+            { num: 2,  label: 'JD & Attraction',             cluster: 'Define' },
+            { num: 3,  label: 'Market & Competitor Reality',  cluster: 'Define' },
+            { num: 4,  label: 'Sourcing Blueprint',           cluster: 'Execute' },
+            { num: 5,  label: 'Outreach & Engagement',        cluster: 'Execute' },
+            { num: 6,  label: 'Recruiter Screen',             cluster: 'Execute' },
+            { num: 7,  label: 'Submission & HM Prep',         cluster: 'Execute' },
+            { num: 8,  label: 'Interview Loop Design',        cluster: 'Execute' },
+            { num: 9,  label: 'Debrief & Decision',           cluster: 'Close & Learn' },
+            { num: 10, label: 'Offer & Close',                cluster: 'Close & Learn' },
+            { num: 11, label: 'Preboarding & Compliance',     cluster: 'Close & Learn' },
+            { num: 12, label: 'Postmortem & Improvement',     cluster: 'Close & Learn' },
+        ];
+
+        function sanitizeSearchInput(value) {
+            if (window.SecurityUtils && typeof window.SecurityUtils.sanitizeSearchQuery === 'function') {
+                return window.SecurityUtils.sanitizeSearchQuery(value || '');
+            }
+            return String(value || '')
+                .normalize('NFKC')
+                .replace(/[\u0000-\u001F\u007F]/g, ' ')
+                .replace(/[<>`"'\\]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim()
+                .slice(0, 160);
+        }
+
+        function tokenize(text) {
+            return String(text || '')
+                .toLowerCase()
+                .replace(/[^a-z0-9\s]+/g, ' ')
+                .split(/\s+/)
+                .filter(function(token) { return token && token.length > 1; });
+        }
+
+        function expandTokens(tokens) {
+            var set = new Set(tokens);
+            tokens.forEach(function(token) {
+                var expansions = QUERY_EXPANSIONS[token];
+                if (!expansions) return;
+                expansions.forEach(function(term) {
+                    tokenize(term).forEach(function(t) { set.add(t); });
+                });
+            });
+            return Array.from(set);
+        }
+
+        function buildSearchCycles(query) {
+            var clean = sanitizeSearchInput(query).toLowerCase();
+            var baseTokens = tokenize(clean).filter(function(token) { return !SEARCH_STOP_WORDS.has(token); });
+            var expandedTokens = expandTokens(baseTokens);
+            var relaxedTokens = expandedTokens.filter(function(token) { return token.length >= 3; });
+            return [
+                { name: 'strict', phrase: clean, tokens: baseTokens, minScore: 3 },
+                { name: 'expanded', phrase: '', tokens: expandedTokens, minScore: 2 },
+                { name: 'relaxed', phrase: '', tokens: relaxedTokens, minScore: 1 }
+            ];
+        }
+
+        function scorePrompt(prompt, cycle) {
+            var title = String(prompt.title || '').toLowerCase();
+            var preview = String(prompt.preview || '').toLowerCase();
+            var content = String(prompt.content || '').toLowerCase();
+            var stageTitle = String(prompt.stageTitle || '').toLowerCase();
+            var type = String(prompt.type || '').toLowerCase();
+
+            var score = 0;
+            if (cycle.phrase && cycle.phrase.length >= 4) {
+                if (title.indexOf(cycle.phrase) !== -1) score += 9;
+                if (preview.indexOf(cycle.phrase) !== -1) score += 6;
+                if (content.indexOf(cycle.phrase) !== -1) score += 4;
+            }
+
+            cycle.tokens.forEach(function(token) {
+                if (title.indexOf(token) !== -1) score += 4;
+                if (type.indexOf(token) !== -1 || stageTitle.indexOf(token) !== -1) score += 3;
+                if (preview.indexOf(token) !== -1) score += 2;
+                if (content.indexOf(token) !== -1) score += 1;
+            });
+
+            return score;
+        }
+
+        function rankPromptsByQuery(prompts, query) {
+            var cycles = buildSearchCycles(query).filter(function(cycle) {
+                return cycle.tokens.length > 0 || cycle.phrase;
+            });
+            if (!cycles.length) return prompts;
+
+            var map = new Map();
+            cycles.forEach(function(cycle) {
+                prompts.forEach(function(prompt) {
+                    var score = scorePrompt(prompt, cycle);
+                    if (score < cycle.minScore) return;
+                    var existing = map.get(prompt.id);
+                    if (!existing || score > existing.score) {
+                        map.set(prompt.id, { prompt: prompt, score: score, cycle: cycle.name });
+                    }
+                });
+            });
+
+            var strictCycle = cycles[0];
+            var ranked = Array.from(map.values())
+                .map(function(entry) {
+                    var recheck = scorePrompt(entry.prompt, strictCycle);
+                    return { prompt: entry.prompt, score: entry.score + Math.floor(recheck * 0.5) };
+                })
+                .sort(function(a, b) { return b.score - a.score; })
+                .map(function(entry) { return entry.prompt; });
+
+            return ranked;
+        }
+
+        // Build stage filter
+        function buildStageFilter() {
+            const container = document.getElementById('stageFilter');
+            const allBtn = container.querySelector('.stage-filter__all');
+
+            let currentCluster = '';
+            STAGES.forEach(function(stage) {
+                if (stage.cluster !== currentCluster) {
+                    currentCluster = stage.cluster;
+                    const clusterDiv = document.createElement('div');
+                    clusterDiv.className = 'stage-filter__cluster';
+                    clusterDiv.innerHTML = '<div class="stage-filter__cluster-label">' + currentCluster + '</div>';
+                    container.appendChild(clusterDiv);
+                }
+                const lastCluster = container.lastElementChild;
+                const count = allPrompts.filter(function(p) { return p.stage === stage.num; }).length;
+                const btn = document.createElement('button');
+                btn.className = 'stage-filter__item';
+                btn.setAttribute('data-stage', stage.num);
+                btn.innerHTML = '<span class="stage-filter__item-num">' + stage.num + '</span>' +
+                    '<span class="stage-filter__item-label">' + stage.label + '</span>' +
+                    '<span class="stage-filter__item-count">' + count + '</span>';
+                lastCluster.appendChild(btn);
+            });
+
+            document.getElementById('totalCount').textContent = allPrompts.length;
+        }
+
+        // Filter prompts
+        function getFilteredPrompts() {
+            var stageAndType = allPrompts.filter(function(p) {
+                const stageMatch = activeStage === 'all' || p.stage === parseInt(activeStage);
+                const typeMatch = activeType === 'all' || p.type === activeType;
+                return stageMatch && typeMatch;
+            });
+
+            if (!searchQuery) return stageAndType;
+            return rankPromptsByQuery(stageAndType, searchQuery);
+        }
+
+        // Render prompt cards
+        function renderPrompts() {
+            const list = document.getElementById('promptList');
+            const filtered = getFilteredPrompts();
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<div class="no-results"><h3>No prompts found</h3><p>Try adjusting your filters or search terms.</p></div>';
+                return;
+            }
+
+            let html = '<div class="prompt-list__header"><span class="prompt-list__count">' + filtered.length + ' prompt' + (filtered.length !== 1 ? 's' : '') + '</span></div>';
+            html += '<div class="prompt-list">';
+
+            filtered.forEach(function(prompt) {
+                html += '<div class="card card--prompt" data-prompt-id="' + prompt.id + '">';
+                html += '  <div class="prompt__stage-label">Stage ' + prompt.stage + ' — ' + prompt.stageTitle + '</div>';
+                html += '  <div class="prompt__header">';
+                html += '    <span class="prompt__title">' + prompt.title + '</span>';
+                html += '    <span class="type-badge type-badge--' + prompt.type + '">' + prompt.type + '</span>';
+                html += '  </div>';
+                html += '  <div class="prompt__preview">' + prompt.preview + '</div>';
+                html += '  <div class="prompt__content">' + escapeHtml(prompt.content) + '</div>';
+                if (prompt.usageNotes) {
+                    html += '  <div class="prompt__usage"><strong>Usage:</strong> ' + prompt.usageNotes + '</div>';
+                }
+                html += '  <div class="prompt__actions">';
+                html += '    <button class="btn btn-copy btn-sm prompt-copy" data-prompt-id="' + prompt.id + '">Copy Prompt</button>';
+                html += '    <button class="btn btn-ghost btn-sm prompt-expand" data-prompt-id="' + prompt.id + '">Expand</button>';
+                html += '    <button class="btn btn-ghost btn-sm prompt-test" data-prompt-id="' + prompt.id + '">Test in Playground</button>';
+                html += '  </div>';
+                html += '</div>';
+            });
+
+            html += '</div>';
+            list.innerHTML = html;
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        // Event handlers
+        function setupEvents() {
+            // Stage filter clicks
+            document.getElementById('stageFilter').addEventListener('click', function(e) {
+                const btn = e.target.closest('.stage-filter__item');
+                if (!btn) return;
+                activeStage = btn.getAttribute('data-stage');
+                document.querySelectorAll('.stage-filter__item').forEach(function(b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                renderPrompts();
+            });
+
+            // Type filter clicks
+            document.querySelector('.type-filters').addEventListener('click', function(e) {
+                const tag = e.target.closest('.tag');
+                if (!tag) return;
+                activeType = tag.getAttribute('data-type');
+                document.querySelectorAll('.type-filters .tag').forEach(function(t) { t.classList.remove('active'); });
+                tag.classList.add('active');
+                renderPrompts();
+            });
+
+            // Search
+            document.getElementById('promptSearch').addEventListener('input', function(e) {
+                clearTimeout(searchDebounceTimer);
+                var safeQuery = sanitizeSearchInput(e.target.value).toLowerCase();
+                searchDebounceTimer = setTimeout(function() {
+                    searchQuery = safeQuery;
+                    renderPrompts();
+                }, 180);
+            });
+
+            // Prompt card actions (delegated)
+            document.getElementById('promptList').addEventListener('click', function(e) {
+                const copyBtn = e.target.closest('.prompt-copy');
+                const expandBtn = e.target.closest('.prompt-expand');
+                const testBtn = e.target.closest('.prompt-test');
+
+                if (copyBtn) {
+                    const id = copyBtn.getAttribute('data-prompt-id');
+                    const prompt = allPrompts.find(function(p) { return p.id === id; });
+                    if (prompt) {
+                        ExportUtils.copyToClipboard(prompt.content, copyBtn);
+                    }
+                }
+
+                if (expandBtn) {
+                    const id = expandBtn.getAttribute('data-prompt-id');
+                    const card = document.querySelector('.card--prompt[data-prompt-id="' + id + '"]');
+                    if (card) {
+                        card.classList.toggle('expanded');
+                        expandBtn.textContent = card.classList.contains('expanded') ? 'Collapse' : 'Expand';
+                    }
+                }
+
+                if (testBtn) {
+                    const id = testBtn.getAttribute('data-prompt-id');
+                    const prompt = allPrompts.find(function(p) { return p.id === id; });
+                    if (prompt) {
+                        document.getElementById('playgroundInput').value = prompt.content;
+                        document.getElementById('playground').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+
+            // Playground
+            document.getElementById('playgroundRun').addEventListener('click', async function() {
+                const input = document.getElementById('playgroundInput').value.trim();
+                const output = document.getElementById('playgroundOutput');
+                const runBtn = document.getElementById('playgroundRun');
+
+                if (!input) return;
+
+                runBtn.disabled = true;
+                runBtn.textContent = 'Running...';
+                output.className = 'playground__response';
+                output.textContent = 'Generating response...';
+
+                try {
+                    const engine = document.getElementById('engineSelect').value;
+                    const result = await AIService.query(input, { engine: engine });
+                    if (result.error) {
+                        output.textContent = 'Error: ' + result.error;
+                    } else {
+                        output.textContent = result.text;
+                    }
+                } catch (err) {
+                    output.textContent = 'Error: ' + err.message;
+                }
+
+                runBtn.disabled = false;
+                runBtn.textContent = 'Run Prompt';
+            });
+
+            document.getElementById('playgroundClear').addEventListener('click', function() {
+                document.getElementById('playgroundInput').value = '';
+                const output = document.getElementById('playgroundOutput');
+                output.className = 'playground__response playground__response--empty';
+                output.textContent = 'Response will appear here';
+            });
+        }
+
+        // Handle URL params (e.g. ?stage=5)
+        function handleUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            const stageParam = params.get('stage');
+            if (stageParam) {
+                activeStage = stageParam;
+                const stageBtn = document.querySelector('.stage-filter__item[data-stage="' + stageParam + '"]');
+                if (stageBtn) {
+                    document.querySelectorAll('.stage-filter__item').forEach(function(b) { b.classList.remove('active'); });
+                    stageBtn.classList.add('active');
+                }
+            }
+        }
+
+        // Init
+        async function init() {
+            try {
+                const response = await fetch('prompts.json');
+                allPrompts = await response.json();
+                buildStageFilter();
+                handleUrlParams();
+                renderPrompts();
+                setupEvents();
+            } catch (err) {
+                console.error('[PromptArsenal] Failed to load prompts:', err);
+                document.getElementById('promptList').innerHTML = '<div class="no-results"><h3>Failed to load prompts</h3><p>' + err.message + '</p></div>';
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+    </script>
+</body>
+</html>

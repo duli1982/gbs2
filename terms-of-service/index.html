@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>Terms of Service | AI Hub v2.0 — The Confidence Engine</title>
+    <meta name="description" content="Terms of Service for the AI Hub — User agreement, platform usage terms, and your responsibilities.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Theme -->
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/sidebar.css">
+
+    <style>
+        .page-breadcrumb { margin-bottom: var(--space-8); }
+        .page-breadcrumb a {
+            display: inline-flex; align-items: center; gap: var(--space-2);
+            font-size: var(--font-sm); color: var(--text-muted);
+        }
+        .page-breadcrumb a:hover { color: var(--text-secondary); }
+        .page-breadcrumb svg { width: 14px; height: 14px; }
+
+        .page-header { text-align: center; margin-bottom: var(--space-10); }
+        .page-title { margin-bottom: var(--space-3); }
+        .page-subtitle {
+            color: var(--text-secondary); max-width: 640px; margin: 0 auto;
+            line-height: var(--leading-relaxed);
+        }
+        .page-meta {
+            font-size: var(--font-sm); color: var(--text-muted); margin-top: var(--space-3);
+        }
+
+        .page-content { max-width: 860px; margin: 0 auto; }
+
+        /* Quick Summary */
+        .summary-card {
+            background: var(--accent-cyan-dim); border: 1px solid rgba(0, 229, 255, 0.2);
+            border-left: 3px solid var(--accent-cyan);
+            border-radius: var(--radius-lg); padding: var(--space-6); margin-bottom: var(--space-8);
+        }
+        .summary-card h2 { font-size: var(--font-lg); margin-bottom: var(--space-4); color: var(--accent-cyan); }
+        .summary-card li {
+            display: flex; align-items: flex-start; gap: var(--space-3);
+            color: var(--text-secondary); font-size: var(--font-sm); padding: var(--space-1) 0;
+        }
+        .summary-card li::before {
+            content: ''; width: 6px; height: 6px; background: var(--accent-cyan);
+            border-radius: 50%; margin-top: 7px; flex-shrink: 0;
+        }
+
+        /* ToC */
+        .toc-card {
+            background: var(--bg-surface); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl); padding: var(--space-6); margin-bottom: var(--space-8);
+        }
+        .toc-card h2 { font-size: var(--font-xl); margin-bottom: var(--space-4); }
+        .toc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-2); }
+        .toc-grid a {
+            font-size: var(--font-sm); color: var(--accent-cyan); padding: var(--space-2) 0;
+            transition: color var(--transition-fast);
+        }
+        .toc-grid a:hover { color: var(--text-primary); }
+
+        /* Section Cards */
+        .section-card {
+            background: var(--bg-surface); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl); padding: var(--space-8); margin-bottom: var(--space-6);
+        }
+        .section-card h2 {
+            font-size: var(--font-xl); margin-bottom: var(--space-4);
+        }
+        .section-card h3 {
+            font-size: var(--font-lg); margin-bottom: var(--space-3); margin-top: var(--space-6);
+            color: var(--text-primary);
+        }
+        .section-card h3:first-of-type { margin-top: 0; }
+        .section-card p {
+            color: var(--text-secondary); line-height: var(--leading-relaxed);
+            margin-bottom: var(--space-4);
+        }
+
+        .content-list { list-style: none; padding: 0; margin-bottom: var(--space-4); }
+        .content-list li {
+            display: flex; align-items: flex-start; gap: var(--space-3);
+            color: var(--text-secondary); font-size: var(--font-sm); padding: var(--space-2) 0;
+        }
+        .content-list li::before {
+            content: ''; width: 6px; height: 6px; background: var(--accent-cyan);
+            border-radius: 50%; margin-top: 7px; flex-shrink: 0;
+        }
+
+        /* Info callouts */
+        .callout {
+            border-radius: var(--radius-lg); padding: var(--space-5); margin-bottom: var(--space-5);
+        }
+        .callout--info {
+            background: var(--accent-cyan-dim); border-left: 3px solid var(--accent-cyan);
+        }
+        .callout--warning {
+            background: var(--accent-amber-dim); border-left: 3px solid var(--accent-amber);
+        }
+        .callout--danger {
+            background: rgba(255, 76, 106, 0.08); border-left: 3px solid var(--accent-red);
+        }
+        .callout h4 {
+            font-size: var(--font-sm); font-weight: var(--weight-semibold); margin-bottom: var(--space-2);
+        }
+        .callout--info h4 { color: var(--accent-cyan); }
+        .callout--warning h4 { color: var(--accent-amber); }
+        .callout--danger h4 { color: var(--accent-red); }
+        .callout p, .callout li {
+            font-size: var(--font-sm); color: var(--text-secondary);
+        }
+
+        /* Two-col grid */
+        .two-col {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-4); margin-bottom: var(--space-5);
+        }
+        .rule-card {
+            background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg); padding: var(--space-5);
+        }
+        .rule-card--green { border-left: 3px solid var(--accent-green); }
+        .rule-card--red { border-left: 3px solid var(--accent-red); }
+        .rule-card h4 {
+            font-size: var(--font-sm); font-weight: var(--weight-semibold); margin-bottom: var(--space-3);
+        }
+        .rule-card--green h4 { color: var(--accent-green); }
+        .rule-card--red h4 { color: var(--accent-red); }
+        .rule-card li {
+            font-size: var(--font-sm); color: var(--text-secondary); padding: var(--space-1) 0;
+        }
+
+        /* Prohibited conduct grid */
+        .conduct-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: var(--space-4); margin-bottom: var(--space-5);
+        }
+        .conduct-card {
+            background: rgba(255, 76, 106, 0.06); border: 1px solid rgba(255, 76, 106, 0.15);
+            border-radius: var(--radius-lg); padding: var(--space-5);
+        }
+        .conduct-card h4 {
+            font-size: var(--font-sm); font-weight: var(--weight-semibold);
+            color: var(--accent-red); margin-bottom: var(--space-3);
+        }
+        .conduct-card li {
+            font-size: var(--font-sm); color: var(--text-secondary); padding: var(--space-1) 0;
+        }
+
+        /* Legal uppercase block */
+        .legal-block {
+            background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg); padding: var(--space-6); margin-bottom: var(--space-5);
+        }
+        .legal-block p {
+            font-size: var(--font-xs); color: var(--text-secondary); text-transform: uppercase;
+            font-weight: var(--weight-semibold); line-height: 1.7;
+        }
+
+        /* Miscellaneous items */
+        .misc-grid { display: grid; gap: var(--space-4); }
+        .misc-item h4 {
+            font-size: var(--font-sm); font-weight: var(--weight-semibold);
+            color: var(--text-primary); margin-bottom: var(--space-2);
+        }
+        .misc-item p {
+            font-size: var(--font-sm); color: var(--text-secondary); margin-bottom: 0;
+        }
+
+        /* Acceptance banner */
+        .acceptance-banner {
+            background: var(--accent-green-dim); border: 1px solid rgba(0, 214, 143, 0.3);
+            border-radius: var(--radius-xl); padding: var(--space-6);
+            text-align: center; margin-top: var(--space-8);
+        }
+        .acceptance-banner h3 { font-size: var(--font-lg); margin-bottom: var(--space-2); }
+        .acceptance-banner p { font-size: var(--font-sm); color: var(--text-muted); }
+
+        /* Contact card */
+        .contact-grid {
+            display: flex; flex-wrap: wrap; gap: var(--space-4); margin-top: var(--space-4);
+        }
+        .contact-grid a {
+            font-size: var(--font-sm); color: var(--accent-cyan);
+            transition: color var(--transition-fast);
+        }
+        .contact-grid a:hover { color: var(--text-primary); }
+
+        .cta-link {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: var(--space-3) var(--space-5); background: var(--accent-cyan);
+            color: var(--text-inverse) !important; font-size: var(--font-sm); font-weight: var(--weight-semibold);
+            border-radius: var(--radius-lg); text-decoration: none !important;
+            transition: background var(--transition-fast);
+        }
+        .cta-link:hover { background: var(--accent-cyan-hover); }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <main class="app-main">
+            <div class="content-container">
+
+                <!-- Breadcrumb -->
+                <div class="page-breadcrumb">
+                    <a href="../index.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                        Back to Command Center
+                    </a>
+                </div>
+
+                <div class="page-content">
+
+                    <!-- Header -->
+                    <div class="page-header">
+                        <h1 class="page-title">Terms of Service</h1>
+                        <p class="page-subtitle">These Terms govern your access to and use of the AI Hub. By using the platform, you agree to be bound by these Terms.</p>
+                        <p class="page-meta">Last Updated: November 2025</p>
+                    </div>
+
+                    <!-- Quick Summary -->
+                    <div class="summary-card">
+                        <h2>Quick Summary</h2>
+                        <ul class="content-list" style="margin-bottom: 0;">
+                            <li>This platform is for authorized GBS EMEA employees only</li>
+                            <li>You're responsible for maintaining confidentiality of your account</li>
+                            <li>Content is for internal use and learning purposes</li>
+                            <li>We reserve the right to modify or terminate services</li>
+                            <li>Your use must comply with all applicable laws and policies</li>
+                        </ul>
+                    </div>
+
+                    <!-- Table of Contents -->
+                    <div class="toc-card">
+                        <h2>Table of Contents</h2>
+                        <nav class="toc-grid">
+                            <a href="#acceptance">1. Acceptance of Terms</a>
+                            <a href="#eligibility">2. Eligibility</a>
+                            <a href="#user-accounts">3. User Accounts</a>
+                            <a href="#platform-use">4. Platform Use</a>
+                            <a href="#intellectual-property">5. Intellectual Property</a>
+                            <a href="#user-content">6. User-Generated Content</a>
+                            <a href="#prohibited-conduct">7. Prohibited Conduct</a>
+                            <a href="#privacy">8. Privacy and Data Protection</a>
+                            <a href="#disclaimers">9. Disclaimers</a>
+                            <a href="#limitation-liability">10. Limitation of Liability</a>
+                            <a href="#modifications">11. Modifications</a>
+                            <a href="#termination">12. Termination</a>
+                            <a href="#governing-law">13. Governing Law</a>
+                            <a href="#miscellaneous">14. Miscellaneous</a>
+                            <a href="#contact">15. Contact Information</a>
+                        </nav>
+                    </div>
+
+                    <!-- Section 1: Acceptance -->
+                    <section id="acceptance" class="section-card">
+                        <h2>1. Acceptance of Terms</h2>
+                        <p>By accessing and using the AI Hub ("Platform"), you acknowledge that you have read, understood, and agree to be bound by these Terms of Service, our Privacy Policy, and all applicable laws and regulations.</p>
+                        <p>If you are using the Platform on behalf of an organization, you represent and warrant that you have the authority to bind that organization to these Terms, and your acceptance of these Terms will be treated as acceptance by that organization.</p>
+                    </section>
+
+                    <!-- Section 2: Eligibility -->
+                    <section id="eligibility" class="section-card">
+                        <h2>2. Eligibility</h2>
+
+                        <div class="callout callout--info">
+                            <h4>Authorized Users Only</h4>
+                            <p>This Platform is intended exclusively for current employees, contractors, and authorized personnel of GBS EMEA and its affiliated organizations.</p>
+                        </div>
+
+                        <h3>You must:</h3>
+                        <ul class="content-list">
+                            <li>Be at least 18 years of age</li>
+                            <li>Be an authorized employee or contractor of GBS EMEA</li>
+                            <li>Have a valid company email address</li>
+                            <li>Comply with all company policies and codes of conduct</li>
+                            <li>Have the legal capacity to enter into binding agreements</li>
+                        </ul>
+                        <p>We reserve the right to verify your eligibility at any time and to suspend or terminate your access if you do not meet these requirements.</p>
+                    </section>
+
+                    <!-- Section 3: User Accounts -->
+                    <section id="user-accounts" class="section-card">
+                        <h2>3. User Accounts</h2>
+
+                        <h3>3.1 Account Creation</h3>
+                        <p>Access to certain features may require you to create an account. When creating an account, you agree to:</p>
+                        <ul class="content-list">
+                            <li>Provide accurate, current, and complete information</li>
+                            <li>Maintain and promptly update your account information</li>
+                            <li>Use your company email address for registration</li>
+                            <li>Not create an account for anyone other than yourself</li>
+                        </ul>
+
+                        <h3>3.2 Account Security</h3>
+                        <div class="callout callout--warning">
+                            <h4>You are responsible for:</h4>
+                            <ul class="content-list" style="margin-bottom: 0;">
+                                <li>Maintaining the confidentiality of your account credentials</li>
+                                <li>All activities that occur under your account</li>
+                                <li>Immediately notifying us of any unauthorized use</li>
+                                <li>Ensuring you log out at the end of each session</li>
+                            </ul>
+                        </div>
+
+                        <h3>3.3 Account Termination</h3>
+                        <p>Your account will typically be deactivated when your employment or contract with GBS EMEA ends. You may also request account deletion at any time by contacting us.</p>
+                    </section>
+
+                    <!-- Section 4: Platform Use -->
+                    <section id="platform-use" class="section-card">
+                        <h2>4. Platform Use</h2>
+
+                        <h3>4.1 License Grant</h3>
+                        <p>We grant you a limited, non-exclusive, non-transferable, revocable license to access and use the Platform for your personal learning and professional development within GBS EMEA.</p>
+
+                        <h3>4.2 Permitted Uses</h3>
+                        <div class="two-col">
+                            <div class="rule-card rule-card--green">
+                                <h4>You May:</h4>
+                                <ul class="content-list">
+                                    <li>Access training materials</li>
+                                    <li>Complete courses and assessments</li>
+                                    <li>Track your learning progress</li>
+                                    <li>Submit feedback and content</li>
+                                    <li>Share insights with colleagues</li>
+                                </ul>
+                            </div>
+                            <div class="rule-card rule-card--red">
+                                <h4>You May Not:</h4>
+                                <ul class="content-list">
+                                    <li>Share access with non-employees</li>
+                                    <li>Distribute content externally</li>
+                                    <li>Use for commercial purposes</li>
+                                    <li>Modify or reverse engineer</li>
+                                    <li>Circumvent security measures</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3>4.3 Training Completion</h3>
+                        <p>Completion of certain training modules may be required as part of your employment. Certificates and completion records may be shared with your supervisors and HR department for compliance and development tracking purposes.</p>
+                    </section>
+
+                    <!-- Section 5: Intellectual Property -->
+                    <section id="intellectual-property" class="section-card">
+                        <h2>5. Intellectual Property Rights</h2>
+
+                        <h3>5.1 Platform Content</h3>
+                        <p>All content on the Platform, including but not limited to text, graphics, images, videos, audio, software, training materials, designs, and trademarks ("Platform Content"), is owned by or licensed to GBS EMEA and is protected by intellectual property laws.</p>
+
+                        <div class="callout callout--info">
+                            <h4>Copyright Notice</h4>
+                            <p>2026 GBS EMEA. All rights reserved. Unauthorized reproduction, distribution, or use of Platform Content is strictly prohibited.</p>
+                        </div>
+
+                        <h3>5.2 Trademarks</h3>
+                        <p>GBS EMEA, the GBS EMEA logo, and other marks are trademarks or registered trademarks of GBS EMEA. You may not use these marks without prior written permission.</p>
+
+                        <h3>5.3 Third-Party Content</h3>
+                        <p>The Platform may contain content licensed from third parties (such as Google Gemini, AI tools, etc.). Such content is subject to the respective third-party terms and licenses.</p>
+                    </section>
+
+                    <!-- Section 6: User Content -->
+                    <section id="user-content" class="section-card">
+                        <h2>6. User-Generated Content</h2>
+
+                        <h3>6.1 Your Content</h3>
+                        <p>You may submit feedback, comments, suggestions, course submissions, or other content ("User Content"). By submitting User Content, you grant GBS EMEA a worldwide, non-exclusive, royalty-free, perpetual license to use, reproduce, modify, and distribute such content for platform improvement and training purposes.</p>
+
+                        <h3>6.2 Content Standards</h3>
+                        <p>You agree that your User Content will:</p>
+                        <ul class="content-list">
+                            <li>Be accurate and not misleading</li>
+                            <li>Comply with all applicable laws and regulations</li>
+                            <li>Not infringe any third-party rights</li>
+                            <li>Not contain offensive, discriminatory, or inappropriate material</li>
+                            <li>Not contain confidential information without authorization</li>
+                            <li>Adhere to company code of conduct and policies</li>
+                        </ul>
+
+                        <h3>6.3 Content Moderation</h3>
+                        <p>We reserve the right to review, edit, or remove any User Content that violates these Terms or is otherwise objectionable, without prior notice.</p>
+                    </section>
+
+                    <!-- Section 7: Prohibited Conduct -->
+                    <section id="prohibited-conduct" class="section-card">
+                        <h2>7. Prohibited Conduct</h2>
+                        <p>You agree NOT to:</p>
+
+                        <div class="conduct-grid">
+                            <div class="conduct-card">
+                                <h4>Security Violations</h4>
+                                <ul class="content-list">
+                                    <li>Bypass security measures</li>
+                                    <li>Access unauthorized areas</li>
+                                    <li>Introduce viruses or malware</li>
+                                    <li>Attempt to hack the platform</li>
+                                </ul>
+                            </div>
+                            <div class="conduct-card">
+                                <h4>Misuse of Content</h4>
+                                <ul class="content-list">
+                                    <li>Distribute content externally</li>
+                                    <li>Use for commercial gain</li>
+                                    <li>Modify or adapt materials</li>
+                                    <li>Remove copyright notices</li>
+                                </ul>
+                            </div>
+                            <div class="conduct-card">
+                                <h4>Abusive Behavior</h4>
+                                <ul class="content-list">
+                                    <li>Harass other users</li>
+                                    <li>Post offensive content</li>
+                                    <li>Impersonate others</li>
+                                    <li>Spam or flood the platform</li>
+                                </ul>
+                            </div>
+                            <div class="conduct-card">
+                                <h4>System Interference</h4>
+                                <ul class="content-list">
+                                    <li>Overload servers</li>
+                                    <li>Scrape or crawl content</li>
+                                    <li>Interfere with operations</li>
+                                    <li>Disrupt user experience</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="callout callout--danger">
+                            <h4>Violations may result in:</h4>
+                            <p>Immediate account suspension, termination of access, disciplinary action (including termination of employment), and potential legal action.</p>
+                        </div>
+                    </section>
+
+                    <!-- Section 8: Privacy -->
+                    <section id="privacy" class="section-card">
+                        <h2>8. Privacy and Data Protection</h2>
+                        <p>Your privacy is important to us. Our collection and use of personal information is governed by our <a href="/privacy-policy/" style="color: var(--accent-cyan);">Privacy Policy</a>, which is incorporated into these Terms by reference.</p>
+
+                        <div class="callout callout--info">
+                            <h4>Key Privacy Points</h4>
+                            <ul class="content-list" style="margin-bottom: 0;">
+                                <li>We collect usage data to improve the platform</li>
+                                <li>Your learning progress may be shared with management</li>
+                                <li>We comply with GDPR and applicable data protection laws</li>
+                                <li>You have rights to access, correct, and delete your data</li>
+                                <li>See our <a href="/cookie-policy/" style="color: var(--accent-cyan);">Cookie Policy</a> for tracking information</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- Section 9: Disclaimers -->
+                    <section id="disclaimers" class="section-card">
+                        <h2>9. Disclaimers</h2>
+
+                        <div class="legal-block">
+                            <p>THE PLATFORM IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR COURSE OF PERFORMANCE.</p>
+                        </div>
+
+                        <h3>We do not warrant that:</h3>
+                        <ul class="content-list">
+                            <li>The Platform will be uninterrupted, secure, or error-free</li>
+                            <li>Defects will be corrected</li>
+                            <li>The Platform or servers are free of viruses or harmful components</li>
+                            <li>Results or information obtained will be accurate or reliable</li>
+                            <li>All content is current or complete</li>
+                        </ul>
+
+                        <div class="callout callout--warning">
+                            <h4>Educational Content Disclaimer</h4>
+                            <p>Training materials are for educational purposes and do not constitute professional advice. Always consult appropriate experts for specific situations.</p>
+                        </div>
+                    </section>
+
+                    <!-- Section 10: Limitation of Liability -->
+                    <section id="limitation-liability" class="section-card">
+                        <h2>10. Limitation of Liability</h2>
+
+                        <div class="legal-block">
+                            <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, GBS EMEA SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES RESULTING FROM:</p>
+                        </div>
+
+                        <ul class="content-list">
+                            <li>Your use or inability to use the Platform</li>
+                            <li>Any unauthorized access to or use of our servers and/or personal information</li>
+                            <li>Any interruption or cessation of transmission to or from the Platform</li>
+                            <li>Any bugs, viruses, or other harmful code that may be transmitted through the Platform</li>
+                            <li>Any errors or omissions in content or loss from use of content</li>
+                        </ul>
+                        <p>Some jurisdictions do not allow the exclusion of certain warranties or limitations of liability. In such cases, our liability will be limited to the maximum extent permitted by law.</p>
+                    </section>
+
+                    <!-- Section 11: Modifications -->
+                    <section id="modifications" class="section-card">
+                        <h2>11. Modifications to Terms and Platform</h2>
+
+                        <h3>11.1 Changes to Terms</h3>
+                        <p>We reserve the right to modify these Terms at any time. We will notify users of material changes by:</p>
+                        <ul class="content-list">
+                            <li>Posting the updated Terms on the Platform</li>
+                            <li>Updating the "Last Updated" date</li>
+                            <li>Sending email notifications for significant changes</li>
+                            <li>Displaying a prominent notice on the Platform</li>
+                        </ul>
+
+                        <div class="callout callout--info">
+                            <p>Your continued use of the Platform after changes constitute acceptance of the modified Terms. If you do not agree with the changes, you must discontinue use of the Platform.</p>
+                        </div>
+
+                        <h3>11.2 Changes to Platform</h3>
+                        <p>We reserve the right to modify, suspend, or discontinue any aspect of the Platform at any time, with or without notice. We shall not be liable to you or any third party for any such modifications, suspensions, or discontinuations.</p>
+                    </section>
+
+                    <!-- Section 12: Termination -->
+                    <section id="termination" class="section-card">
+                        <h2>12. Termination</h2>
+
+                        <h3>12.1 Termination by You</h3>
+                        <p>You may stop using the Platform at any time. You may request account deletion by contacting us.</p>
+
+                        <h3>12.2 Termination by Us</h3>
+                        <p>We may suspend or terminate your access immediately, without prior notice, for any reason, including:</p>
+                        <ul class="content-list">
+                            <li>Violation of these Terms</li>
+                            <li>Fraudulent, abusive, or illegal activity</li>
+                            <li>Termination of employment or contract with GBS EMEA</li>
+                            <li>Request from law enforcement or government agencies</li>
+                            <li>Extended period of inactivity</li>
+                        </ul>
+
+                        <h3>12.3 Effect of Termination</h3>
+                        <p>Upon termination, your right to use the Platform will immediately cease. All provisions of these Terms that by their nature should survive termination shall survive, including intellectual property provisions, disclaimers, and limitations of liability.</p>
+                    </section>
+
+                    <!-- Section 13: Governing Law -->
+                    <section id="governing-law" class="section-card">
+                        <h2>13. Governing Law and Dispute Resolution</h2>
+
+                        <h3>13.1 Governing Law</h3>
+                        <p>These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law provisions.</p>
+
+                        <h3>13.2 Jurisdiction</h3>
+                        <p>You agree to submit to the exclusive jurisdiction of the courts located in [Your Location] for the resolution of any disputes arising from these Terms or your use of the Platform.</p>
+
+                        <h3>13.3 GDPR Compliance</h3>
+                        <p>For users in the European Union, nothing in these Terms affects your statutory rights under the General Data Protection Regulation (GDPR) or other applicable consumer protection laws.</p>
+                    </section>
+
+                    <!-- Section 14: Miscellaneous -->
+                    <section id="miscellaneous" class="section-card">
+                        <h2>14. Miscellaneous</h2>
+                        <div class="misc-grid">
+                            <div class="misc-item">
+                                <h4>Entire Agreement</h4>
+                                <p>These Terms, together with our Privacy Policy and Cookie Policy, constitute the entire agreement between you and GBS EMEA regarding the Platform.</p>
+                            </div>
+                            <div class="misc-item">
+                                <h4>Severability</h4>
+                                <p>If any provision of these Terms is found to be unenforceable, the remaining provisions will continue in full force and effect.</p>
+                            </div>
+                            <div class="misc-item">
+                                <h4>Waiver</h4>
+                                <p>Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights.</p>
+                            </div>
+                            <div class="misc-item">
+                                <h4>Assignment</h4>
+                                <p>You may not assign or transfer these Terms without our prior written consent. We may assign our rights without restriction.</p>
+                            </div>
+                            <div class="misc-item">
+                                <h4>Force Majeure</h4>
+                                <p>We shall not be liable for any failure to perform due to circumstances beyond our reasonable control, including acts of God, war, terrorism, or internet failures.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 15: Contact -->
+                    <section id="contact" class="section-card">
+                        <h2>15. Contact Information</h2>
+                        <p>If you have any questions about these Terms of Service, we're here to help.</p>
+
+                        <a href="/contact-us/" class="cta-link" style="margin-bottom: var(--space-5); display: inline-flex;">Contact Us</a>
+
+                        <ul class="content-list">
+                            <li>General Support: Questions about the platform or need assistance</li>
+                            <li>Legal Inquiries: Terms of Service and legal matters</li>
+                            <li>Privacy Questions: Data protection and privacy concerns</li>
+                            <li>Technical Issues: Report bugs or technical problems</li>
+                        </ul>
+
+                        <div style="margin-top: var(--space-5); padding-top: var(--space-4); border-top: 1px solid var(--border-subtle);">
+                            <p style="font-size: var(--font-xs); color: var(--text-muted); margin-bottom: var(--space-3);">Related Documents:</p>
+                            <div class="contact-grid">
+                                <a href="/privacy-policy/">Privacy Policy</a>
+                                <a href="/cookie-policy/">Cookie Policy</a>
+                                <a href="/legal-notice/">Legal Notice</a>
+                                <a href="/ai-governance/">AI Governance</a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Acceptance Banner -->
+                    <div class="acceptance-banner">
+                        <h3>By using this platform, you agree to these Terms of Service</h3>
+                        <p>Last Updated: November 2025</p>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../shared/sidebar.js"></script>
+</body>
+
+</html>

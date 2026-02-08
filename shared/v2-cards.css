@@ -1,0 +1,390 @@
+/* ============================================
+   AI Hub v2.0 — Card System
+   ============================================ */
+
+/* --- Base Card --- */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  transition: all var(--transition-base);
+  position: relative;
+}
+
+.card:hover {
+  border-color: var(--border-default);
+  background: var(--bg-surface-hover);
+}
+
+/* --- Clickable Card --- */
+.card--clickable {
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+
+.card--clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
+}
+
+.card--clickable:active {
+  transform: translateY(0);
+}
+
+/* --- Action Card (Quick Actions on Dashboard) --- */
+.card--action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--border-subtle);
+}
+
+.card--action:hover {
+  border-color: var(--accent-cyan);
+  box-shadow: var(--shadow-glow-cyan);
+  transform: translateY(-2px);
+}
+
+.card--action .card__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-lg);
+}
+
+.card--action .card__icon--cyan {
+  background: var(--accent-cyan-dim);
+  color: var(--accent-cyan);
+}
+
+.card--action .card__icon--green {
+  background: var(--accent-green-dim);
+  color: var(--accent-green);
+}
+
+.card--action .card__icon--amber {
+  background: var(--accent-amber-dim);
+  color: var(--accent-amber);
+}
+
+.card--action .card__icon--purple {
+  background: var(--accent-purple-dim);
+  color: var(--accent-purple);
+}
+
+.card--action .card__title {
+  font-size: var(--font-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+}
+
+.card--action .card__desc {
+  font-size: var(--font-xs);
+  color: var(--text-muted);
+  line-height: var(--leading-normal);
+}
+
+/* --- Stat Card --- */
+.card--stat {
+  padding: var(--space-5);
+}
+
+.card--stat .stat__label {
+  font-size: var(--font-xs);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-2);
+}
+
+.card--stat .stat__value {
+  font-size: var(--font-3xl);
+  font-weight: var(--weight-bold);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.card--stat .stat__change {
+  font-size: var(--font-xs);
+  margin-top: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.card--stat .stat__change--up { color: var(--accent-green); }
+.card--stat .stat__change--down { color: var(--accent-red); }
+
+/* --- Ritual Card --- */
+.card--ritual {
+  padding: var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.card--ritual .ritual__day {
+  font-size: var(--font-xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-cyan);
+  min-width: 36px;
+}
+
+.card--ritual .ritual__info {
+  flex: 1;
+}
+
+.card--ritual .ritual__name {
+  font-size: var(--font-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-primary);
+}
+
+.card--ritual .ritual__desc {
+  font-size: var(--font-xs);
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.card--ritual .ritual__time {
+  font-size: var(--font-xs);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.card--ritual .ritual__toggle {
+  width: 40px;
+  height: 22px;
+  background: var(--border-default);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  position: relative;
+  transition: background var(--transition-fast);
+  border: none;
+  flex-shrink: 0;
+}
+
+.card--ritual .ritual__toggle::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background: var(--text-secondary);
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: all var(--transition-fast);
+}
+
+.card--ritual .ritual__toggle.done {
+  background: var(--accent-green);
+}
+
+.card--ritual .ritual__toggle.done::after {
+  background: white;
+  left: 21px;
+}
+
+/* --- Stage Card (12 Stages) --- */
+.card--stage {
+  padding: var(--space-6);
+  cursor: pointer;
+  border-left: 3px solid transparent;
+}
+
+.card--stage:hover {
+  border-left-color: var(--accent-cyan);
+}
+
+.card--stage.active {
+  border-left-color: var(--accent-cyan);
+  background: var(--bg-surface-active);
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.card--stage .stage__number {
+  font-family: var(--font-mono);
+  font-size: var(--font-xs);
+  color: var(--accent-cyan);
+  font-weight: var(--weight-bold);
+  margin-bottom: var(--space-2);
+}
+
+.card--stage .stage__title {
+  font-size: var(--font-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.card--stage .stage__subtitle {
+  font-size: var(--font-sm);
+  color: var(--text-muted);
+}
+
+/* --- Prompt Card --- */
+.card--prompt {
+  padding: var(--space-5);
+  cursor: pointer;
+}
+
+.card--prompt .prompt__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.card--prompt .prompt__title {
+  font-size: var(--font-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+}
+
+.card--prompt .prompt__type {
+  flex-shrink: 0;
+}
+
+.card--prompt .prompt__preview {
+  font-size: var(--font-sm);
+  color: var(--text-muted);
+  line-height: var(--leading-normal);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card--prompt .prompt__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.card--prompt.expanded .prompt__preview {
+  -webkit-line-clamp: unset;
+}
+
+.card--prompt .prompt__full {
+  display: none;
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  background: var(--bg-primary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  white-space: pre-wrap;
+}
+
+.card--prompt.expanded .prompt__full {
+  display: block;
+}
+
+/* --- Asset Card --- */
+.card--asset {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.card--asset .asset__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.card--asset .asset__title {
+  font-size: var(--font-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+}
+
+.card--asset .asset__desc {
+  font-size: var(--font-xs);
+  color: var(--text-muted);
+  line-height: var(--leading-normal);
+}
+
+/* --- Coming Soon Overlay --- */
+.card--coming-soon {
+  opacity: 0.5;
+  pointer-events: none;
+  position: relative;
+}
+
+.card--coming-soon::after {
+  content: 'Coming Soon';
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  font-size: var(--font-xs);
+  font-weight: var(--weight-medium);
+  color: var(--text-muted);
+  background: var(--bg-primary);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+}
+
+/* --- Grid Layouts --- */
+.card-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.card-grid--2 { grid-template-columns: repeat(2, 1fr); }
+.card-grid--3 { grid-template-columns: repeat(3, 1fr); }
+.card-grid--4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 1024px) {
+  .card-grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid--3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .card-grid--4,
+  .card-grid--3,
+  .card-grid--2 { grid-template-columns: 1fr; }
+}
+
+/* --- Empty State --- */
+.empty-state {
+  text-align: center;
+  padding: var(--space-12) var(--space-6);
+  color: var(--text-muted);
+}
+
+.empty-state svg {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto var(--space-4);
+  opacity: 0.4;
+}
+
+.empty-state h3 {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-2);
+}

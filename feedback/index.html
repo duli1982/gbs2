@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>Feedback | AI Hub v2.0 — The Confidence Engine</title>
+
+    <meta name="description" content="Help us improve the AI Hub by sharing your thoughts, suggestions, and experiences.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Theme -->
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/sidebar.css">
+
+    <style>
+        .page-breadcrumb {
+            margin-bottom: var(--space-8);
+        }
+
+        .page-breadcrumb a {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+        }
+
+        .page-breadcrumb a:hover {
+            color: var(--text-secondary);
+        }
+
+        .page-breadcrumb svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--space-10);
+        }
+
+        .page-title {
+            margin-bottom: var(--space-3);
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: var(--leading-relaxed);
+        }
+
+        .page-content {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: var(--space-8);
+            margin-bottom: var(--space-8);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-5);
+        }
+
+        .form-label {
+            display: block;
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-2);
+            font-size: var(--font-sm);
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: var(--space-3) var(--space-4);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: var(--font-sm);
+            font-family: var(--font-family);
+            transition: border-color var(--transition-fast);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--text-disabled);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        .form-select option {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px var(--accent-cyan-dim);
+        }
+
+        .form-textarea {
+            resize: vertical;
+        }
+
+        /* Rating Group */
+        .rating-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-3);
+        }
+
+        .rating-option {
+            position: relative;
+        }
+
+        .rating-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .rating-option label {
+            display: block;
+            padding: var(--space-2) var(--space-4);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-full);
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .rating-option input[type="radio"]:checked + label {
+            background: var(--accent-cyan-dim);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .rating-option label:hover {
+            border-color: var(--border-strong);
+            color: var(--text-primary);
+        }
+
+        /* Submit */
+        .submit-btn {
+            width: 100%;
+            padding: var(--space-4);
+            background: var(--accent-cyan);
+            color: var(--text-inverse);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: var(--font-base);
+            font-weight: var(--weight-semibold);
+            font-family: var(--font-family);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            margin-top: var(--space-4);
+        }
+
+        .submit-btn:hover {
+            background: var(--accent-cyan-hover);
+            box-shadow: var(--shadow-glow-cyan);
+        }
+
+        /* Success */
+        .success-message {
+            display: none;
+            margin-top: var(--space-6);
+            padding: var(--space-5);
+            background: var(--accent-green-dim);
+            border: 1px solid rgba(0, 214, 143, 0.3);
+            border-radius: var(--radius-lg);
+        }
+
+        .success-message.show {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .success-message svg {
+            width: 20px;
+            height: 20px;
+            color: var(--accent-green);
+            flex-shrink: 0;
+        }
+
+        .success-message p {
+            color: var(--accent-green);
+            font-size: var(--font-sm);
+            font-weight: var(--weight-medium);
+        }
+
+        /* What Happens Next */
+        .info-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+        }
+
+        .info-card h3 {
+            font-size: var(--font-lg);
+            margin-bottom: var(--space-4);
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-3);
+            color: var(--text-secondary);
+            font-size: var(--font-sm);
+            padding: var(--space-2) 0;
+        }
+
+        .info-card li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            margin-top: 7px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <main class="app-main">
+            <div class="content-container">
+
+                <!-- Breadcrumb -->
+                <div class="page-breadcrumb">
+                    <a href="../index.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                        Back to Command Center
+                    </a>
+                </div>
+
+                <div class="page-content">
+
+                    <!-- Header -->
+                    <div class="page-header">
+                        <h1 class="page-title">We Value Your Feedback</h1>
+                        <p class="page-subtitle">Help us improve the AI Hub by sharing your thoughts, suggestions, and experiences. Your input drives our continuous improvement.</p>
+                    </div>
+
+                    <!-- Form -->
+                    <div class="form-card">
+                        <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) {showSuccessMessage();}"></iframe>
+
+                        <form id="feedbackForm" action="https://docs.google.com/forms/d/e/1FAIpQLSelwbgIYE0mtrU9m2HUKAOyy3-Nt4HrHAoLzLoEFGDCfaZ5MA/formResponse" method="POST" target="hidden_iframe">
+
+                            <div class="form-group">
+                                <label class="form-label">Feedback Type</label>
+                                <select name="entry.1374134785" class="form-select" required>
+                                    <option value="">Select feedback type...</option>
+                                    <option value="General Feedback">General Feedback</option>
+                                    <option value="Bug Report">Bug Report</option>
+                                    <option value="Feature Request">Feature Request</option>
+                                    <option value="Content Suggestion">Content Suggestion</option>
+                                    <option value="Training Program Feedback">Training Program Feedback</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Related Page/Section (Optional)</label>
+                                <select name="entry.472344537" class="form-select">
+                                    <option value="">Select if applicable...</option>
+                                    <option value="Command Center">Command Center</option>
+                                    <option value="The 12 Stages">The 12 Stages</option>
+                                    <option value="Prompt Arsenal">Prompt Arsenal</option>
+                                    <option value="Role Passport">Role Passport</option>
+                                    <option value="Truth Check">Truth Check</option>
+                                    <option value="Confidence Pack">Confidence Pack</option>
+                                    <option value="Academy">Academy</option>
+                                    <option value="Asset Library">Asset Library</option>
+                                    <option value="Telemetry">Telemetry</option>
+                                    <option value="Team Rituals">Team Rituals</option>
+                                    <option value="General Site">General Site</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Your Name</label>
+                                <input type="text" name="entry.367209013" class="form-input" placeholder="Enter your name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" name="entry.1285442051" class="form-input" placeholder="your.email@randstad.com" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Department/Role (Optional)</label>
+                                <input type="text" name="entry.183746620" class="form-input" placeholder="e.g., RPO, GBS Leadership, Sourcing">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Overall Experience Rating</label>
+                                <div class="rating-group">
+                                    <div class="rating-option">
+                                        <input type="radio" name="entry.851188432" value="Excellent" id="rating5">
+                                        <label for="rating5">Excellent</label>
+                                    </div>
+                                    <div class="rating-option">
+                                        <input type="radio" name="entry.851188432" value="Good" id="rating4">
+                                        <label for="rating4">Good</label>
+                                    </div>
+                                    <div class="rating-option">
+                                        <input type="radio" name="entry.851188432" value="Average" id="rating3">
+                                        <label for="rating3">Average</label>
+                                    </div>
+                                    <div class="rating-option">
+                                        <input type="radio" name="entry.851188432" value="Poor" id="rating2">
+                                        <label for="rating2">Poor</label>
+                                    </div>
+                                    <div class="rating-option">
+                                        <input type="radio" name="entry.851188432" value="Very Poor" id="rating1">
+                                        <label for="rating1">Very Poor</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Your Feedback</label>
+                                <textarea name="entry.2131644124" rows="6" class="form-textarea" placeholder="Please share your detailed feedback, suggestions, or report any issues you've encountered..." required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Suggestions for Improvement (Optional)</label>
+                                <textarea name="entry.1715663794" rows="4" class="form-textarea" placeholder="What specific improvements would you like to see?"></textarea>
+                            </div>
+
+                            <button type="submit" class="submit-btn">Submit Feedback</button>
+                        </form>
+
+                        <div id="successMessage" class="success-message">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            <p>Thank you for your feedback! We'll review it and get back to you if needed.</p>
+                        </div>
+                    </div>
+
+                    <!-- What Happens Next -->
+                    <div class="info-card">
+                        <h3>What Happens Next?</h3>
+                        <ul>
+                            <li>We review all feedback within 2-3 business days</li>
+                            <li>Bug reports are prioritized for quick fixes</li>
+                            <li>Feature requests are evaluated for future releases</li>
+                            <li>You'll receive updates on significant improvements</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../shared/sidebar.js"></script>
+
+    <script>
+        var submitted = false;
+
+        function showSuccessMessage() {
+            if (submitted) {
+                document.getElementById('feedbackForm').style.display = 'none';
+                document.getElementById('successMessage').classList.add('show');
+                document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            submitted = true;
+        });
+    </script>
+</body>
+
+</html>

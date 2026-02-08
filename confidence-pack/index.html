@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>Confidence Pack Builder | AI Hub v2.0 — The Confidence Engine | Randstad GBS</title>
+
+    <meta name="description" content="Turn screened candidates into evidence-backed submission packages that hiring managers trust. Every claim has proof. Every risk has a plan.">
+    <meta name="author" content="Randstad GBS">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Confidence Pack Builder — AI Hub v2.0">
+    <meta property="og:description" content="Turn screened candidates into evidence-backed submission packages that hiring managers trust.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/sidebar.css">
+    <link rel="stylesheet" href="../shared/v2-buttons.css">
+    <link rel="stylesheet" href="../shared/v2-cards.css">
+
+    <style>
+        /* ============================================
+           Confidence Pack Builder — Page Styles
+           ============================================ */
+
+        /* --- Page Header --- */
+        .cp-header {
+            margin-bottom: var(--space-10);
+        }
+
+        .cp-header__title {
+            font-size: var(--font-4xl);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .cp-header__title span {
+            color: var(--accent-cyan);
+        }
+
+        .cp-header__subtitle {
+            font-size: var(--font-base);
+            color: var(--text-secondary);
+            margin-top: var(--space-2);
+            max-width: 640px;
+            line-height: var(--leading-relaxed);
+        }
+
+        /* --- Form View --- */
+        .cp-form-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* --- Section Headers --- */
+        .cp-section-header {
+            font-size: var(--font-lg);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            border-left: 3px solid var(--accent-cyan);
+            padding-left: var(--space-3);
+            margin-bottom: var(--space-5);
+        }
+
+        .cp-section {
+            margin-bottom: var(--space-8);
+        }
+
+        .cp-section-divider {
+            border: none;
+            border-top: 1px solid var(--border-subtle);
+            margin: var(--space-8) 0;
+        }
+
+        /* --- Form Fields --- */
+        .cp-field {
+            margin-bottom: var(--space-4);
+        }
+
+        .cp-field label {
+            display: block;
+            font-size: var(--font-sm);
+            font-weight: var(--weight-medium);
+            color: var(--text-primary);
+            margin-bottom: var(--space-1);
+        }
+
+        .cp-field label .required-mark {
+            color: var(--accent-red);
+            margin-left: 2px;
+        }
+
+        .cp-field input[type="text"],
+        .cp-field textarea {
+            display: block;
+            width: 100%;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            font-size: var(--font-sm);
+            font-family: var(--font-family);
+            line-height: var(--leading-normal);
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+            resize: vertical;
+        }
+
+        .cp-field input[type="text"]:focus,
+        .cp-field textarea:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px var(--accent-cyan-dim);
+        }
+
+        .cp-field input[type="text"]::placeholder,
+        .cp-field textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .cp-field .field-helper {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            margin-top: var(--space-1);
+        }
+
+        .cp-field .field-error {
+            font-size: var(--font-xs);
+            color: var(--accent-red);
+            margin-top: var(--space-1);
+            display: none;
+        }
+
+        .cp-field.has-error input,
+        .cp-field.has-error textarea {
+            border-color: var(--accent-red);
+        }
+
+        .cp-field.has-error .field-error {
+            display: block;
+        }
+
+        .cp-field--short input {
+            max-width: 200px;
+        }
+
+        .cp-field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-4);
+        }
+
+        /* --- Submit Section --- */
+        .cp-submit-section {
+            margin-top: var(--space-8);
+        }
+
+        .cp-submit-section .btn {
+            width: 100%;
+        }
+
+        .cp-submit-note {
+            text-align: center;
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            margin-top: var(--space-3);
+        }
+
+        /* --- Loading Overlay --- */
+        .cp-loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-overlay);
+            z-index: var(--z-modal);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cp-loading-overlay.visible {
+            display: flex;
+        }
+
+        .cp-loading-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-10) var(--space-8);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .cp-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-default);
+            border-top-color: var(--accent-cyan);
+            border-radius: 50%;
+            animation: cpSpin 0.8s linear infinite;
+            margin: 0 auto var(--space-5);
+        }
+
+        @keyframes cpSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        .cp-loading-text {
+            font-size: var(--font-base);
+            font-weight: var(--weight-medium);
+            color: var(--text-primary);
+        }
+
+        .cp-loading-sub {
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+            margin-top: var(--space-2);
+        }
+
+        /* --- Result View --- */
+        .cp-result-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* --- Result Top Bar --- */
+        .cp-result-topbar {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+        }
+
+        .cp-result-candidate {
+            font-size: var(--font-2xl);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-1);
+        }
+
+        .cp-result-role {
+            font-size: var(--font-sm);
+            color: var(--accent-cyan);
+            font-weight: var(--weight-medium);
+            margin-bottom: var(--space-1);
+        }
+
+        .cp-result-date {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            margin-bottom: var(--space-4);
+        }
+
+        .cp-result-actions {
+            display: flex;
+            gap: var(--space-2);
+            flex-wrap: wrap;
+        }
+
+        /* --- Pack Sections --- */
+        .cp-pack-section {
+            margin-bottom: var(--space-8);
+        }
+
+        .cp-pack-section-title {
+            font-size: var(--font-xs);
+            font-weight: var(--weight-bold);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-4);
+            padding-bottom: var(--space-2);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        /* --- Match Cards --- */
+        .cp-match-cards {
+            display: grid;
+            gap: var(--space-4);
+        }
+
+        .cp-match-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-left: 3px solid var(--accent-green);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+        }
+
+        .cp-match-card:hover {
+            border-color: var(--border-default);
+            border-left-color: var(--accent-green);
+            background: var(--bg-surface-hover);
+        }
+
+        .cp-match-label {
+            font-size: var(--font-xs);
+            font-weight: var(--weight-bold);
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: var(--space-2);
+        }
+
+        .cp-match-requirement {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-2);
+        }
+
+        .cp-match-evidence {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+        }
+
+        .cp-match-evidence-label {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            font-weight: var(--weight-medium);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: var(--space-1);
+            margin-top: var(--space-3);
+        }
+
+        /* --- Risk Card --- */
+        .cp-risk-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-left: 3px solid var(--accent-red);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+        }
+
+        .cp-risk-card:hover {
+            border-color: var(--border-default);
+            border-left-color: var(--accent-red);
+            background: var(--bg-surface-hover);
+        }
+
+        .cp-risk-title {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-2);
+        }
+
+        .cp-risk-desc {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+            margin-bottom: var(--space-3);
+        }
+
+        .cp-risk-mitigation-label {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            font-weight: var(--weight-medium);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: var(--space-1);
+        }
+
+        .cp-risk-mitigation {
+            font-size: var(--font-sm);
+            color: var(--accent-amber);
+            line-height: var(--leading-relaxed);
+        }
+
+        /* --- Next Step Card --- */
+        .cp-nextstep-card {
+            background: var(--accent-cyan-dim);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+        }
+
+        .cp-nextstep-text {
+            font-size: var(--font-sm);
+            color: var(--text-primary);
+            line-height: var(--leading-relaxed);
+        }
+
+        /* --- Interview Focus --- */
+        .cp-focus-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: var(--space-3);
+        }
+
+        .cp-focus-item {
+            display: flex;
+            gap: var(--space-3);
+            padding: var(--space-4);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+        }
+
+        .cp-focus-item:hover {
+            border-color: var(--border-default);
+            background: var(--bg-surface-hover);
+        }
+
+        .cp-focus-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            box-shadow: 0 0 6px var(--accent-cyan);
+            flex-shrink: 0;
+            margin-top: 6px;
+        }
+
+        .cp-focus-area {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .cp-focus-why {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+        }
+
+        /* --- Snapshot Box --- */
+        .cp-snapshot {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+        }
+
+        .cp-snapshot:hover {
+            border-color: var(--border-default);
+            background: var(--bg-surface-hover);
+        }
+
+        .cp-snapshot-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-4);
+        }
+
+        .cp-snapshot-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .cp-snapshot-label {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: var(--weight-medium);
+        }
+
+        .cp-snapshot-value {
+            font-size: var(--font-sm);
+            color: var(--text-primary);
+            line-height: var(--leading-normal);
+        }
+
+        .cp-snapshot-flags {
+            margin-top: var(--space-4);
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+        }
+
+        /* --- Bottom Bar --- */
+        .cp-result-bottombar {
+            display: flex;
+            gap: var(--space-3);
+            justify-content: center;
+            margin-top: var(--space-8);
+            padding-top: var(--space-6);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        /* --- Error Card --- */
+        .cp-error-card {
+            background: var(--accent-red-dim);
+            border: 1px solid rgba(255, 76, 106, 0.3);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            text-align: center;
+            max-width: 600px;
+            margin: var(--space-10) auto;
+        }
+
+        .cp-error-title {
+            font-size: var(--font-lg);
+            font-weight: var(--weight-semibold);
+            color: var(--accent-red);
+            margin-bottom: var(--space-2);
+        }
+
+        .cp-error-message {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-4);
+            line-height: var(--leading-relaxed);
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .cp-field-row {
+                grid-template-columns: 1fr;
+            }
+
+            .cp-result-actions {
+                flex-direction: column;
+            }
+
+            .cp-result-actions .btn {
+                width: 100%;
+            }
+
+            .cp-snapshot-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cp-result-bottombar {
+                flex-direction: column;
+            }
+
+            .cp-result-bottombar .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cp-form-wrapper,
+            .cp-result-wrapper {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <main class="app-main">
+            <div class="content-container">
+
+                <!-- Page Header -->
+                <div class="cp-header fade-in-up">
+                    <h1 class="cp-header__title">Confidence <span>Pack</span> Builder</h1>
+                    <p class="cp-header__subtitle">Turn screened candidates into evidence-backed submissions. Every claim has proof. Every risk has a plan.</p>
+                    <p style="font-size:var(--font-sm);color:var(--text-muted);margin-top:var(--space-2);max-width:640px;">Any recruiter can submit a CV. This tool ensures nothing reaches a hiring manager without verified evidence behind every claim — because that is what earns trust when everyone else is just sending AI-polished summaries.</p>
+                </div>
+
+                <!-- ===================== -->
+                <!--   VIEW 1: INPUT FORM  -->
+                <!-- ===================== -->
+                <div id="cpInputView" class="cp-form-wrapper fade-in-up fade-in-up-delay-1">
+
+                    <!-- Section A: Candidate Details -->
+                    <div class="cp-section">
+                        <h2 class="cp-section-header">Candidate Details</h2>
+
+                        <div class="cp-field-row">
+                            <div class="cp-field">
+                                <label for="cpCandidateName">Candidate Name <span class="required-mark">*</span></label>
+                                <input type="text" id="cpCandidateName" placeholder="Full name">
+                                <div class="field-error">Candidate name is required.</div>
+                            </div>
+                            <div class="cp-field">
+                                <label for="cpCurrentTitle">Current Title <span class="required-mark">*</span></label>
+                                <input type="text" id="cpCurrentTitle" placeholder="e.g. Senior Software Engineer">
+                                <div class="field-error">Current title is required.</div>
+                            </div>
+                        </div>
+
+                        <div class="cp-field-row">
+                            <div class="cp-field">
+                                <label for="cpCurrentCompany">Current Company</label>
+                                <input type="text" id="cpCurrentCompany" placeholder="e.g. Acme Corp">
+                            </div>
+                            <div class="cp-field cp-field--short">
+                                <label for="cpYearsExp">Years of Experience</label>
+                                <input type="text" id="cpYearsExp" placeholder="e.g. 8">
+                            </div>
+                        </div>
+
+                        <div class="cp-field">
+                            <label for="cpLinkedIn">LinkedIn URL</label>
+                            <input type="text" id="cpLinkedIn" placeholder="https://linkedin.com/in/...">
+                            <div class="field-helper">Optional. Will be included in the submission package if provided.</div>
+                        </div>
+                    </div>
+
+                    <hr class="cp-section-divider">
+
+                    <!-- Section B: Role Context -->
+                    <div class="cp-section">
+                        <h2 class="cp-section-header">Role Context</h2>
+
+                        <div class="cp-field">
+                            <label for="cpTargetRole">Target Role <span class="required-mark">*</span></label>
+                            <input type="text" id="cpTargetRole" placeholder="e.g. Lead Data Engineer">
+                            <div class="field-error">Target role is required.</div>
+                        </div>
+
+                        <div class="cp-field">
+                            <label for="cpRolePassport">Role Passport Summary</label>
+                            <textarea id="cpRolePassport" rows="4" placeholder="Paste the key must-haves, dealbreakers, and evidence requirements from the Role Passport. The more specific, the better the output."></textarea>
+                            <div class="field-helper">The more detail you include here, the more precisely the Confidence Pack will match evidence to requirements.</div>
+                        </div>
+
+                        <div class="cp-field">
+                            <label for="cpHiringManager">Hiring Manager Name</label>
+                            <input type="text" id="cpHiringManager" placeholder="e.g. Sarah Chen">
+                            <div class="field-helper">Optional. Used to personalize the submission and email draft.</div>
+                        </div>
+                    </div>
+
+                    <hr class="cp-section-divider">
+
+                    <!-- Section C: Screening Evidence -->
+                    <div class="cp-section">
+                        <h2 class="cp-section-header">Screening Evidence</h2>
+
+                        <div class="cp-field">
+                            <label for="cpScreenNotes">Screen Notes / Truth Check Results</label>
+                            <textarea id="cpScreenNotes" rows="8" placeholder="Paste your structured screen notes, Truth Check assessment, or raw notes from the conversation. Include: what the candidate said, evidence captured, constraint check results, motivation assessment."></textarea>
+                        </div>
+
+                        <div class="cp-field">
+                            <label for="cpStrengths">Key Strengths Observed</label>
+                            <textarea id="cpStrengths" rows="3" placeholder="What stood out? Specific examples, skills demonstrated, projects mentioned."></textarea>
+                        </div>
+
+                        <div class="cp-field">
+                            <label for="cpConcerns">Concerns or Risks</label>
+                            <textarea id="cpConcerns" rows="3" placeholder="Any red flags, gaps, unknowns, or areas that need further validation?"></textarea>
+                        </div>
+
+                        <div class="cp-field">
+                            <label for="cpAdditional">Additional Context</label>
+                            <textarea id="cpAdditional" rows="2" placeholder="Anything else relevant -- counter-offer risk, competing interviews, timeline pressure, etc."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="cp-submit-section">
+                        <button id="cpGenerateBtn" class="btn btn-primary btn-lg" type="button">Generate Confidence Pack</button>
+                        <p class="cp-submit-note">AI will analyze your inputs and generate an evidence-based submission package.</p>
+                    </div>
+                </div>
+
+                <!-- ======================== -->
+                <!--  VIEW 2: RESULT OUTPUT   -->
+                <!-- ======================== -->
+                <div id="cpResultView" class="cp-result-wrapper" style="display:none;">
+
+                    <!-- Top Bar -->
+                    <div class="cp-result-topbar">
+                        <div class="cp-result-candidate" id="cpResultCandidate"></div>
+                        <div class="cp-result-role" id="cpResultRole"></div>
+                        <div class="cp-result-date" id="cpResultDate"></div>
+                        <div class="cp-result-actions">
+                            <button class="btn btn-secondary" id="cpEditBtn" type="button">Edit Inputs</button>
+                            <button class="btn btn-copy" id="cpCopyAllBtn" type="button">Copy All</button>
+                            <button class="btn btn-secondary" id="cpPrintBtn" type="button">Print</button>
+                            <button class="btn btn-secondary" id="cpDownloadBtn" type="button">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- Pack Content -->
+                    <div id="cpPackContent">
+
+                        <!-- 1. WHY THIS CANDIDATE -->
+                        <div class="cp-pack-section">
+                            <div class="cp-pack-section-title">1. Why This Candidate</div>
+                            <div class="cp-match-cards" id="cpMatchCards"></div>
+                        </div>
+
+                        <!-- 2. RISK TO KNOW -->
+                        <div class="cp-pack-section">
+                            <div class="cp-pack-section-title">2. Risk to Know</div>
+                            <div id="cpRiskCard"></div>
+                        </div>
+
+                        <!-- 3. RECOMMENDED NEXT STEP -->
+                        <div class="cp-pack-section">
+                            <div class="cp-pack-section-title">3. Recommended Next Step</div>
+                            <div id="cpNextStep"></div>
+                        </div>
+
+                        <!-- 4. SUGGESTED INTERVIEW FOCUS -->
+                        <div class="cp-pack-section">
+                            <div class="cp-pack-section-title">4. Suggested Interview Focus</div>
+                            <ul class="cp-focus-list" id="cpFocusList"></ul>
+                        </div>
+
+                        <!-- 5. CANDIDATE SNAPSHOT -->
+                        <div class="cp-pack-section">
+                            <div class="cp-pack-section-title">5. Candidate Snapshot</div>
+                            <div id="cpSnapshot"></div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Bar -->
+                    <div class="cp-result-bottombar">
+                        <button class="btn btn-secondary" id="cpGenerateAnotherBtn" type="button">Generate Another</button>
+                        <button class="btn btn-primary" id="cpCopyEmailBtn" type="button">Copy as Email Draft</button>
+                    </div>
+                </div>
+
+                <!-- Error State (hidden by default) -->
+                <div id="cpErrorView" style="display:none;">
+                    <div class="cp-error-card">
+                        <div class="cp-error-title">Generation Failed</div>
+                        <div class="cp-error-message" id="cpErrorMessage">Something went wrong while generating the Confidence Pack. Please try again.</div>
+                        <button class="btn btn-primary" id="cpRetryBtn" type="button">Retry</button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="cp-loading-overlay" id="cpLoadingOverlay">
+        <div class="cp-loading-card">
+            <div class="cp-spinner"></div>
+            <div class="cp-loading-text">Generating Confidence Pack...</div>
+            <div class="cp-loading-sub">Analyzing screening evidence and matching to role requirements.</div>
+        </div>
+    </div>
+
+    <!-- Shared Scripts -->
+    <script src="../shared/sidebar.js"></script>
+    <script src="../shared/v2-footer.js"></script>
+    <script src="../shared/export-utils.js"></script>
+    <script src="../shared/ai-service.js"></script>
+
+    <script>
+    (function() {
+        'use strict';
+
+        /* ============================================
+           State
+           ============================================ */
+        let formData = {};
+        let packResult = null;
+
+        /* ============================================
+           DOM References
+           ============================================ */
+        const inputView = document.getElementById('cpInputView');
+        const resultView = document.getElementById('cpResultView');
+        const errorView = document.getElementById('cpErrorView');
+        const loadingOverlay = document.getElementById('cpLoadingOverlay');
+
+        // Form fields
+        const fields = {
+            candidateName:  document.getElementById('cpCandidateName'),
+            currentTitle:   document.getElementById('cpCurrentTitle'),
+            currentCompany: document.getElementById('cpCurrentCompany'),
+            yearsExp:       document.getElementById('cpYearsExp'),
+            linkedIn:       document.getElementById('cpLinkedIn'),
+            targetRole:     document.getElementById('cpTargetRole'),
+            rolePassport:   document.getElementById('cpRolePassport'),
+            hiringManager:  document.getElementById('cpHiringManager'),
+            screenNotes:    document.getElementById('cpScreenNotes'),
+            strengths:      document.getElementById('cpStrengths'),
+            concerns:       document.getElementById('cpConcerns'),
+            additional:     document.getElementById('cpAdditional')
+        };
+
+        // Buttons
+        const generateBtn       = document.getElementById('cpGenerateBtn');
+        const editBtn           = document.getElementById('cpEditBtn');
+        const copyAllBtn        = document.getElementById('cpCopyAllBtn');
+        const printBtn          = document.getElementById('cpPrintBtn');
+        const downloadBtn       = document.getElementById('cpDownloadBtn');
+        const generateAnotherBtn = document.getElementById('cpGenerateAnotherBtn');
+        const copyEmailBtn      = document.getElementById('cpCopyEmailBtn');
+        const retryBtn          = document.getElementById('cpRetryBtn');
+
+        // Result containers
+        const resultCandidate = document.getElementById('cpResultCandidate');
+        const resultRole      = document.getElementById('cpResultRole');
+        const resultDate      = document.getElementById('cpResultDate');
+        const matchCards      = document.getElementById('cpMatchCards');
+        const riskCard        = document.getElementById('cpRiskCard');
+        const nextStep        = document.getElementById('cpNextStep');
+        const focusList       = document.getElementById('cpFocusList');
+        const snapshotEl      = document.getElementById('cpSnapshot');
+
+        /* ============================================
+           View Switching
+           ============================================ */
+        function showView(view) {
+            inputView.style.display = 'none';
+            resultView.style.display = 'none';
+            errorView.style.display = 'none';
+
+            if (view === 'input')  inputView.style.display = 'block';
+            if (view === 'result') resultView.style.display = 'block';
+            if (view === 'error')  errorView.style.display = 'block';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showLoading(visible) {
+            if (visible) {
+                loadingOverlay.classList.add('visible');
+            } else {
+                loadingOverlay.classList.remove('visible');
+            }
+        }
+
+        /* ============================================
+           Validation
+           ============================================ */
+        function clearErrors() {
+            document.querySelectorAll('.cp-field.has-error').forEach(function(el) {
+                el.classList.remove('has-error');
+            });
+        }
+
+        function validateForm() {
+            clearErrors();
+            let valid = true;
+
+            var required = [
+                { field: fields.candidateName, name: 'candidateName' },
+                { field: fields.currentTitle,  name: 'currentTitle' },
+                { field: fields.targetRole,    name: 'targetRole' }
+            ];
+
+            required.forEach(function(item) {
+                if (!item.field.value.trim()) {
+                    item.field.closest('.cp-field').classList.add('has-error');
+                    valid = false;
+                }
+            });
+
+            return valid;
+        }
+
+        /* ============================================
+           Collect Form Data
+           ============================================ */
+        function collectFormData() {
+            formData = {
+                candidateName:  fields.candidateName.value.trim(),
+                currentTitle:   fields.currentTitle.value.trim(),
+                currentCompany: fields.currentCompany.value.trim(),
+                yearsExp:       fields.yearsExp.value.trim(),
+                linkedIn:       fields.linkedIn.value.trim(),
+                targetRole:     fields.targetRole.value.trim(),
+                rolePassport:   fields.rolePassport.value.trim(),
+                hiringManager:  fields.hiringManager.value.trim(),
+                screenNotes:    fields.screenNotes.value.trim(),
+                strengths:      fields.strengths.value.trim(),
+                concerns:       fields.concerns.value.trim(),
+                additional:     fields.additional.value.trim()
+            };
+            return formData;
+        }
+
+        /* ============================================
+           Build AI Prompt
+           ============================================ */
+        function buildPrompt(data) {
+            var parts = [];
+            parts.push('CANDIDATE DETAILS:');
+            parts.push('Name: ' + data.candidateName);
+            parts.push('Current Title: ' + data.currentTitle);
+            if (data.currentCompany) parts.push('Current Company: ' + data.currentCompany);
+            if (data.yearsExp) parts.push('Years of Experience: ' + data.yearsExp);
+            if (data.linkedIn) parts.push('LinkedIn: ' + data.linkedIn);
+            parts.push('');
+            parts.push('TARGET ROLE: ' + data.targetRole);
+            if (data.hiringManager) parts.push('Hiring Manager: ' + data.hiringManager);
+            parts.push('');
+            if (data.rolePassport) {
+                parts.push('ROLE PASSPORT SUMMARY:');
+                parts.push(data.rolePassport);
+                parts.push('');
+            }
+            if (data.screenNotes) {
+                parts.push('SCREENING NOTES / TRUTH CHECK RESULTS:');
+                parts.push(data.screenNotes);
+                parts.push('');
+            }
+            if (data.strengths) {
+                parts.push('KEY STRENGTHS OBSERVED:');
+                parts.push(data.strengths);
+                parts.push('');
+            }
+            if (data.concerns) {
+                parts.push('CONCERNS OR RISKS:');
+                parts.push(data.concerns);
+                parts.push('');
+            }
+            if (data.additional) {
+                parts.push('ADDITIONAL CONTEXT:');
+                parts.push(data.additional);
+                parts.push('');
+            }
+
+            parts.push('Based on this information, generate the Confidence Pack as specified. Return ONLY valid JSON, no markdown code blocks, no additional text.');
+
+            return parts.join('\n');
+        }
+
+        var systemPrompt = [
+            'You are a senior recruiting strategist at a global RPO operation. Based on the candidate details and screening evidence provided, generate a Confidence Pack -- an evidence-based candidate submission designed to give hiring managers confidence.',
+            '',
+            'Return a JSON object with this EXACT structure:',
+            '{',
+            '  "matchReasons": [',
+            '    { "requirement": "The must-have requirement this addresses", "evidence": "Specific evidence from the screening notes proving the match" },',
+            '    { "requirement": "...", "evidence": "..." },',
+            '    { "requirement": "...", "evidence": "..." }',
+            '  ],',
+            '  "risk": {',
+            '    "title": "The key risk or concern",',
+            '    "description": "Why this is a risk",',
+            '    "mitigation": "Specific plan to address or validate this risk"',
+            '  },',
+            '  "recommendedNextStep": "A specific, actionable next step recommendation (interview format, who should interview, what to test)",',
+            '  "interviewFocus": [',
+            '    { "area": "Area to probe", "why": "Why this matters for this specific role" },',
+            '    { "area": "...", "why": "..." }',
+            '  ],',
+            '  "snapshot": {',
+            '    "experience": "Summary of experience level",',
+            '    "availability": "Known availability or start date info, or Unknown if not mentioned",',
+            '    "compensation": "Known comp expectations, or Unknown if not mentioned",',
+            '    "motivation": "Summary of what motivates this candidate to move",',
+            '    "flags": ["List of unknowns or items that need follow-up"]',
+            '  }',
+            '}',
+            '',
+            'Rules:',
+            '- Every match reason MUST cite specific evidence from the screening notes. Do not fabricate evidence.',
+            '- The risk must be honest and real, not superficial.',
+            '- Recommendations must be actionable and specific.',
+            '- If information is missing, flag it clearly in the snapshot flags.',
+            '- Always provide exactly 3 match reasons.',
+            '- Always provide 2-3 interview focus areas.',
+            '- Return ONLY the JSON object. No markdown formatting, no code blocks, no additional text.'
+        ].join('\n');
+
+        /* ============================================
+           Parse AI Response
+           ============================================ */
+        function parseAIResponse(text) {
+            var cleaned = text.trim();
+
+            // Remove markdown code blocks if present
+            if (cleaned.startsWith('```')) {
+                cleaned = cleaned.replace(/^```(?:json)?\s*\n?/, '').replace(/\n?```\s*$/, '');
+            }
+
+            // Try to find JSON object in the text
+            var jsonStart = cleaned.indexOf('{');
+            var jsonEnd = cleaned.lastIndexOf('}');
+            if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
+                cleaned = cleaned.substring(jsonStart, jsonEnd + 1);
+            }
+
+            return JSON.parse(cleaned);
+        }
+
+        /* ============================================
+           Render Result
+           ============================================ */
+        function escapeHtml(str) {
+            if (!str) return '';
+            var div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function renderResult(data, pack) {
+            // Top bar
+            var candidateDisplay = escapeHtml(data.candidateName);
+            if (data.currentTitle) {
+                candidateDisplay += ' <span style="color:var(--text-secondary);font-weight:var(--weight-normal);font-size:var(--font-lg);">/ ' + escapeHtml(data.currentTitle);
+                if (data.currentCompany) {
+                    candidateDisplay += ' @ ' + escapeHtml(data.currentCompany);
+                }
+                candidateDisplay += '</span>';
+            }
+            resultCandidate.innerHTML = candidateDisplay;
+            resultRole.textContent = 'Target Role: ' + data.targetRole;
+            resultDate.textContent = 'Generated: ' + new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+            // 1. Match reasons
+            var matchHtml = '';
+            if (pack.matchReasons && pack.matchReasons.length > 0) {
+                pack.matchReasons.forEach(function(match, i) {
+                    matchHtml += '<div class="cp-match-card">';
+                    matchHtml += '  <div class="cp-match-label">Match #' + (i + 1) + '</div>';
+                    matchHtml += '  <div class="cp-match-requirement">' + escapeHtml(match.requirement) + '</div>';
+                    matchHtml += '  <div class="cp-match-evidence-label">Evidence</div>';
+                    matchHtml += '  <div class="cp-match-evidence">' + escapeHtml(match.evidence) + '</div>';
+                    matchHtml += '</div>';
+                });
+            }
+            matchCards.innerHTML = matchHtml;
+
+            // 2. Risk
+            if (pack.risk) {
+                var riskHtml = '<div class="cp-risk-card">';
+                riskHtml += '<div class="cp-risk-title">' + escapeHtml(pack.risk.title) + '</div>';
+                riskHtml += '<div class="cp-risk-desc">' + escapeHtml(pack.risk.description) + '</div>';
+                riskHtml += '<div class="cp-risk-mitigation-label">Mitigation Plan</div>';
+                riskHtml += '<div class="cp-risk-mitigation">' + escapeHtml(pack.risk.mitigation) + '</div>';
+                riskHtml += '</div>';
+                riskCard.innerHTML = riskHtml;
+            }
+
+            // 3. Recommended Next Step
+            if (pack.recommendedNextStep) {
+                var nsHtml = '<div class="cp-nextstep-card">';
+                nsHtml += '<div class="cp-nextstep-text">' + escapeHtml(pack.recommendedNextStep) + '</div>';
+                nsHtml += '</div>';
+                nextStep.innerHTML = nsHtml;
+            }
+
+            // 4. Interview Focus
+            var focusHtml = '';
+            if (pack.interviewFocus && pack.interviewFocus.length > 0) {
+                pack.interviewFocus.forEach(function(item) {
+                    focusHtml += '<li class="cp-focus-item">';
+                    focusHtml += '  <div class="cp-focus-dot"></div>';
+                    focusHtml += '  <div>';
+                    focusHtml += '    <div class="cp-focus-area">' + escapeHtml(item.area) + '</div>';
+                    focusHtml += '    <div class="cp-focus-why">' + escapeHtml(item.why) + '</div>';
+                    focusHtml += '  </div>';
+                    focusHtml += '</li>';
+                });
+            }
+            focusList.innerHTML = focusHtml;
+
+            // 5. Candidate Snapshot
+            if (pack.snapshot) {
+                var snapHtml = '<div class="cp-snapshot">';
+                snapHtml += '<div class="cp-snapshot-grid">';
+
+                var snapItems = [
+                    { label: 'Experience', value: pack.snapshot.experience },
+                    { label: 'Availability', value: pack.snapshot.availability },
+                    { label: 'Compensation', value: pack.snapshot.compensation },
+                    { label: 'Motivation', value: pack.snapshot.motivation }
+                ];
+
+                snapItems.forEach(function(item) {
+                    snapHtml += '<div class="cp-snapshot-item">';
+                    snapHtml += '  <div class="cp-snapshot-label">' + escapeHtml(item.label) + '</div>';
+                    snapHtml += '  <div class="cp-snapshot-value">' + escapeHtml(item.value || 'Unknown') + '</div>';
+                    snapHtml += '</div>';
+                });
+
+                snapHtml += '</div>';
+
+                // Flags
+                if (pack.snapshot.flags && pack.snapshot.flags.length > 0) {
+                    snapHtml += '<div class="cp-snapshot-flags">';
+                    pack.snapshot.flags.forEach(function(flag) {
+                        if (flag && flag.trim()) {
+                            snapHtml += '<span class="signal-badge signal-badge--watch">' + escapeHtml(flag) + '</span>';
+                        }
+                    });
+                    snapHtml += '</div>';
+                }
+
+                snapHtml += '</div>';
+                snapshotEl.innerHTML = snapHtml;
+            }
+        }
+
+        /* ============================================
+           Export Helpers
+           ============================================ */
+        function buildPlainText() {
+            if (!packResult || !formData) return '';
+
+            var lines = [];
+            lines.push('CONFIDENCE PACK');
+            lines.push('================');
+            lines.push('');
+            lines.push('Candidate: ' + formData.candidateName);
+            if (formData.currentTitle) lines.push('Title: ' + formData.currentTitle);
+            if (formData.currentCompany) lines.push('Company: ' + formData.currentCompany);
+            lines.push('Target Role: ' + formData.targetRole);
+            lines.push('Generated: ' + new Date().toLocaleDateString());
+            lines.push('');
+
+            lines.push('--- WHY THIS CANDIDATE ---');
+            if (packResult.matchReasons) {
+                packResult.matchReasons.forEach(function(m, i) {
+                    lines.push('');
+                    lines.push('Match #' + (i + 1) + ': ' + m.requirement);
+                    lines.push('Evidence: ' + m.evidence);
+                });
+            }
+            lines.push('');
+
+            lines.push('--- RISK TO KNOW ---');
+            if (packResult.risk) {
+                lines.push('Risk: ' + packResult.risk.title);
+                lines.push('Why: ' + packResult.risk.description);
+                lines.push('Mitigation: ' + packResult.risk.mitigation);
+            }
+            lines.push('');
+
+            lines.push('--- RECOMMENDED NEXT STEP ---');
+            if (packResult.recommendedNextStep) {
+                lines.push(packResult.recommendedNextStep);
+            }
+            lines.push('');
+
+            lines.push('--- INTERVIEW FOCUS ---');
+            if (packResult.interviewFocus) {
+                packResult.interviewFocus.forEach(function(item) {
+                    lines.push('- ' + item.area + ': ' + item.why);
+                });
+            }
+            lines.push('');
+
+            lines.push('--- CANDIDATE SNAPSHOT ---');
+            if (packResult.snapshot) {
+                lines.push('Experience: ' + (packResult.snapshot.experience || 'Unknown'));
+                lines.push('Availability: ' + (packResult.snapshot.availability || 'Unknown'));
+                lines.push('Compensation: ' + (packResult.snapshot.compensation || 'Unknown'));
+                lines.push('Motivation: ' + (packResult.snapshot.motivation || 'Unknown'));
+                if (packResult.snapshot.flags && packResult.snapshot.flags.length > 0) {
+                    lines.push('Flags: ' + packResult.snapshot.flags.join(', '));
+                }
+            }
+            lines.push('');
+            lines.push('---');
+            lines.push('Generated by AI Hub v2.0 -- The Confidence Engine');
+
+            return lines.join('\n');
+        }
+
+        function buildMarkdown() {
+            if (!packResult || !formData) return '';
+
+            var lines = [];
+            lines.push('# Confidence Pack');
+            lines.push('');
+            lines.push('**Candidate:** ' + formData.candidateName);
+            if (formData.currentTitle) lines.push('**Title:** ' + formData.currentTitle);
+            if (formData.currentCompany) lines.push('**Company:** ' + formData.currentCompany);
+            lines.push('**Target Role:** ' + formData.targetRole);
+            lines.push('**Generated:** ' + new Date().toLocaleDateString());
+            lines.push('');
+
+            lines.push('## Why This Candidate');
+            if (packResult.matchReasons) {
+                packResult.matchReasons.forEach(function(m, i) {
+                    lines.push('');
+                    lines.push('### Match #' + (i + 1) + ': ' + m.requirement);
+                    lines.push('**Evidence:** ' + m.evidence);
+                });
+            }
+            lines.push('');
+
+            lines.push('## Risk to Know');
+            if (packResult.risk) {
+                lines.push('**' + packResult.risk.title + '**');
+                lines.push(packResult.risk.description);
+                lines.push('');
+                lines.push('**Mitigation:** ' + packResult.risk.mitigation);
+            }
+            lines.push('');
+
+            lines.push('## Recommended Next Step');
+            if (packResult.recommendedNextStep) {
+                lines.push(packResult.recommendedNextStep);
+            }
+            lines.push('');
+
+            lines.push('## Interview Focus');
+            if (packResult.interviewFocus) {
+                packResult.interviewFocus.forEach(function(item) {
+                    lines.push('- **' + item.area + ':** ' + item.why);
+                });
+            }
+            lines.push('');
+
+            lines.push('## Candidate Snapshot');
+            if (packResult.snapshot) {
+                lines.push('| Field | Value |');
+                lines.push('|-------|-------|');
+                lines.push('| Experience | ' + (packResult.snapshot.experience || 'Unknown') + ' |');
+                lines.push('| Availability | ' + (packResult.snapshot.availability || 'Unknown') + ' |');
+                lines.push('| Compensation | ' + (packResult.snapshot.compensation || 'Unknown') + ' |');
+                lines.push('| Motivation | ' + (packResult.snapshot.motivation || 'Unknown') + ' |');
+                if (packResult.snapshot.flags && packResult.snapshot.flags.length > 0) {
+                    lines.push('');
+                    lines.push('**Flags:** ' + packResult.snapshot.flags.join(' | '));
+                }
+            }
+            lines.push('');
+            lines.push('---');
+            lines.push('*Generated by AI Hub v2.0 -- The Confidence Engine*');
+
+            return lines.join('\n');
+        }
+
+        function buildPrintHtml() {
+            if (!packResult || !formData) return '';
+
+            var html = '';
+
+            html += '<p><strong>Candidate:</strong> ' + escapeHtml(formData.candidateName) + '</p>';
+            if (formData.currentTitle) html += '<p><strong>Title:</strong> ' + escapeHtml(formData.currentTitle) + '</p>';
+            if (formData.currentCompany) html += '<p><strong>Company:</strong> ' + escapeHtml(formData.currentCompany) + '</p>';
+            html += '<p><strong>Target Role:</strong> ' + escapeHtml(formData.targetRole) + '</p>';
+            html += '<p><strong>Generated:</strong> ' + new Date().toLocaleDateString() + '</p>';
+
+            html += '<h2>Why This Candidate</h2>';
+            if (packResult.matchReasons) {
+                packResult.matchReasons.forEach(function(m, i) {
+                    html += '<div class="section">';
+                    html += '<h3><span class="badge badge--strong">Match #' + (i + 1) + '</span> ' + escapeHtml(m.requirement) + '</h3>';
+                    html += '<p><strong>Evidence:</strong> ' + escapeHtml(m.evidence) + '</p>';
+                    html += '</div>';
+                });
+            }
+
+            html += '<h2>Risk to Know</h2>';
+            if (packResult.risk) {
+                html += '<div class="section">';
+                html += '<h3><span class="badge badge--risk">Risk</span> ' + escapeHtml(packResult.risk.title) + '</h3>';
+                html += '<p>' + escapeHtml(packResult.risk.description) + '</p>';
+                html += '<p><strong>Mitigation:</strong> ' + escapeHtml(packResult.risk.mitigation) + '</p>';
+                html += '</div>';
+            }
+
+            html += '<h2>Recommended Next Step</h2>';
+            if (packResult.recommendedNextStep) {
+                html += '<p>' + escapeHtml(packResult.recommendedNextStep) + '</p>';
+            }
+
+            html += '<h2>Interview Focus</h2>';
+            if (packResult.interviewFocus) {
+                html += '<ul>';
+                packResult.interviewFocus.forEach(function(item) {
+                    html += '<li><strong>' + escapeHtml(item.area) + ':</strong> ' + escapeHtml(item.why) + '</li>';
+                });
+                html += '</ul>';
+            }
+
+            html += '<h2>Candidate Snapshot</h2>';
+            if (packResult.snapshot) {
+                html += '<div class="section">';
+                html += '<p><strong>Experience:</strong> ' + escapeHtml(packResult.snapshot.experience || 'Unknown') + '</p>';
+                html += '<p><strong>Availability:</strong> ' + escapeHtml(packResult.snapshot.availability || 'Unknown') + '</p>';
+                html += '<p><strong>Compensation:</strong> ' + escapeHtml(packResult.snapshot.compensation || 'Unknown') + '</p>';
+                html += '<p><strong>Motivation:</strong> ' + escapeHtml(packResult.snapshot.motivation || 'Unknown') + '</p>';
+                if (packResult.snapshot.flags && packResult.snapshot.flags.length > 0) {
+                    html += '<p><strong>Flags:</strong> ';
+                    packResult.snapshot.flags.forEach(function(flag) {
+                        html += '<span class="badge badge--watch">' + escapeHtml(flag) + '</span> ';
+                    });
+                    html += '</p>';
+                }
+                html += '</div>';
+            }
+
+            return html;
+        }
+
+        function buildEmailDraft() {
+            if (!packResult || !formData) return '';
+
+            var hmName = formData.hiringManager || '[Hiring Manager]';
+            var lines = [];
+
+            lines.push('Hi ' + hmName + ',');
+            lines.push('');
+            lines.push('I\'d like to submit ' + formData.candidateName + ' for the ' + formData.targetRole + ' role. Here\'s the summary:');
+            lines.push('');
+
+            lines.push('WHY THIS CANDIDATE:');
+            if (packResult.matchReasons) {
+                packResult.matchReasons.forEach(function(m, i) {
+                    lines.push((i + 1) + '. ' + m.requirement + ' -- ' + m.evidence);
+                });
+            }
+            lines.push('');
+
+            lines.push('RISK TO KNOW:');
+            if (packResult.risk) {
+                lines.push(packResult.risk.title + ': ' + packResult.risk.description);
+                lines.push('Mitigation: ' + packResult.risk.mitigation);
+            }
+            lines.push('');
+
+            lines.push('RECOMMENDED NEXT STEP:');
+            if (packResult.recommendedNextStep) {
+                lines.push(packResult.recommendedNextStep);
+            }
+            lines.push('');
+
+            lines.push('QUICK SNAPSHOT:');
+            if (packResult.snapshot) {
+                lines.push('- Experience: ' + (packResult.snapshot.experience || 'Unknown'));
+                lines.push('- Availability: ' + (packResult.snapshot.availability || 'Unknown'));
+                lines.push('- Motivation: ' + (packResult.snapshot.motivation || 'Unknown'));
+            }
+            lines.push('');
+
+            lines.push('Happy to discuss further or set up the interview at your convenience.');
+            lines.push('');
+            lines.push('Best regards');
+
+            return lines.join('\n');
+        }
+
+        /* ============================================
+           Generate Pack
+           ============================================ */
+        async function generatePack() {
+            if (!validateForm()) return;
+
+            var data = collectFormData();
+            showLoading(true);
+            showView('input');
+
+            try {
+                var prompt = buildPrompt(data);
+                var result = await AIService.query(prompt, {
+                    systemPrompt: systemPrompt,
+                    maxTokens: 4096
+                });
+
+                if (result.error) {
+                    throw new Error(result.error);
+                }
+
+                if (!result.text) {
+                    throw new Error('No response received from AI service.');
+                }
+
+                packResult = parseAIResponse(result.text);
+                renderResult(data, packResult);
+                showLoading(false);
+                showView('result');
+
+            } catch (err) {
+                console.error('[ConfidencePack] Error:', err);
+                showLoading(false);
+                document.getElementById('cpErrorMessage').textContent = err.message || 'Something went wrong while generating the Confidence Pack. Please try again.';
+                showView('error');
+            }
+        }
+
+        /* ============================================
+           Event Listeners
+           ============================================ */
+
+        // Generate
+        generateBtn.addEventListener('click', generatePack);
+
+        // Edit Inputs — go back to form with data preserved
+        editBtn.addEventListener('click', function() {
+            showView('input');
+        });
+
+        // Generate Another — reset everything
+        generateAnotherBtn.addEventListener('click', function() {
+            Object.keys(fields).forEach(function(key) {
+                fields[key].value = '';
+            });
+            formData = {};
+            packResult = null;
+            clearErrors();
+            showView('input');
+        });
+
+        // Retry after error
+        retryBtn.addEventListener('click', function() {
+            showView('input');
+            generatePack();
+        });
+
+        // Copy All
+        copyAllBtn.addEventListener('click', function() {
+            var text = buildPlainText();
+            ExportUtils.copyToClipboard(text, copyAllBtn);
+        });
+
+        // Print
+        printBtn.addEventListener('click', function() {
+            var title = 'Confidence Pack: ' + formData.candidateName + ' for ' + formData.targetRole;
+            var html = buildPrintHtml();
+            ExportUtils.printContent(title, html);
+        });
+
+        // Download
+        downloadBtn.addEventListener('click', function() {
+            var markdown = buildMarkdown();
+            var filename = 'Confidence-Pack-' + formData.candidateName.replace(/\s+/g, '-') + '.md';
+            ExportUtils.downloadFile(filename, markdown, 'text/markdown');
+        });
+
+        // Copy as Email Draft
+        copyEmailBtn.addEventListener('click', function() {
+            var email = buildEmailDraft();
+            ExportUtils.copyToClipboard(email, copyEmailBtn);
+        });
+
+        // Clear field errors on input
+        Object.keys(fields).forEach(function(key) {
+            fields[key].addEventListener('input', function() {
+                var parent = this.closest('.cp-field');
+                if (parent && parent.classList.contains('has-error')) {
+                    parent.classList.remove('has-error');
+                }
+            });
+        });
+
+    })();
+    </script>
+</body>
+
+</html>

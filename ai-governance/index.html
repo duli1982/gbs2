@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>AI Hiring Governance | AI Hub v2.0 — The Confidence Engine</title>
+    <meta name="description"
+        content="AI hiring governance: candidate data rules, no automated decisioning, bias/adverse-impact guidance, and safe prompt patterns for recruiting.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Theme -->
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/sidebar.css">
+
+    <style>
+        .page-breadcrumb { margin-bottom: var(--space-8); display: flex; justify-content: space-between; align-items: center; }
+        .page-breadcrumb a { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--font-sm); color: var(--text-muted); }
+        .page-breadcrumb a:hover { color: var(--text-secondary); }
+        .page-breadcrumb svg { width: 14px; height: 14px; }
+
+        .return-btn {
+            display: inline-flex; align-items: center; gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            background: transparent; border: 1px solid var(--border-default); border-radius: var(--radius-md);
+            color: var(--text-muted); font-size: var(--font-sm); font-family: var(--font-family); cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .return-btn:hover { border-color: var(--border-strong); color: var(--text-secondary); }
+
+        .page-content { max-width: 960px; margin: 0 auto; }
+
+        .section-card {
+            background: var(--bg-surface); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl); padding: var(--space-8); margin-bottom: var(--space-6);
+        }
+
+        .header-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-5); }
+
+        .cta-link {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: var(--space-3) var(--space-5); background: var(--accent-cyan);
+            color: var(--text-inverse) !important; font-size: var(--font-sm); font-weight: var(--weight-semibold);
+            border-radius: var(--radius-lg); text-decoration: none !important; border: none;
+            font-family: var(--font-family); cursor: pointer; transition: background var(--transition-fast);
+        }
+        .cta-link:hover { background: var(--accent-cyan-hover); }
+
+        .outline-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: var(--space-3) var(--space-5); background: transparent;
+            color: var(--text-primary); font-size: var(--font-sm); font-weight: var(--weight-semibold);
+            border: 1px solid var(--border-default); border-radius: var(--radius-lg);
+            font-family: var(--font-family); cursor: pointer; transition: all var(--transition-fast);
+        }
+        .outline-btn:hover { background: var(--bg-surface-hover); }
+        .outline-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-6); margin-bottom: var(--space-6); }
+
+        .rule-card {
+            background: var(--bg-surface); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl); padding: var(--space-6);
+        }
+        .rule-card--green { border-left: 3px solid var(--accent-green); }
+        .rule-card--red { border-left: 3px solid var(--accent-red); }
+        .rule-card h2 { font-size: var(--font-xl); margin-bottom: var(--space-4); }
+
+        .content-list { list-style: none; padding: 0; }
+        .content-list li {
+            display: flex; align-items: flex-start; gap: var(--space-3);
+            color: var(--text-secondary); font-size: var(--font-sm); padding: var(--space-2) 0;
+        }
+        .content-list li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+        .rule-card--green .content-list li::before { background: var(--accent-green); }
+        .rule-card--red .content-list li::before { background: var(--accent-red); }
+        .content-list--cyan li::before { background: var(--accent-cyan); }
+
+        .warning-card {
+            background: var(--accent-amber-dim); border: 1px solid rgba(255,184,0,0.25);
+            border-radius: var(--radius-xl); padding: var(--space-6); margin-bottom: var(--space-6);
+        }
+        .warning-card h2 { font-size: var(--font-xl); color: var(--accent-amber); margin-bottom: var(--space-2); }
+        .warning-card p { color: var(--text-secondary); }
+
+        .checklist-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-4);
+        }
+        .checklist-card {
+            background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg); padding: var(--space-5);
+        }
+        .checklist-card__title { font-size: var(--font-base); font-weight: var(--weight-semibold); color: var(--text-primary); margin-bottom: var(--space-3); }
+        .checklist-card li { font-size: var(--font-sm); color: var(--text-secondary); padding: var(--space-1) 0; }
+
+        /* Prompt blocks */
+        .prompt-block { border: 1px solid var(--border-default); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: var(--space-6); }
+        .prompt-block__header {
+            display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
+            padding: var(--space-3) var(--space-4); background: var(--bg-elevated); border-bottom: 1px solid var(--border-default);
+        }
+        .prompt-block__title { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--text-primary); }
+        .prompt-block__copy {
+            padding: var(--space-2) var(--space-3); background: var(--accent-cyan);
+            color: var(--text-inverse); border: none; border-radius: var(--radius-md);
+            font-size: var(--font-xs); font-weight: var(--weight-semibold); font-family: var(--font-family);
+            cursor: pointer; transition: background var(--transition-fast); white-space: nowrap;
+        }
+        .prompt-block__copy:hover { background: var(--accent-cyan-hover); }
+        .prompt-block pre {
+            margin: 0; padding: var(--space-5); background: #0a0c10; color: #86efac;
+            font-family: var(--font-mono); font-size: var(--font-sm); line-height: 1.6;
+            white-space: pre-wrap; overflow-x: auto; border: none; border-radius: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <main class="app-main">
+            <div class="content-container">
+
+                <div class="page-breadcrumb">
+                    <a href="../index.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                        Back to Command Center
+                    </a>
+                    <button id="gov-return-btn" class="return-btn" type="button" aria-label="Return to previous page">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="m9 14-4-4 4-4"/><path d="M5 10h11a4 4 0 0 1 0 8h-1"/></svg>
+                        Return
+                    </button>
+                </div>
+
+                <div class="page-content">
+
+                    <!-- Header -->
+                    <div class="section-card">
+                        <h1 style="font-size: var(--font-4xl); margin-bottom: var(--space-3);">AI Hiring Governance</h1>
+                        <p style="font-size: var(--font-lg); color: var(--text-secondary); line-height: var(--leading-relaxed);">Practical rules for using AI in recruiting: what's allowed, what's not, how to avoid bias, and safe prompt templates you can copy today.</p>
+                        <div class="header-actions">
+                            <a href="#safe-prompts" class="cta-link">Jump to Safe Prompt Pack</a>
+                            <button id="ack-governance" class="outline-btn">Acknowledge guidelines</button>
+                        </div>
+                        <p style="font-size: var(--font-xs); color: var(--text-muted); margin-top: var(--space-4);">Note: this page is guidance for responsible use. Always follow client, local, and company policies.</p>
+                    </div>
+
+                    <!-- What you may / may not do -->
+                    <div class="two-col">
+                        <div class="rule-card rule-card--green">
+                            <h2>What you may do</h2>
+                            <ul class="content-list">
+                                <li>Draft job descriptions, outreach, interview guides, and scorecards.</li>
+                                <li>Summarize evidence from a resume against a JD (no "fit score").</li>
+                                <li>Identify gaps/ambiguities and propose questions to validate.</li>
+                                <li>Create structured evaluation criteria and rubrics for humans.</li>
+                            </ul>
+                        </div>
+                        <div class="rule-card rule-card--red">
+                            <h2>What you may not do</h2>
+                            <ul class="content-list">
+                                <li>Use AI as an automated decision-maker (screen/shortlist/reject) without human review.</li>
+                                <li>Infer protected characteristics (age, ethnicity, health, pregnancy, religion, etc.).</li>
+                                <li>Store or share candidate PII in tools that are not approved for that data.</li>
+                                <li>Use "cultural fit" scoring; focus on job-related criteria only.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Warning -->
+                    <div class="warning-card">
+                        <h2>No automated decisioning</h2>
+                        <p>Treat AI outputs as suggestions. Final decisions must be made by trained recruiters/hiring managers with documented job-related evidence and consistent criteria.</p>
+                    </div>
+
+                    <!-- Candidate data rules -->
+                    <div class="section-card">
+                        <h2 style="font-size: var(--font-xl); margin-bottom: var(--space-4);">Candidate data rules (quick checklist)</h2>
+                        <div class="checklist-grid">
+                            <div class="checklist-card">
+                                <div class="checklist-card__title">Minimize</div>
+                                <ul class="content-list content-list--cyan">
+                                    <li>Use the minimum data needed to complete the task.</li>
+                                    <li>Redact contact details and identifiers if possible.</li>
+                                </ul>
+                            </div>
+                            <div class="checklist-card">
+                                <div class="checklist-card__title">Control</div>
+                                <ul class="content-list content-list--cyan">
+                                    <li>Use only approved tools for candidate content.</li>
+                                    <li>Do not paste candidate data into public LLMs.</li>
+                                </ul>
+                            </div>
+                            <div class="checklist-card">
+                                <div class="checklist-card__title">Document</div>
+                                <ul class="content-list content-list--cyan">
+                                    <li>Keep a clear rationale tied to the job requirements.</li>
+                                    <li>Record what AI was used for (drafting, summarizing, etc.).</li>
+                                </ul>
+                            </div>
+                            <div class="checklist-card">
+                                <div class="checklist-card__title">Retain safely</div>
+                                <ul class="content-list content-list--cyan">
+                                    <li>Do not store AI outputs containing PII outside approved systems.</li>
+                                    <li>Follow retention rules (client + legal + company).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bias guardrails -->
+                    <div class="section-card">
+                        <h2 style="font-size: var(--font-xl); margin-bottom: var(--space-4);">Bias &amp; adverse-impact guardrails</h2>
+                        <ul class="content-list content-list--cyan">
+                            <li>Use consistent criteria for everyone; avoid "vibes" evaluation.</li>
+                            <li>Do not use proxies for protected characteristics (school prestige, gaps, location) as hard filters.</li>
+                            <li>Ask AI to propose <strong>verification questions</strong>, not conclusions.</li>
+                            <li>Prefer structured interviews and job-related work samples.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Safe Prompt Pack -->
+                    <div id="safe-prompts" class="section-card">
+                        <h2 style="font-size: var(--font-2xl); margin-bottom: var(--space-3);">Safe Prompt Pack (copy-ready)</h2>
+                        <p style="margin-bottom: var(--space-6);">These prompts avoid automated decisioning and "fit scores". They focus on evidence, gaps, and structured interviewing.</p>
+
+                        <div class="prompt-block">
+                            <div class="prompt-block__header">
+                                <span class="prompt-block__title">1) Evidence-based resume summary (no scoring)</span>
+                                <button class="prompt-block__copy" data-copy="prompt-1">Copy</button>
+                            </div>
+                            <pre id="prompt-1">Act as a recruiter.
+
+Task: Summarize the evidence in this resume against the job requirements, without giving a single "fit score" or ranking.
+
+Rules:
+- Use only job-related information in the resume; do not infer protected characteristics.
+- Separate "Evidence" from "Assumptions".
+- If information is missing or unclear, list questions to validate.
+- Suggest structured interview questions mapped to each key requirement.
+
+Inputs:
+Job requirements: [PASTE JD REQUIREMENTS]
+Resume: [PASTE RESUME TEXT]
+
+Output format:
+- Requirements mapping table (Requirement | Evidence from resume | Missing/unclear | Validation question)
+- Risks/flags (job-related only)
+- Suggested interview questions (by competency)</pre>
+                        </div>
+
+                        <div class="prompt-block">
+                            <div class="prompt-block__header">
+                                <span class="prompt-block__title">2) Structured interview kit + scorecard (human-led)</span>
+                                <button class="prompt-block__copy" data-copy="prompt-2">Copy</button>
+                            </div>
+                            <pre id="prompt-2">Act as an interview designer for a structured hiring process.
+
+Create a structured interview kit for: [ROLE]
+
+Rules:
+- No automated decisioning: humans assess responses using the rubric you create.
+- Questions must be job-related and non-discriminatory.
+- Include "strong / acceptable / weak" indicators for each question.
+
+Inputs:
+Job requirements: [PASTE JD REQUIREMENTS]
+
+Output format:
+1) Interview plan (stages + who interviews + purpose)
+2) Question bank (Competency | Question | What good looks like | Red flags)
+3) Scorecard rubric (Competency | Rating anchors | Notes)</pre>
+                        </div>
+
+                        <div class="prompt-block">
+                            <div class="prompt-block__header">
+                                <span class="prompt-block__title">3) Outreach message (privacy-safe)</span>
+                                <button class="prompt-block__copy" data-copy="prompt-3">Copy</button>
+                            </div>
+                            <pre id="prompt-3">Write a concise, professional outreach message for [ROLE].
+
+Rules:
+- Do not include sensitive personal data.
+- Focus on role value proposition and clear next step.
+- Offer an opt-out.
+
+Inputs:
+Company/context: [CONTEXT]
+Candidate public profile highlights: [BULLETS]
+
+Output format:
+Subject line options (3)
+Message (120-180 words)
+Follow-up (1 short message)</pre>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../shared/scripts/ai-governance.js"></script>
+    <script src="../shared/sidebar.js"></script>
+
+    <script>
+        (function () {
+            // AIGovernance integration (if script loaded)
+            if (window.AIGovernance && window.AIGovernance.track) {
+                window.AIGovernance.track('governance_viewed', { page: 'ai-governance' });
+            }
+
+            // Acknowledge button
+            const ackBtn = document.getElementById('ack-governance');
+            if (ackBtn && window.AIGovernance && typeof window.AIGovernance.ensureAcknowledged === 'function') {
+                const updateAckUi = (acknowledged) => {
+                    if (!ackBtn) return;
+                    if (acknowledged) {
+                        ackBtn.textContent = 'Guidelines acknowledged';
+                        ackBtn.disabled = true;
+                        ackBtn.style.opacity = '0.5';
+                        ackBtn.style.cursor = 'not-allowed';
+                    } else {
+                        ackBtn.textContent = 'Acknowledge guidelines';
+                        ackBtn.disabled = false;
+                        ackBtn.style.opacity = '';
+                        ackBtn.style.cursor = '';
+                    }
+                };
+
+                try {
+                    const already = window.AIGovernance.isAcknowledged && window.AIGovernance.isAcknowledged('general');
+                    updateAckUi(Boolean(already));
+                } catch { }
+
+                ackBtn.addEventListener('click', function () {
+                    window.AIGovernance.ensureAcknowledged('general', {
+                        title: 'Acknowledge AI use guidelines',
+                        description: 'Confirm you understand the AI use guidelines for recruiting work.'
+                    }).then((ok) => {
+                        if (ok) updateAckUi(true);
+                    });
+                });
+            }
+
+            // Copy prompt functionality
+            function copyFrom(id) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const btn = document.querySelector('[data-copy="' + id + '"]');
+                navigator.clipboard.writeText(el.textContent || '').then(() => {
+                    if (btn) {
+                        const orig = btn.textContent;
+                        btn.textContent = 'Copied!';
+                        setTimeout(() => { btn.textContent = orig; }, 2000);
+                    }
+                }).catch(() => { });
+            }
+
+            document.addEventListener('click', function (e) {
+                const btn = e.target && e.target.closest && e.target.closest('button[data-copy]');
+                if (!btn) return;
+                const id = btn.getAttribute('data-copy');
+                if (!id) return;
+                copyFrom(id);
+            });
+
+            // Return button
+            function safeSameOriginUrl(candidate) {
+                if (!candidate) return null;
+                try {
+                    const url = new URL(candidate, window.location.origin);
+                    if (url.origin !== window.location.origin) return null;
+                    return url.pathname + url.search + url.hash;
+                } catch { return null; }
+            }
+
+            const params = new URLSearchParams(window.location.search || '');
+            const fromParam = safeSameOriginUrl(params.get('from'));
+            const referrer = safeSameOriginUrl(document.referrer || '');
+            const returnTarget = fromParam || referrer;
+
+            const returnBtn = document.getElementById('gov-return-btn');
+            if (returnBtn) {
+                returnBtn.addEventListener('click', function () {
+                    if (window.history && window.history.length > 1) {
+                        window.history.back();
+                        return;
+                    }
+                    if (returnTarget) {
+                        window.location.href = returnTarget;
+                        return;
+                    }
+                    window.location.href = '../index.html';
+                });
+            }
+        })();
+    </script>
+</body>
+
+</html>

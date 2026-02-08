@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>The 12 Stages — AI Hub v2.0 | Randstad GBS</title>
+
+    <meta name="description" content="AI-powered workflow for every recruiting step. 12 stages from intake to postmortem, each with AI agent behavior, team advantages, and measurable metrics.">
+    <meta name="author" content="Randstad GBS">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="The 12 Stages — AI Hub v2.0">
+    <meta property="og:description" content="AI-powered workflow for every recruiting step. 12 stages covering the full recruiting pipeline.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/sidebar.css">
+    <link rel="stylesheet" href="../shared/v2-buttons.css">
+    <link rel="stylesheet" href="../shared/v2-cards.css">
+
+    <style>
+        /* --- Page Header --- */
+        .stages-header {
+            margin-bottom: var(--space-8);
+        }
+
+        .stages-header__label {
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+            font-weight: var(--weight-medium);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: var(--space-2);
+        }
+
+        .stages-header__title {
+            font-size: var(--font-4xl);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .stages-header__title span {
+            color: var(--accent-cyan);
+        }
+
+        .stages-header__subtitle {
+            font-size: var(--font-base);
+            color: var(--text-secondary);
+            margin-top: var(--space-2);
+            max-width: 600px;
+        }
+
+        /* --- Workbook Progress --- */
+        .workflow-progress {
+            margin-top: var(--space-5);
+            padding: var(--space-5);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+        }
+
+        .workflow-progress__head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-3);
+            margin-bottom: var(--space-3);
+        }
+
+        .workflow-progress__title {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .workflow-progress__meta {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .workflow-progress__bar {
+            height: 8px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        .workflow-progress__fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+            transition: width var(--transition-slow);
+        }
+
+        .workflow-progress__footer {
+            margin-top: var(--space-3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-3);
+            flex-wrap: wrap;
+        }
+
+        .workflow-progress__text {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+        }
+
+        /* --- Pipeline Navigation (sticky) --- */
+        .pipeline-nav {
+            position: sticky;
+            top: 0;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-subtle);
+            z-index: var(--z-sticky);
+            padding: var(--space-4) var(--space-4) var(--space-3);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        .pipeline-nav::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .pipeline-nav::-webkit-scrollbar-thumb {
+            background: var(--border-subtle);
+            border-radius: var(--radius-full);
+        }
+
+        .pipeline-clusters {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-6);
+            min-width: max-content;
+        }
+
+        .pipeline-cluster {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .pipeline-cluster__label {
+            font-size: 10px;
+            font-weight: var(--weight-semibold);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .pipeline-cluster__nodes {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .pipeline-connector {
+            width: 16px;
+            height: 2px;
+            background: var(--border-default);
+            flex-shrink: 0;
+        }
+
+        .pipeline-node {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-xs);
+            font-weight: var(--weight-semibold);
+            font-family: var(--font-mono);
+            background: var(--bg-primary);
+            color: var(--text-muted);
+            border: 2px solid var(--border-default);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .pipeline-node:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            background: var(--accent-cyan-dim);
+        }
+
+        .pipeline-node.active {
+            background: var(--accent-cyan);
+            color: var(--text-inverse);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
+        }
+
+        .pipeline-node.done {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            background: var(--accent-green-dim);
+        }
+
+        .pipeline-node.done.active {
+            background: var(--accent-green);
+            color: var(--text-inverse);
+            box-shadow: 0 0 12px rgba(0, 214, 143, 0.3);
+            border-color: var(--accent-green);
+        }
+
+        .pipeline-node__tooltip {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            font-size: 10px;
+            font-family: var(--font-family);
+            font-weight: var(--weight-medium);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            white-space: nowrap;
+            border: 1px solid var(--border-default);
+            box-shadow: var(--shadow-md);
+            z-index: var(--z-dropdown);
+            pointer-events: none;
+        }
+
+        .pipeline-node:hover .pipeline-node__tooltip {
+            display: block;
+        }
+
+        .pipeline-cluster-separator {
+            width: 1px;
+            height: 32px;
+            background: var(--border-strong);
+            align-self: flex-end;
+            flex-shrink: 0;
+        }
+
+        /* --- Stage Detail Area --- */
+        .stage-detail {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--space-8) 0;
+        }
+
+        .stage-detail__header {
+            margin-bottom: var(--space-6);
+        }
+
+        .stage-detail__number {
+            font-family: var(--font-mono);
+            font-size: var(--font-xs);
+            color: var(--accent-cyan);
+            font-weight: var(--weight-bold);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-2);
+        }
+
+        .stage-detail__cluster-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-1);
+            padding: 2px 10px;
+            border-radius: var(--radius-full);
+            font-size: var(--font-xs);
+            font-weight: var(--weight-medium);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-left: var(--space-3);
+        }
+
+        .stage-detail__cluster-badge--define {
+            background: var(--accent-cyan-dim);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+
+        .stage-detail__cluster-badge--execute {
+            background: var(--accent-amber-dim);
+            color: var(--accent-amber);
+            border: 1px solid rgba(255, 184, 0, 0.2);
+        }
+
+        .stage-detail__cluster-badge--close {
+            background: var(--accent-green-dim);
+            color: var(--accent-green);
+            border: 1px solid rgba(0, 214, 143, 0.2);
+        }
+
+        .stage-detail__workbook-status {
+            margin-left: var(--space-2);
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: var(--weight-semibold);
+        }
+
+        .stage-detail__workbook-status--done {
+            background: var(--accent-green-dim);
+            color: var(--accent-green);
+            border: 1px solid rgba(0, 214, 143, 0.2);
+        }
+
+        .stage-detail__workbook-status--open {
+            background: var(--bg-surface);
+            color: var(--text-muted);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .stage-detail__title {
+            font-size: var(--font-3xl);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: var(--space-1);
+        }
+
+        .stage-detail__subtitle {
+            font-size: var(--font-lg);
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* --- Tab Navigation --- */
+        .stage-tabs {
+            margin-bottom: var(--space-6);
+        }
+
+        .stage-tabs .pill-toggle {
+            flex-wrap: wrap;
+        }
+
+        /* --- Tab Content Sections --- */
+        .stage-section {
+            display: none;
+            animation: fadeInUp 0.3s ease both;
+        }
+
+        .stage-section.active {
+            display: block;
+        }
+
+        /* What AI Does */
+        .ai-does-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .ai-does-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-3);
+            padding: var(--space-4);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+        }
+
+        .ai-does-list li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            flex-shrink: 0;
+            margin-top: 8px;
+            box-shadow: 0 0 6px var(--accent-cyan);
+        }
+
+        /* Agent Behavior */
+        .agent-behavior-box {
+            background: var(--accent-amber-dim);
+            border-left: 3px solid var(--accent-amber);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: var(--space-5);
+        }
+
+        .agent-behavior-box__label {
+            font-size: var(--font-xs);
+            font-weight: var(--weight-semibold);
+            color: var(--accent-amber);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-3);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .agent-behavior-box__label svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .agent-behavior-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .agent-behavior-list li {
+            font-size: var(--font-sm);
+            color: var(--text-primary);
+            line-height: var(--leading-relaxed);
+            padding-left: var(--space-4);
+            position: relative;
+        }
+
+        .agent-behavior-list li::before {
+            content: '\203A';
+            position: absolute;
+            left: 0;
+            color: var(--accent-amber);
+            font-weight: var(--weight-bold);
+            font-size: var(--font-lg);
+            line-height: 1.3;
+        }
+
+        /* Team Advantage */
+        .team-advantage-box {
+            background: var(--accent-green-dim);
+            border-left: 3px solid var(--accent-green);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: var(--space-5);
+        }
+
+        .team-advantage-box__label {
+            font-size: var(--font-xs);
+            font-weight: var(--weight-semibold);
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-3);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .team-advantage-box__label svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .team-advantage-box p {
+            font-size: var(--font-base);
+            color: var(--text-primary);
+            line-height: var(--leading-relaxed);
+            font-weight: var(--weight-medium);
+        }
+
+        /* Tools & Templates */
+        .tools-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-3);
+        }
+
+        .tool-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: 10px 20px;
+            font-size: var(--font-sm);
+            font-weight: var(--weight-medium);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+
+        .tool-link--available {
+            background: var(--accent-cyan-dim);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+
+        .tool-link--available:hover {
+            background: var(--accent-cyan);
+            color: var(--text-inverse);
+            box-shadow: var(--shadow-glow-cyan);
+        }
+
+        .tool-link--available svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .tool-link--soon {
+            background: var(--bg-surface);
+            color: var(--text-muted);
+            border: 1px solid var(--border-subtle);
+            cursor: default;
+            opacity: 0.6;
+        }
+
+        .tool-link--soon .tool-link__badge {
+            font-size: 10px;
+            background: var(--bg-primary);
+            padding: 2px 6px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            margin-left: var(--space-1);
+        }
+
+        /* Metrics */
+        .metrics-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .metric-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-4);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+        }
+
+        .metric-item__icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-md);
+            background: var(--accent-purple-dim);
+            color: var(--accent-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .metric-item__icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .metric-item__text {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            font-weight: var(--weight-medium);
+        }
+
+        /* Workbook */
+        .workbook-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: var(--space-4);
+        }
+
+        .workbook-block {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+        }
+
+        .workbook-block h3 {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-3);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .workbook-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .workbook-check {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-2);
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+        }
+
+        .workbook-check input {
+            margin-top: 2px;
+            accent-color: var(--accent-cyan);
+        }
+
+        .workbook-note {
+            width: 100%;
+            min-height: 140px;
+            resize: vertical;
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            padding: 10px 12px;
+            font: inherit;
+            font-size: var(--font-sm);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: var(--leading-relaxed);
+        }
+
+        .workbook-note:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.12);
+        }
+
+        .workbook-note__hint {
+            margin-top: var(--space-2);
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+        }
+
+        .workbook-actions {
+            margin-top: var(--space-4);
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+        }
+
+        .workbook-status {
+            margin-top: var(--space-3);
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+        }
+
+        /* --- Stage Navigation Arrows --- */
+        .stage-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: var(--space-8);
+            padding-top: var(--space-6);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .stage-nav__btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: 10px 20px;
+            font-size: var(--font-sm);
+            font-weight: var(--weight-medium);
+            color: var(--text-secondary);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+
+        .stage-nav__btn:hover {
+            background: var(--bg-surface-hover);
+            border-color: var(--border-default);
+            color: var(--text-primary);
+        }
+
+        .stage-nav__btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .stage-nav__btn--disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* --- Bottom CTA --- */
+        .stages-cta {
+            text-align: center;
+            padding: var(--space-10) 0;
+            margin-top: var(--space-8);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .stages-cta p {
+            font-size: var(--font-base);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-4);
+        }
+
+        /* --- Loading State --- */
+        .stages-loading {
+            text-align: center;
+            padding: var(--space-16) 0;
+            color: var(--text-muted);
+            font-size: var(--font-sm);
+        }
+
+        .stages-loading__spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border-default);
+            border-top-color: var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto var(--space-3);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .stage-detail {
+                padding: var(--space-6) 0;
+            }
+
+            .pipeline-nav {
+                padding: var(--space-3);
+            }
+
+            .pipeline-clusters {
+                gap: var(--space-4);
+            }
+
+            .pipeline-connector {
+                width: 8px;
+            }
+
+            .pipeline-node {
+                width: 28px;
+                height: 28px;
+                font-size: 10px;
+            }
+
+            .stage-tabs .pill-toggle {
+                width: 100%;
+            }
+
+            .stage-tabs .pill-toggle .pill {
+                flex: 1;
+                text-align: center;
+                padding: 6px 10px;
+                font-size: 10px;
+            }
+
+            .stage-nav {
+                flex-direction: column;
+                gap: var(--space-3);
+            }
+
+            .stage-nav__btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .workflow-progress__head {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .workbook-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <main class="app-main">
+            <div class="content-container">
+
+                <!-- Page Header -->
+                <header class="stages-header fade-in-up">
+                    <div class="stages-header__label">AI Hub v2.0</div>
+                    <h1 class="stages-header__title">The 12 <span>Stages</span></h1>
+                    <p class="stages-header__subtitle">AI-powered workflow for every recruiting step. Each stage builds a verified evidence trail — because when everyone has AI, proof is what separates good from great.</p>
+                    <div id="workflowProgress" class="workflow-progress" aria-live="polite"></div>
+                </header>
+
+                <!-- Pipeline Visualization -->
+                <nav class="pipeline-nav fade-in-up fade-in-up-delay-1" id="pipelineNav" aria-label="Pipeline stage navigation">
+                    <!-- Populated by JavaScript -->
+                </nav>
+
+                <!-- Stage Detail -->
+                <div id="stageDetail" class="fade-in-up fade-in-up-delay-2">
+                    <div class="stages-loading">
+                        <div class="stages-loading__spinner"></div>
+                        Loading stages...
+                    </div>
+                </div>
+
+                <!-- Bottom CTA -->
+                <section class="stages-cta fade-in-up fade-in-up-delay-3">
+                    <p>Every stage produces evidence. Every tool demands proof. That is how you build confidence the hiring manager can trust.</p>
+                    <a href="/prompts/" class="btn btn-primary">See the prompts for every stage</a>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../shared/sidebar.js"></script>
+    <script src="../shared/v2-footer.js"></script>
+    <script>
+    (function() {
+        'use strict';
+
+        var stages = [];
+        var activeStageId = 1;
+        var activeTab = 'workbook';
+        var workbookState = {};
+        var WORKBOOK_STORAGE_KEY = 'aihub-stage-workbook-v1';
+
+        var TABS = [
+            { key: 'whatAIDoes',     label: 'What AI Does' },
+            { key: 'agentBehavior',  label: 'Agent Behavior' },
+            { key: 'teamAdvantage',  label: 'Team Advantage' },
+            { key: 'tools',          label: 'Templates & Tools' },
+            { key: 'metrics',        label: 'What to Measure' },
+            { key: 'workbook',       label: 'Workbook' }
+        ];
+
+        var CLUSTER_CONFIG = {
+            'Define':        { class: 'define',  stageIds: [1, 2, 3] },
+            'Execute':       { class: 'execute', stageIds: [4, 5, 6, 7, 8] },
+            'Close & Learn': { class: 'close',   stageIds: [9, 10, 11, 12] }
+        };
+
+        var SHORT_LABELS = {
+            1: 'Intake',
+            2: 'JD',
+            3: 'Market',
+            4: 'Source',
+            5: 'Outreach',
+            6: 'Screen',
+            7: 'Submit',
+            8: 'Interview',
+            9: 'Debrief',
+            10: 'Offer',
+            11: 'Preboard',
+            12: 'Postmortem'
+        };
+
+        /* --- Fetch Data --- */
+        function init() {
+            fetch('stages.json')
+                .then(function(res) {
+                    if (!res.ok) throw new Error('Failed to load stages.json');
+                    return res.json();
+                })
+                .then(function(data) {
+                    stages = data;
+                    loadWorkbookState();
+                    handleHashStage();
+                    buildPipelineNav();
+                    renderWorkflowProgress();
+                    renderStage(activeStageId);
+                })
+                .catch(function(err) {
+                    console.error(err);
+                    document.getElementById('stageDetail').innerHTML =
+                        '<div class="stages-loading" style="color: var(--accent-red);">Failed to load stage data. Please refresh.</div>';
+                });
+        }
+
+        function loadWorkbookState() {
+            try {
+                var raw = localStorage.getItem(WORKBOOK_STORAGE_KEY);
+                workbookState = raw ? JSON.parse(raw) : {};
+            } catch (e) {
+                workbookState = {};
+            }
+        }
+
+        function saveWorkbookState() {
+            try {
+                localStorage.setItem(WORKBOOK_STORAGE_KEY, JSON.stringify(workbookState));
+            } catch (e) {
+                // noop
+            }
+        }
+
+        function getStageWorkbookState(stageId) {
+            var key = String(stageId);
+            if (!workbookState[key]) {
+                workbookState[key] = { done: false, checks: {}, note: '', updatedAt: Date.now() };
+            }
+            return workbookState[key];
+        }
+
+        function setStageWorkbookState(stageId, nextState) {
+            workbookState[String(stageId)] = nextState;
+            saveWorkbookState();
+            renderWorkflowProgress();
+            updatePipelineActive();
+        }
+
+        function getWorkbookChecklist(stage) {
+            var items = [];
+            var aiActions = Array.isArray(stage.whatAIDoes) ? stage.whatAIDoes.slice(0, 3) : [];
+            aiActions.forEach(function(action) { items.push(action); });
+
+            if (Array.isArray(stage.agentBehavior) && stage.agentBehavior.length) {
+                items.push('Enforce the key rule: ' + stage.agentBehavior[0]);
+            }
+            if (Array.isArray(stage.tools) && stage.tools.length) {
+                items.push('Use the primary tool/template: ' + stage.tools[0].name);
+            }
+            return items.slice(0, 5);
+        }
+
+        function checklistItemId(text) {
+            return String(text || '')
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '')
+                .slice(0, 80) || 'item';
+        }
+
+        function getCompletedCount() {
+            var count = 0;
+            for (var i = 1; i <= 12; i++) {
+                if (getStageWorkbookState(i).done) count += 1;
+            }
+            return count;
+        }
+
+        function getNextIncompleteStageId() {
+            for (var i = 1; i <= 12; i++) {
+                if (!getStageWorkbookState(i).done) return i;
+            }
+            return 12;
+        }
+
+        function renderWorkflowProgress() {
+            var el = document.getElementById('workflowProgress');
+            if (!el) return;
+
+            var completed = getCompletedCount();
+            var pct = Math.round((completed / 12) * 100);
+            var nextStage = getNextIncompleteStageId();
+
+            var html = '';
+            html += '<div class="workflow-progress__head">';
+            html += '<div class="workflow-progress__title">Workbook Progress</div>';
+            html += '<div class="workflow-progress__meta">' + completed + '/12 stages complete</div>';
+            html += '</div>';
+            html += '<div class="workflow-progress__bar">';
+            html += '<div class="workflow-progress__fill" style="width:' + pct + '%"></div>';
+            html += '</div>';
+            html += '<div class="workflow-progress__footer">';
+            html += '<div class="workflow-progress__text">Next recommended step: Stage ' + nextStage + '</div>';
+            html += '<button class="btn btn-secondary btn-sm" type="button" data-jump-stage="' + nextStage + '">Continue Workbook</button>';
+            html += '</div>';
+
+            el.innerHTML = html;
+
+            var jumpBtn = el.querySelector('[data-jump-stage]');
+            if (jumpBtn) {
+                jumpBtn.addEventListener('click', function() {
+                    var targetStage = parseInt(this.getAttribute('data-jump-stage'), 10);
+                    navigateToStage(targetStage);
+                    scrollToNav();
+                });
+            }
+        }
+
+        /* --- Handle URL Hash --- */
+        function handleHashStage() {
+            var hash = window.location.hash;
+            if (hash) {
+                var match = hash.match(/stage-(\d+)/);
+                if (match) {
+                    var num = parseInt(match[1], 10);
+                    if (num >= 1 && num <= 12) {
+                        activeStageId = num;
+                    }
+                }
+            }
+        }
+
+        /* --- Build Pipeline Nav --- */
+        function buildPipelineNav() {
+            var nav = document.getElementById('pipelineNav');
+            var html = '<div class="pipeline-clusters">';
+
+            var clusterKeys = ['Define', 'Execute', 'Close & Learn'];
+            for (var c = 0; c < clusterKeys.length; c++) {
+                var clusterName = clusterKeys[c];
+                var config = CLUSTER_CONFIG[clusterName];
+
+                if (c > 0) {
+                    html += '<div class="pipeline-cluster-separator"></div>';
+                }
+
+                html += '<div class="pipeline-cluster">';
+                html += '<div class="pipeline-cluster__label">' + clusterName + '</div>';
+                html += '<div class="pipeline-cluster__nodes">';
+
+                for (var n = 0; n < config.stageIds.length; n++) {
+                    var sid = config.stageIds[n];
+                    var stage = getStage(sid);
+
+                    if (n > 0) {
+                        html += '<div class="pipeline-connector"></div>';
+                    }
+
+                    var activeClass = sid === activeStageId ? ' active' : '';
+                    var doneClass = getStageWorkbookState(sid).done ? ' done' : '';
+                    html += '<button class="pipeline-node' + activeClass + doneClass + '" data-stage-id="' + sid + '" ';
+                    html += 'aria-label="Stage ' + sid + ': ' + (stage ? stage.title : '') + '" ';
+                    html += 'title="' + (stage ? stage.title : '') + '">';
+                    html += sid;
+                    html += '<span class="pipeline-node__tooltip">' + SHORT_LABELS[sid] + '</span>';
+                    html += '</button>';
+                }
+
+                html += '</div>';
+                html += '</div>';
+            }
+
+            html += '</div>';
+            nav.innerHTML = html;
+
+            // Bind click events
+            var nodes = nav.querySelectorAll('.pipeline-node');
+            nodes.forEach(function(node) {
+                node.addEventListener('click', function() {
+                    var id = parseInt(this.getAttribute('data-stage-id'), 10);
+                    navigateToStage(id);
+                });
+            });
+        }
+
+        /* --- Navigate to Stage --- */
+        function navigateToStage(id) {
+            activeStageId = id;
+            activeTab = 'workbook';
+            updatePipelineActive();
+            renderStage(id);
+            window.history.replaceState(null, '', '#stage-' + id);
+        }
+
+        /* --- Update Pipeline Active State --- */
+        function updatePipelineActive() {
+            var nodes = document.querySelectorAll('.pipeline-node');
+            nodes.forEach(function(node) {
+                var id = parseInt(node.getAttribute('data-stage-id'), 10);
+                if (id === activeStageId) {
+                    node.classList.add('active');
+                } else {
+                    node.classList.remove('active');
+                }
+
+                if (getStageWorkbookState(id).done) {
+                    node.classList.add('done');
+                } else {
+                    node.classList.remove('done');
+                }
+            });
+        }
+
+        /* --- Render Stage Detail --- */
+        function renderStage(id) {
+            var stage = getStage(id);
+            if (!stage) return;
+
+            var container = document.getElementById('stageDetail');
+            var clusterClass = getClusterClass(stage.cluster);
+            var stageState = getStageWorkbookState(stage.id);
+
+            var html = '<div class="stage-detail">';
+
+            // Header
+            html += '<div class="stage-detail__header">';
+            html += '<div class="stage-detail__number">';
+            html += 'Stage ' + stage.id + ' of 12';
+            html += '<span class="stage-detail__cluster-badge stage-detail__cluster-badge--' + clusterClass + '">' + stage.cluster + '</span>';
+            html += '<span class="stage-detail__workbook-status stage-detail__workbook-status--' + (stageState.done ? 'done' : 'open') + '">';
+            html += stageState.done ? 'Workbook Complete' : 'Workbook Open';
+            html += '</span>';
+            html += '</div>';
+            html += '<h2 class="stage-detail__title">' + stage.title + '</h2>';
+            html += '<p class="stage-detail__subtitle">' + stage.subtitle + '</p>';
+            if (stage.verificationFocus) {
+                html += '<div style="margin-top:var(--space-3);padding:var(--space-3) var(--space-4);background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.15);border-radius:var(--radius-md);font-size:var(--font-sm);color:var(--text-secondary);display:flex;align-items:flex-start;gap:var(--space-2);">';
+                html += '<span style="color:var(--accent-cyan);font-weight:var(--weight-semibold);font-size:var(--font-xs);text-transform:uppercase;letter-spacing:0.06em;white-space:nowrap;margin-top:1px;">Verify</span>';
+                html += '<span>' + escapeHtml(stage.verificationFocus) + '</span>';
+                html += '</div>';
+            }
+            html += '</div>';
+
+            // Tabs
+            html += '<div class="stage-tabs">';
+            html += '<div class="pill-toggle" role="tablist">';
+            for (var t = 0; t < TABS.length; t++) {
+                var tab = TABS[t];
+                var isActive = tab.key === activeTab;
+                html += '<button class="pill' + (isActive ? ' active' : '') + '" ';
+                html += 'role="tab" aria-selected="' + isActive + '" ';
+                html += 'data-tab="' + tab.key + '">';
+                html += tab.label;
+                html += '</button>';
+            }
+            html += '</div>';
+            html += '</div>';
+
+            // Tab Panels
+            html += renderWhatAIDoes(stage);
+            html += renderAgentBehavior(stage);
+            html += renderTeamAdvantage(stage);
+            html += renderTools(stage);
+            html += renderMetrics(stage);
+            html += renderWorkbook(stage);
+
+            // Prev / Next navigation
+            html += renderStageNav(stage);
+
+            html += '</div>';
+
+            container.innerHTML = html;
+
+            // Bind tab events
+            var pills = container.querySelectorAll('.pill[data-tab]');
+            pills.forEach(function(pill) {
+                pill.addEventListener('click', function() {
+                    activeTab = this.getAttribute('data-tab');
+                    updateTabs(container);
+                });
+            });
+
+            bindWorkbookEvents(stage, container);
+        }
+
+        /* --- Tab Content Renderers --- */
+
+        function renderWhatAIDoes(stage) {
+            var active = activeTab === 'whatAIDoes' ? ' active' : '';
+            var html = '<div class="stage-section' + active + '" data-section="whatAIDoes">';
+            html += '<ul class="ai-does-list">';
+            for (var i = 0; i < stage.whatAIDoes.length; i++) {
+                html += '<li>' + escapeHtml(stage.whatAIDoes[i]) + '</li>';
+            }
+            html += '</ul>';
+            html += '</div>';
+            return html;
+        }
+
+        function renderAgentBehavior(stage) {
+            var active = activeTab === 'agentBehavior' ? ' active' : '';
+            var html = '<div class="stage-section' + active + '" data-section="agentBehavior">';
+            html += '<div class="agent-behavior-box">';
+            html += '<div class="agent-behavior-box__label">';
+            html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+            html += 'Agent Rules';
+            html += '</div>';
+            html += '<ul class="agent-behavior-list">';
+            for (var i = 0; i < stage.agentBehavior.length; i++) {
+                html += '<li>' + escapeHtml(stage.agentBehavior[i]) + '</li>';
+            }
+            html += '</ul>';
+            html += '</div>';
+            html += '</div>';
+            return html;
+        }
+
+        function renderTeamAdvantage(stage) {
+            var active = activeTab === 'teamAdvantage' ? ' active' : '';
+            var html = '<div class="stage-section' + active + '" data-section="teamAdvantage">';
+            html += '<div class="team-advantage-box">';
+            html += '<div class="team-advantage-box__label">';
+            html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+            html += 'Team Advantage';
+            html += '</div>';
+            html += '<p>' + escapeHtml(stage.teamAdvantage) + '</p>';
+            html += '</div>';
+            html += '</div>';
+            return html;
+        }
+
+        function renderTools(stage) {
+            var active = activeTab === 'tools' ? ' active' : '';
+            var html = '<div class="stage-section' + active + '" data-section="tools">';
+            html += '<div class="tools-grid">';
+            for (var i = 0; i < stage.tools.length; i++) {
+                var tool = stage.tools[i];
+                if (tool.available) {
+                    html += '<a href="' + tool.href + '" class="tool-link tool-link--available">';
+                    html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>';
+                    html += escapeHtml(tool.name);
+                    html += '</a>';
+                } else {
+                    html += '<span class="tool-link tool-link--soon">';
+                    html += escapeHtml(tool.name);
+                    html += '<span class="tool-link__badge">Coming Soon</span>';
+                    html += '</span>';
+                }
+            }
+            html += '</div>';
+            html += '</div>';
+            return html;
+        }
+
+        function renderMetrics(stage) {
+            var active = activeTab === 'metrics' ? ' active' : '';
+            var html = '<div class="stage-section' + active + '" data-section="metrics">';
+            html += '<div class="metrics-list">';
+            for (var i = 0; i < stage.metrics.length; i++) {
+                html += '<div class="metric-item">';
+                html += '<div class="metric-item__icon">';
+                html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>';
+                html += '</div>';
+                html += '<div class="metric-item__text">' + escapeHtml(stage.metrics[i]) + '</div>';
+                html += '</div>';
+            }
+            html += '</div>';
+            html += '</div>';
+            return html;
+        }
+
+        function renderWorkbook(stage) {
+            var active = activeTab === 'workbook' ? ' active' : '';
+            var stageState = getStageWorkbookState(stage.id);
+            var checklist = getWorkbookChecklist(stage);
+            var primaryTool = Array.isArray(stage.tools) && stage.tools.length ? stage.tools[0] : null;
+
+            var html = '<div class="stage-section' + active + '" data-section="workbook">';
+            html += '<div class="workbook-grid">';
+
+            html += '<div class="workbook-block">';
+            html += '<h3>Execution Checklist</h3>';
+            html += '<div class="workbook-checklist">';
+            for (var i = 0; i < checklist.length; i++) {
+                var line = checklist[i];
+                var itemId = checklistItemId(line);
+                var checked = stageState.checks && stageState.checks[itemId] ? ' checked' : '';
+                html += '<label class="workbook-check">';
+                html += '<input type="checkbox" data-wb-check="' + itemId + '"' + checked + '>';
+                html += '<span>' + escapeHtml(line) + '</span>';
+                html += '</label>';
+            }
+            html += '</div>';
+
+            html += '<div class="workbook-actions">';
+            if (primaryTool && primaryTool.available) {
+                html += '<a class="btn btn-ghost btn-sm" href="' + primaryTool.href + '">Open Primary Tool</a>';
+            }
+            html += '<button class="btn btn-secondary btn-sm" type="button" data-wb-save="1">Save Notes</button>';
+            if (stageState.done) {
+                html += '<button class="btn btn-ghost btn-sm" type="button" data-wb-toggle-done="0">Mark Incomplete</button>';
+            } else {
+                html += '<button class="btn btn-primary btn-sm" type="button" data-wb-toggle-done="1">Mark Stage Complete</button>';
+            }
+            html += '</div>';
+
+            html += '<div class="workbook-status" data-wb-status="1">';
+            html += stageState.done
+                ? 'Stage complete. Move to the next stage when handoff notes are clear.'
+                : 'Complete checklist items, capture evidence, then mark this stage complete.';
+            html += '</div>';
+            html += '</div>';
+
+            html += '<div class="workbook-block">';
+            html += '<h3>Evidence / Handoff Notes</h3>';
+            html += '<textarea class="workbook-note" data-wb-note="1" placeholder="Capture what you learned, what evidence you gathered, and what the next stage needs to execute cleanly.">' + escapeHtml(stageState.note || '') + '</textarea>';
+            html += '<div class="workbook-note__hint">First principle: if the next stage cannot execute from these notes, this stage is not done.</div>';
+            html += '</div>';
+
+            html += '</div>';
+            html += '</div>';
+
+            return html;
+        }
+
+        /* --- Stage Navigation (Prev/Next) --- */
+        function renderStageNav(stage) {
+            var html = '<div class="stage-nav">';
+
+            // Previous
+            if (stage.id > 1) {
+                var prev = getStage(stage.id - 1);
+                html += '<button class="stage-nav__btn" data-nav-stage="' + (stage.id - 1) + '">';
+                html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
+                html += '<span>' + (prev ? prev.title : 'Previous') + '</span>';
+                html += '</button>';
+            } else {
+                html += '<div class="stage-nav__btn stage-nav__btn--disabled">';
+                html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
+                html += '<span>Previous</span>';
+                html += '</div>';
+            }
+
+            // Next
+            if (stage.id < 12) {
+                var next = getStage(stage.id + 1);
+                html += '<button class="stage-nav__btn" data-nav-stage="' + (stage.id + 1) + '">';
+                html += '<span>' + (next ? next.title : 'Next') + '</span>';
+                html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+                html += '</button>';
+            } else {
+                html += '<div class="stage-nav__btn stage-nav__btn--disabled">';
+                html += '<span>Next</span>';
+                html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+                html += '</div>';
+            }
+
+            html += '</div>';
+
+            // Bind nav events after render using event delegation
+            setTimeout(function() {
+                var navBtns = document.querySelectorAll('[data-nav-stage]');
+                navBtns.forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        var id = parseInt(this.getAttribute('data-nav-stage'), 10);
+                        navigateToStage(id);
+                        scrollToNav();
+                    });
+                });
+            }, 0);
+
+            return html;
+        }
+
+        /* --- Update Tab State --- */
+        function updateTabs(container) {
+            // Update pill active states
+            var pills = container.querySelectorAll('.pill[data-tab]');
+            pills.forEach(function(pill) {
+                if (pill.getAttribute('data-tab') === activeTab) {
+                    pill.classList.add('active');
+                    pill.setAttribute('aria-selected', 'true');
+                } else {
+                    pill.classList.remove('active');
+                    pill.setAttribute('aria-selected', 'false');
+                }
+            });
+
+            // Update section visibility
+            var sections = container.querySelectorAll('.stage-section');
+            sections.forEach(function(section) {
+                if (section.getAttribute('data-section') === activeTab) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+        }
+
+        function bindWorkbookEvents(stage, container) {
+            var stageState = getStageWorkbookState(stage.id);
+
+            var noteField = container.querySelector('[data-wb-note]');
+            if (noteField) {
+                noteField.addEventListener('input', function() {
+                    stageState.note = this.value.slice(0, 5000);
+                    stageState.updatedAt = Date.now();
+                    setStageWorkbookState(stage.id, stageState);
+                });
+            }
+
+            var checkboxes = container.querySelectorAll('[data-wb-check]');
+            checkboxes.forEach(function(box) {
+                box.addEventListener('change', function() {
+                    var checkId = this.getAttribute('data-wb-check');
+                    stageState.checks = stageState.checks || {};
+                    stageState.checks[checkId] = this.checked;
+                    stageState.updatedAt = Date.now();
+                    setStageWorkbookState(stage.id, stageState);
+                });
+            });
+
+            var saveBtn = container.querySelector('[data-wb-save]');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', function() {
+                    stageState.updatedAt = Date.now();
+                    setStageWorkbookState(stage.id, stageState);
+                    var status = container.querySelector('[data-wb-status]');
+                    if (status) status.textContent = 'Workbook notes saved.';
+                });
+            }
+
+            var toggleBtn = container.querySelector('[data-wb-toggle-done]');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function() {
+                    var targetDone = this.getAttribute('data-wb-toggle-done') === '1';
+                    if (targetDone && !canMarkDone(stage.id)) {
+                        var status = container.querySelector('[data-wb-status]');
+                        if (status) {
+                            status.textContent = 'To complete this stage: check at least one execution item and capture meaningful handoff notes.';
+                        }
+                        return;
+                    }
+                    stageState.done = targetDone;
+                    stageState.updatedAt = Date.now();
+                    setStageWorkbookState(stage.id, stageState);
+                    renderStage(stage.id);
+                });
+            }
+        }
+
+        function canMarkDone(stageId) {
+            var state = getStageWorkbookState(stageId);
+            var checks = state.checks || {};
+            var checkedCount = 0;
+            Object.keys(checks).forEach(function(key) {
+                if (checks[key]) checkedCount += 1;
+            });
+            var noteLen = (state.note || '').trim().length;
+            return checkedCount >= 1 && noteLen >= 25;
+        }
+
+        /* --- Helpers --- */
+        function getStage(id) {
+            for (var i = 0; i < stages.length; i++) {
+                if (stages[i].id === id) return stages[i];
+            }
+            return null;
+        }
+
+        function getClusterClass(cluster) {
+            if (cluster === 'Define') return 'define';
+            if (cluster === 'Execute') return 'execute';
+            if (cluster === 'Close & Learn') return 'close';
+            return 'define';
+        }
+
+        function escapeHtml(str) {
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        function scrollToNav() {
+            var nav = document.getElementById('pipelineNav');
+            if (nav) {
+                nav.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        /* --- Hash Change Listener --- */
+        window.addEventListener('hashchange', function() {
+            handleHashStage();
+            updatePipelineActive();
+            renderStage(activeStageId);
+        });
+
+        /* --- Init --- */
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+    </script>
+</body>
+</html>

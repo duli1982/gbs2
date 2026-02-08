@@ -1,0 +1,170 @@
+{
+  "program": {
+    "title": "AI-Ready Sourcer Program",
+    "subtitle": "8 weeks from task-doer to outcome-owner",
+    "description": "A structured program that produces behavior change and reusable assets. Each week builds on the last. By the end, every participant can diagnose what matters, design a plan, execute with AI, verify with evidence, and influence hiring managers with confidence."
+  },
+  "weeks": [
+    {
+      "id": 1,
+      "title": "Baseline + Non-negotiables",
+      "shortLabel": "Baseline",
+      "outcome": "Everyone understands the new definition of quality.",
+      "focus": "Introduce 5 Quality Proof Points that apply to every market: Motivation (why this role, why now), Location reality (onsite/relocation constraints), Compensation range reality, Notice period/availability, Evidence snippet (proof they did the thing).",
+      "howToRun": "Show two candidate examples: one who 'looks great' but fails (no evidence), and one who is 'evidence-based' and wins. Teach the principle: AI can draft, humans must verify.",
+      "deliverable": "Team agrees on a one-page 'What Good Looks Like' standard.",
+      "exercises": [
+        "Compare two candidate profiles and identify which has real evidence vs surface impressions",
+        "Write down your team's current definition of quality — then compare with the 5 Proof Points",
+        "Pick one recent submission and retroactively score it against the 5 Proof Points"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Prompting for Outcomes",
+      "shortLabel": "Prompting",
+      "outcome": "Everyone can use AI to produce decisions, not paragraphs.",
+      "focus": "Teach 3 prompt types only: Intake Clarifier (turn messy req into crisp requirements), Persona Builder (who is the target + what signals matter), Outreach Angle Generator (3 angles + why they work).",
+      "howToRun": "Live-build one persona together for a real role. Everyone copies and adapts it for their own role.",
+      "deliverable": "Role Persona Card template added to the Asset Library.",
+      "exercises": [
+        "Take a current open role and run it through the Intake Clarifier prompt",
+        "Build a Persona Card for your most challenging open role",
+        "Generate 3 outreach angles and explain which you'd use first and why"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "AI Sourcing: From Boolean to Strategy",
+      "shortLabel": "Sourcing",
+      "outcome": "AI is used to expand reach intelligently, not spam.",
+      "focus": "Use AI to produce: 4 sourcing lanes (companies, titles, adjacent industries, geography), 'Must-have evidence' list (what proof you need to see), Boolean + alternative searches without being dependent on boolean alone.",
+      "howToRun": "30-minute sprint: each person builds 1 sourcing plan — not a search string, but a full plan.",
+      "deliverable": "Sourcing Plan One-Pager template in the Asset Library.",
+      "exercises": [
+        "Build a 4-lane sourcing strategy for your top priority role",
+        "Create a must-have evidence checklist that you can use during profile review",
+        "Generate Boolean strings in strict, balanced, and broad variants for one role"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "The Pre-HM Truth Check",
+      "shortLabel": "Truth Check",
+      "outcome": "You reduce late-stage failure from AI-polished CVs, inflated resumes, and misalignment.",
+      "focus": "Implement a standard 10-12 minute check: 3 evidence questions (tell me about a time you did X — what was the measurable output?), 1 constraint reality question (location/availability/comp), 1 motivation question (why change now).",
+      "howToRun": "Role-play: one person is the candidate, one is the sourcer, one is the evaluator. Calibrate scoring together (Strong/OK/Risk).",
+      "deliverable": "Truth Check Script + Rubric added to the Asset Library.",
+      "exercises": [
+        "Run 3 practice Truth Checks with teammates role-playing as candidates",
+        "Score the same candidate independently, then compare — calibrate where you differ",
+        "Identify one question in your current process that produces zero useful signal — replace it"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Shortlist Writing: The Confidence Pack",
+      "shortLabel": "Confidence Pack",
+      "outcome": "Hiring managers trust you more because your shortlists are decisive.",
+      "focus": "Every shortlist submission must include: 3 match reasons (with evidence), 1 risk identified, mitigation plan for the risk, recommended next step.",
+      "howToRun": "Convert 2 existing candidates into Confidence Packs live as a group. Compare with how they would have been submitted before.",
+      "deliverable": "Confidence Pack format added to the Asset Library.",
+      "exercises": [
+        "Convert your most recent submission into a Confidence Pack format",
+        "Ask a hiring manager to compare a traditional CV forward vs a Confidence Pack — note their reaction",
+        "Identify the most common risk you see in candidates for your roles — write a standard mitigation for it"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "AI for Ops Acceleration",
+      "shortLabel": "Ops",
+      "outcome": "Team removes busywork and makes flow smoother without losing quality.",
+      "focus": "Pick 2 automations from: Automated follow-up sequences, Candidate summary cards, HM update drafts, Interview prep packs, Data hygiene checks for trackers.",
+      "howToRun": "Everyone chooses ONE workflow they hate. Work with AI to rewrite it into a standard template or automation.",
+      "deliverable": "1 automation per person contributed to the Asset Library.",
+      "exercises": [
+        "List your top 3 most repetitive tasks — rank by time wasted per week",
+        "Pick the worst one and write an AI prompt that handles 80% of it",
+        "Create a standard template that your whole team can use for that workflow"
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Coaching: From 'Do This' to 'Think Like This'",
+      "shortLabel": "Coaching",
+      "outcome": "You build leaders, not doers. Each person can explain decisions, challenge requirements, and propose trade-offs.",
+      "focus": "Train on: Explaining a decision with evidence, Challenging a req politely and constructively, Proposing trade-offs when constraints conflict.",
+      "howToRun": "Trade-off drills: You give constraints (limited budget, tight timeline, scarce market); they propose a strategy shift with rationale.",
+      "deliverable": "Trade-off Playbook for common patterns added to the Asset Library.",
+      "exercises": [
+        "Practice explaining a 'pass' decision to an HM using only evidence — no opinions",
+        "Take a current req that feels unrealistic — write a trade-off proposal with 3 options",
+        "Role-play a conversation where you push back on a hiring manager's unrealistic timeline"
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Certification + Showcase",
+      "shortLabel": "Certification",
+      "outcome": "Adoption becomes identity and pride. The team has proof of capability.",
+      "focus": "Each person must demonstrate: one persona card created, one sourcing plan completed, one truth check conducted, one confidence pack sent to HM, one AI asset contributed to the Hub.",
+      "howToRun": "Each person presents their best work. The team reviews and celebrates. Certifications awarded.",
+      "deliverable": "AI-Ready Sourcer Badge (internal) + team showcase page.",
+      "exercises": [
+        "Compile your portfolio of 5 required deliverables",
+        "Present your best piece of work to the team — explain the impact",
+        "Write a one-paragraph reflection: what changed in how you work over 8 weeks"
+      ]
+    }
+  ],
+  "toolSkills": [
+    {
+      "id": "gemini-setup",
+      "title": "Gemini Setup & Basics",
+      "description": "How to access Gemini, configure your workspace, and run your first prompts effectively.",
+      "topics": [
+        "Accessing Gemini in your browser",
+        "Understanding context windows",
+        "Basic prompt structure",
+        "Saving and reusing prompts",
+        "Gemini in Google Workspace (Docs, Sheets, Gmail)"
+      ]
+    },
+    {
+      "id": "copilot-setup",
+      "title": "Microsoft Copilot Basics",
+      "description": "Getting started with Microsoft Copilot for recruiting workflows.",
+      "topics": [
+        "Accessing Copilot in Microsoft 365",
+        "Copilot in Teams, Outlook, and Word",
+        "Comparing Gemini vs Copilot strengths",
+        "When to use which tool"
+      ]
+    },
+    {
+      "id": "prompt-engineering",
+      "title": "Prompt Engineering Essentials",
+      "description": "The core principles that make prompts produce decisions, not just text.",
+      "topics": [
+        "Structure: Role + Context + Task + Format",
+        "Specificity: why vague in = vague out",
+        "Iteration: refining prompts based on output",
+        "Chain-of-thought: making AI show its reasoning",
+        "Evidence extraction: getting proof, not summaries"
+      ]
+    },
+    {
+      "id": "ai-verification",
+      "title": "AI Output Verification",
+      "description": "How to verify, fact-check, and quality-control AI-generated content.",
+      "topics": [
+        "Common AI failure modes in recruiting",
+        "Hallucination detection",
+        "Cross-referencing AI output with source material",
+        "When NOT to trust AI output",
+        "Building verification habits into your workflow"
+      ]
+    }
+  ]
+}

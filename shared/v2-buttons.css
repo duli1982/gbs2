@@ -1,0 +1,256 @@
+/* ============================================
+   AI Hub v2.0 — Button System
+   ============================================ */
+
+/* --- Base Button --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 10px 20px;
+  font-family: var(--font-family);
+  font-size: var(--font-sm);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  text-decoration: none;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn svg,
+.btn i {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* --- Primary (Cyan) --- */
+.btn-primary {
+  background: var(--accent-cyan);
+  color: var(--text-inverse);
+  border-color: var(--accent-cyan);
+}
+
+.btn-primary:hover {
+  background: var(--accent-cyan-hover);
+  border-color: var(--accent-cyan-hover);
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+/* --- Secondary (Ghost/Outline) --- */
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--border-default);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--border-strong);
+}
+
+/* --- Ghost (No border) --- */
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: transparent;
+}
+
+.btn-ghost:hover {
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
+}
+
+/* --- Accent Variants --- */
+.btn-green {
+  background: var(--accent-green);
+  color: var(--text-inverse);
+  border-color: var(--accent-green);
+}
+
+.btn-green:hover {
+  background: var(--accent-green-hover);
+  box-shadow: var(--shadow-glow-green);
+}
+
+.btn-amber {
+  background: var(--accent-amber);
+  color: var(--text-inverse);
+  border-color: var(--accent-amber);
+}
+
+.btn-amber:hover {
+  background: var(--accent-amber-hover);
+}
+
+.btn-red {
+  background: transparent;
+  color: var(--accent-red);
+  border-color: var(--accent-red);
+}
+
+.btn-red:hover {
+  background: var(--accent-red-dim);
+}
+
+/* --- Sizes --- */
+.btn-sm {
+  padding: 6px 12px;
+  font-size: var(--font-xs);
+  border-radius: var(--radius-sm);
+}
+
+.btn-lg {
+  padding: 14px 28px;
+  font-size: var(--font-base);
+  border-radius: var(--radius-lg);
+}
+
+/* --- Icon Only --- */
+.btn-icon {
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+}
+
+.btn-icon.btn-sm {
+  width: 28px;
+  height: 28px;
+  padding: 6px;
+}
+
+.btn-icon.btn-lg {
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+}
+
+/* --- Button Group --- */
+.btn-group {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.btn-group--tight {
+  gap: 0;
+}
+
+.btn-group--tight .btn {
+  border-radius: 0;
+}
+
+.btn-group--tight .btn:first-child {
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.btn-group--tight .btn:last-child {
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+/* --- Copy Button (special) --- */
+.btn-copy {
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  border-color: var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: var(--font-xs);
+}
+
+.btn-copy:hover {
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  background: var(--accent-cyan-dim);
+}
+
+.btn-copy.copied {
+  color: var(--accent-green);
+  border-color: var(--accent-green);
+  background: var(--accent-green-dim);
+}
+
+/* --- Pill Toggle --- */
+.pill-toggle {
+  display: inline-flex;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 2px;
+}
+
+.pill-toggle .pill {
+  padding: 6px 16px;
+  font-size: var(--font-xs);
+  font-weight: var(--weight-medium);
+  color: var(--text-muted);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+  background: transparent;
+}
+
+.pill-toggle .pill:hover {
+  color: var(--text-secondary);
+}
+
+.pill-toggle .pill.active {
+  background: var(--accent-cyan);
+  color: var(--text-inverse);
+}
+
+/* --- Tag / Filter Pill --- */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 4px 12px;
+  font-size: var(--font-xs);
+  font-weight: var(--weight-medium);
+  border-radius: var(--radius-full);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tag:hover {
+  border-color: var(--border-default);
+  color: var(--text-primary);
+}
+
+.tag.active {
+  background: var(--accent-cyan-dim);
+  color: var(--accent-cyan);
+  border-color: rgba(0, 229, 255, 0.3);
+}
+
+.tag--stage {
+  background: var(--accent-purple-dim);
+  color: var(--accent-purple);
+  border-color: rgba(167, 139, 250, 0.2);
+  cursor: default;
+}

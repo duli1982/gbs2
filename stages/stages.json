@@ -1,0 +1,356 @@
+[
+  {
+    "id": 1,
+    "slug": "intake-role-passport",
+    "title": "Intake & Role Passport",
+    "cluster": "Define",
+    "subtitle": "The standard setter",
+    "verificationFocus": "Lock in explicit must-haves, dealbreakers, and binary screening criteria before a single candidate is sourced.",
+    "whatAIDoes": [
+      "Runs a Preflight Check for conflicts, missing evidence, unclear must-haves, location gaps.",
+      "Converts hiring manager input into a tight Role Passport v1.0.",
+      "Generates a calibration pack: 3 \"yes profiles\" + 3 \"no profiles\" for fast team alignment."
+    ],
+    "agentBehavior": [
+      "Won't proceed until must-haves and dealbreakers are explicit.",
+      "Forces binary decisions on every requirement."
+    ],
+    "teamAdvantage": "You stop wasting sourcing hours on roles that are not truly defined.",
+    "metrics": [
+      "Time from intake to first credible shortlist",
+      "Intake completeness score",
+      "Calibration alignment rate"
+    ],
+    "tools": [
+      {
+        "name": "Role Passport Builder",
+        "href": "/passport/",
+        "available": true
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "jd-attraction",
+    "title": "JD & Attraction",
+    "cluster": "Define",
+    "subtitle": "Precision over poetry",
+    "verificationFocus": "Confirm every JD claim translates to observable, testable behavior — no vague language passes through.",
+    "whatAIDoes": [
+      "Rewrites JDs into candidate-first format with clear outcomes and realistic scope.",
+      "Creates an internal hiring brief.",
+      "Produces a \"truth version\" \u2014 what the job actually is day-to-day."
+    ],
+    "agentBehavior": [
+      "Flags vague phrases like \"fast-paced\" or \"self-starter\" and demands translation into observable behavior."
+    ],
+    "teamAdvantage": "Better applicant quality and fewer mismatched screens.",
+    "metrics": [
+      "Application quality score",
+      "Screen-to-interview conversion rate",
+      "JD clarity rating"
+    ],
+    "tools": [
+      {
+        "name": "JD Prompts",
+        "href": "/prompts/?stage=2",
+        "available": true
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "market-competitor-reality-check",
+    "title": "Market & Competitor Reality Check",
+    "cluster": "Define",
+    "subtitle": "Your Moneyball edge",
+    "verificationFocus": "Separate verified market data from assumptions and mark what still needs validation.",
+    "whatAIDoes": [
+      "Generates a sourcing strategy by country/market \u2014 where talent actually sits, title mapping, likely comp bands.",
+      "Creates a risk memo explaining why this role will be hard or easy."
+    ],
+    "agentBehavior": [
+      "Separates facts from assumptions.",
+      "Marks what needs validation."
+    ],
+    "teamAdvantage": "You go to stakeholders with a reality-based plan, not hope.",
+    "metrics": [
+      "Market mapping accuracy",
+      "Sourcing strategy hit rate",
+      "Time-to-market-intel"
+    ],
+    "tools": [
+      {
+        "name": "Market Analysis Prompts",
+        "href": "/prompts/?stage=3",
+        "available": true
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "slug": "sourcing-blueprint",
+    "title": "Sourcing Blueprint",
+    "cluster": "Execute",
+    "subtitle": "Turn craft into repeatable",
+    "verificationFocus": "Validate that the scoring rubric and target list align with the locked-in must-haves from Stage 1.",
+    "whatAIDoes": [
+      "Builds Boolean strings + variants.",
+      "Creates a target list with companies, adjacent industries, and bridge profiles.",
+      "Produces a profile scoring rubric for shortlist consistency."
+    ],
+    "agentBehavior": [
+      "After 20\u201330 profiles reviewed, updates the blueprint with what\u2019s working and what\u2019s not."
+    ],
+    "teamAdvantage": "New sourcers ramp faster. Sourcing becomes a system, not an art form.",
+    "metrics": [
+      "Sourcing channel effectiveness",
+      "Profile-to-screen conversion",
+      "Blueprint reuse rate"
+    ],
+    "tools": [
+      {
+        "name": "Sourcing Prompts",
+        "href": "/prompts/?stage=4",
+        "available": true
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "slug": "outreach-engagement",
+    "title": "Outreach & Engagement",
+    "cluster": "Execute",
+    "subtitle": "Where most teams waste effort",
+    "verificationFocus": "Tag every outreach message with an angle code so reply rates produce measurable, verifiable signal.",
+    "whatAIDoes": [
+      "Crafts 3 message angles per persona \u2014 mission/outcome hook, craft/mastery hook, career-trajectory hook.",
+      "Writes follow-ups that add value, not \"just bumping this.\""
+    ],
+    "agentBehavior": [
+      "Tags each message with an Angle Code for reply rate measurement.",
+      "Enforces tone rules \u2014 short, direct, no recruiter fluff."
+    ],
+    "teamAdvantage": "Outreach becomes testable and improvable, not random.",
+    "metrics": [
+      "Reply rate by angle code",
+      "Outreach-to-screen conversion",
+      "Follow-up engagement rate"
+    ],
+    "tools": [
+      {
+        "name": "Outreach Prompts",
+        "href": "/prompts/?stage=5",
+        "available": true
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "slug": "recruiter-screen",
+    "title": "Recruiter Screen",
+    "cluster": "Execute",
+    "subtitle": "Structured signal extraction",
+    "verificationFocus": "Capture evidence for every must-have, separate it from interpretation, and flag what is still missing.",
+    "whatAIDoes": [
+      "Generates screen scripts aligned to must-haves.",
+      "Produces real-time note structuring separating evidence from interpretation.",
+      "Flags red flags and identifies candidate motivators."
+    ],
+    "agentBehavior": [
+      "After the call, outputs hire/no-hire recommendation, confidence score with reasons, and missing evidence list."
+    ],
+    "teamAdvantage": "Screening quality becomes consistent across the team.",
+    "metrics": [
+      "Screen quality score",
+      "Interviewer calibration rate",
+      "Evidence capture completeness"
+    ],
+    "tools": [
+      {
+        "name": "Truth Check",
+        "href": "/truth-check/",
+        "available": true
+      },
+      {
+        "name": "Screen Prompts",
+        "href": "/prompts/?stage=6",
+        "available": true
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "slug": "submission-hm-prep",
+    "title": "Submission & HM Prep",
+    "cluster": "Execute",
+    "subtitle": "Make the HM say yes faster",
+    "verificationFocus": "Block submission unless every claim has proof attached and every known risk has a mitigation plan.",
+    "whatAIDoes": [
+      "Writes a one-page candidate narrative with match to must-haves, risks, mitigations.",
+      "Generates HM briefing questions so the HM tests the right things."
+    ],
+    "agentBehavior": [
+      "Blocks submission if key evidence is missing, or labels unknowns clearly."
+    ],
+    "teamAdvantage": "Higher pass-through to HM interview. Less back-and-forth.",
+    "metrics": [
+      "HM pass-through rate",
+      "Time-to-HM-feedback",
+      "Submission quality score"
+    ],
+    "tools": [
+      {
+        "name": "Confidence Pack",
+        "href": "/confidence-pack/",
+        "available": true
+      },
+      {
+        "name": "Submission Prompts",
+        "href": "/prompts/?stage=7",
+        "available": true
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "slug": "interview-loop-design",
+    "title": "Interview Loop Design",
+    "cluster": "Execute",
+    "subtitle": "Reduce chaos, increase signal",
+    "verificationFocus": "Ensure each interviewer tests a distinct competency with anchored scoring — no duplicated or unstructured questions.",
+    "whatAIDoes": [
+      "Converts competencies into structured interview plans, consistent question banks, and scorecards with strong/okay/weak anchors.",
+      "Creates interviewer-specific guidance."
+    ],
+    "agentBehavior": [
+      "Detects duplicated questions across interviewers and fixes the loop."
+    ],
+    "teamAdvantage": "Cleaner signal, faster decisions, fewer false negatives.",
+    "metrics": [
+      "Interview signal quality",
+      "Cross-interviewer consistency",
+      "Decision confidence score"
+    ],
+    "tools": [
+      {
+        "name": "Interview Prompts",
+        "href": "/prompts/?stage=8",
+        "available": true
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "slug": "debrief-decision",
+    "title": "Debrief & Decision",
+    "cluster": "Close & Learn",
+    "subtitle": "Where bias and vibes sneak in",
+    "verificationFocus": "Force every hiring opinion into observable evidence — flag vibe language and surface contradictions between interviewers.",
+    "whatAIDoes": [
+      "Summarizes notes into evidence matrix per competency, surfaces contradictions between interviewers, and produces decision options with tradeoffs.",
+      "Generates \"What would change my mind?\" triggers."
+    ],
+    "agentBehavior": [
+      "Flags \"vibe language\" and forces translation into observable evidence."
+    ],
+    "teamAdvantage": "Decisions become defensible. Fewer regret hires.",
+    "metrics": [
+      "Decision defensibility score",
+      "Regret hire rate",
+      "Debrief completion rate"
+    ],
+    "tools": [
+      {
+        "name": "Debrief Prompts",
+        "href": "/prompts/?stage=9",
+        "available": true
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "slug": "offer-close",
+    "title": "Offer & Close",
+    "cluster": "Close & Learn",
+    "subtitle": "Conversion engineering",
+    "verificationFocus": "Verify candidate motivators against offer terms and document loss reasons with structured codes for every decline.",
+    "whatAIDoes": [
+      "Builds an Offer Mini Evidence Pack with top motivators, likely objections, and counters.",
+      "Produces a close plan timeline.",
+      "Assigns Loss Reason Code for declines."
+    ],
+    "agentBehavior": [
+      "Enforces single-CTA messaging and clean next steps."
+    ],
+    "teamAdvantage": "Higher acceptance rate plus reusable learning from declines.",
+    "metrics": [
+      "Offer acceptance rate",
+      "Decline reason distribution",
+      "Close plan adherence"
+    ],
+    "tools": [
+      {
+        "name": "Offer Close Prompts",
+        "href": "/prompts/?stage=10",
+        "available": true
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "slug": "preboarding-compliance",
+    "title": "Preboarding & Compliance",
+    "cluster": "Close & Learn",
+    "subtitle": "The silent failure zone",
+    "verificationFocus": "Confirm every compliance item is tracked with deadlines and escalation triggers — no undocumented gaps between offer and start.",
+    "whatAIDoes": [
+      "Generates candidate-facing \"what happens next\" messages.",
+      "Creates internal checklists and nudges for documents, background checks, start readiness."
+    ],
+    "agentBehavior": [
+      "Alerts on stalling risks \u2014 delays, missing documents, unclear start dates."
+    ],
+    "teamAdvantage": "Fewer drop-offs between offer and start.",
+    "metrics": [
+      "Preboarding completion rate",
+      "Drop-off rate post-offer",
+      "Time-to-start compliance"
+    ],
+    "tools": [
+      {
+        "name": "Preboarding Prompts",
+        "href": "/prompts/?stage=11",
+        "available": true
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "slug": "postmortem-continuous-improvement",
+    "title": "Postmortem & Continuous Improvement",
+    "cluster": "Close & Learn",
+    "subtitle": "The compounding loop",
+    "verificationFocus": "Require verified learning entries per role and update templates based on measured stage bottleneck data, not anecdotes.",
+    "whatAIDoes": [
+      "Runs monthly pipeline autopsy \u2014 where candidates drop and why, outreach angles that win, stage bottlenecks.",
+      "Updates Role Passport templates, sourcing blueprints, screen rubrics, and close playbooks."
+    ],
+    "agentBehavior": [
+      "Requires 3 learning entries per role, even if it was easy."
+    ],
+    "teamAdvantage": "You get better every month while others stay flat.",
+    "metrics": [
+      "Monthly learning entries captured",
+      "Template update frequency",
+      "Stage bottleneck reduction rate"
+    ],
+    "tools": [
+      {
+        "name": "Postmortem Prompts",
+        "href": "/prompts/?stage=12",
+        "available": true
+      }
+    ]
+  }
+]

@@ -1,0 +1,172 @@
+{
+  "version": 2,
+  "public": true,
+  "outputDirectory": "public",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; frame-src 'self' https://drive.google.com https://docs.google.com https://script.google.com https://script.googleusercontent.com; connect-src 'self' https://generativelanguage.googleapis.com https://script.google.com https://script.googleusercontent.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://region1.google-analytics.com https://analytics.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://docs.google.com https://script.google.com https://script.googleusercontent.com; upgrade-insecure-requests"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains; preload"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    },
+    {
+      "source": "/shared/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/onboarding",
+      "destination": "/stages/",
+      "permanent": false
+    },
+    {
+      "source": "/training",
+      "destination": "/stages/",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/prompts/prompts.json",
+      "destination": "/prompts/prompts.json"
+    },
+    {
+      "source": "/stages/stages.json",
+      "destination": "/stages/stages.json"
+    },
+    {
+      "source": "/passport",
+      "destination": "/passport/index.html"
+    },
+    {
+      "source": "/truth-check",
+      "destination": "/truth-check/index.html"
+    },
+    {
+      "source": "/confidence-pack",
+      "destination": "/confidence-pack/index.html"
+    },
+    {
+      "source": "/manifesto",
+      "destination": "/manifesto/index.html"
+    },
+    {
+      "source": "/stages",
+      "destination": "/stages/index.html"
+    },
+    {
+      "source": "/prompts",
+      "destination": "/prompts/index.html"
+    },
+    {
+      "source": "/academy",
+      "destination": "/academy/index.html"
+    },
+    {
+      "source": "/library",
+      "destination": "/library/index.html"
+    },
+    {
+      "source": "/academy/academy.json",
+      "destination": "/academy/academy.json"
+    },
+    {
+      "source": "/library/assets.json",
+      "destination": "/library/assets.json"
+    },
+    {
+      "source": "/telemetry",
+      "destination": "/telemetry/index.html"
+    },
+    {
+      "source": "/rituals",
+      "destination": "/rituals/index.html"
+    },
+    {
+      "source": "/profile",
+      "destination": "/profile/index.html"
+    },
+    {
+      "source": "/contact-us",
+      "destination": "/contact-us/index.html"
+    },
+    {
+      "source": "/feedback",
+      "destination": "/feedback/index.html"
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "/privacy-policy/index.html"
+    },
+    {
+      "source": "/cookie-policy",
+      "destination": "/cookie-policy/index.html"
+    },
+    {
+      "source": "/legal-notice",
+      "destination": "/legal-notice/index.html"
+    },
+    {
+      "source": "/ai-governance",
+      "destination": "/ai-governance/index.html"
+    },
+    {
+      "source": "/terms-of-service",
+      "destination": "/terms-of-service/index.html"
+    },
+    {
+      "source": "/submit-content",
+      "destination": "/submit-content/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

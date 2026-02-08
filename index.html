@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>AI Hub v2.0 — The Confidence Engine | Randstad GBS</title>
+
+    <meta name="description" content="AI-powered recruiting operating system for Randstad GBS. Decision quality infrastructure for sourcing, screening, and hiring.">
+    <meta name="author" content="Randstad GBS">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AI Hub v2.0 — The Confidence Engine">
+    <meta property="og:description" content="AI-powered recruiting operating system for Randstad GBS.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Theme -->
+    <link rel="stylesheet" href="shared/theme.css">
+    <link rel="stylesheet" href="shared/sidebar.css">
+    <link rel="stylesheet" href="shared/v2-buttons.css">
+    <link rel="stylesheet" href="shared/v2-cards.css">
+
+    <style>
+        /* --- Command Center Specific --- */
+        .dashboard-header {
+            margin-bottom: var(--space-8);
+        }
+
+        .dashboard-header__greeting {
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+            margin-bottom: var(--space-2);
+            font-weight: var(--weight-medium);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .dashboard-header__title {
+            font-size: var(--font-4xl);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .dashboard-header__title span {
+            color: var(--accent-cyan);
+        }
+
+        .dashboard-header__subtitle {
+            font-size: var(--font-base);
+            color: var(--text-secondary);
+            margin-top: var(--space-2);
+            max-width: 600px;
+        }
+
+        .dashboard-header__cta {
+            margin-top: var(--space-4);
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-4);
+        }
+
+        .section-header h2 {
+            font-size: var(--font-lg);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+        }
+
+        .section-header__line {
+            flex: 1;
+            height: 1px;
+            background: var(--border-subtle);
+            margin-left: var(--space-4);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            margin-bottom: var(--space-8);
+        }
+
+        .quick-actions .card--action .card__arrow {
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-4);
+            color: var(--text-muted);
+            opacity: 0;
+            transition: all var(--transition-fast);
+        }
+
+        .quick-actions .card--action:hover .card__arrow {
+            opacity: 1;
+            color: var(--accent-cyan);
+        }
+
+        /* Pipeline Signal */
+        .pipeline-signal {
+            margin-bottom: var(--space-8);
+        }
+
+        .pipeline-bar {
+            display: flex;
+            gap: 2px;
+            height: 6px;
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            background: var(--bg-surface);
+            margin-top: var(--space-3);
+        }
+
+        .pipeline-bar__segment {
+            height: 100%;
+            border-radius: var(--radius-full);
+            transition: width var(--transition-slow);
+        }
+
+        .pipeline-bar__segment--green { background: var(--accent-green); }
+        .pipeline-bar__segment--amber { background: var(--accent-amber); }
+        .pipeline-bar__segment--red { background: var(--accent-red); }
+
+        .pipeline-legend {
+            display: flex;
+            gap: var(--space-6);
+            margin-top: var(--space-3);
+        }
+
+        .pipeline-legend__item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+        }
+
+        /* Rituals Section */
+        .rituals-section {
+            margin-bottom: var(--space-8);
+        }
+
+        /* Two Column Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Recent Assets */
+        .recent-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .recent-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: inherit;
+            transition: all var(--transition-fast);
+        }
+
+        .recent-item:hover {
+            background: var(--bg-surface-hover);
+            border-color: var(--border-default);
+        }
+
+        .recent-item__icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-sm);
+            flex-shrink: 0;
+            background: var(--accent-cyan-dim);
+            color: var(--accent-cyan);
+        }
+
+        .recent-item__info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .recent-item__title {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-medium);
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .recent-item__meta {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+        }
+
+        /* Manifesto Teaser */
+        .manifesto-teaser {
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.05), rgba(167, 139, 250, 0.05));
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            text-align: center;
+            margin-bottom: var(--space-8);
+        }
+
+        .manifesto-teaser__quote {
+            font-size: var(--font-2xl);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            line-height: var(--leading-snug);
+            max-width: 700px;
+            margin: 0 auto var(--space-4);
+            letter-spacing: -0.01em;
+        }
+
+        .manifesto-teaser__quote span {
+            color: var(--accent-cyan);
+        }
+
+        .manifesto-teaser__sub {
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+            margin-bottom: var(--space-6);
+        }
+
+        /* Version badge */
+        .version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: 4px 12px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: var(--weight-medium);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-4);
+        }
+
+        .version-badge__dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <!-- Sidebar injected by sidebar.js -->
+
+        <main class="app-main">
+            <div class="content-container">
+
+                <!-- Header -->
+                <header class="dashboard-header fade-in-up">
+                    <div class="version-badge">
+                        <span class="version-badge__dot"></span>
+                        AI Hub v2.0
+                    </div>
+                    <h1 class="dashboard-header__title">Command <span>Center</span></h1>
+                    <p class="dashboard-header__subtitle">
+                        Your recruiting operating system. Tools, workflows, and intelligence — all in one place. Built on one principle: when everyone has AI, verification is what makes the difference.
+                    </p>
+                    <div class="dashboard-header__cta">
+                        <a id="continueWorkbookLink" href="/stages/#stage-1" class="btn btn-primary">Continue 12-Stage Workbook</a>
+                    </div>
+                </header>
+
+                <!-- Quick Actions -->
+                <section class="quick-actions fade-in-up fade-in-up-delay-1">
+                    <div class="section-header">
+                        <h2>Quick Actions</h2>
+                        <div class="section-header__line"></div>
+                    </div>
+                    <div class="card-grid card-grid--4">
+                        <a href="/passport/" class="card card--action" aria-label="Create new Role Passport">
+                            <div class="card__icon card__icon--cyan">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            </div>
+                            <div class="card__title">New Role Passport</div>
+                            <div class="card__desc">Turn messy intake into structured requirements</div>
+                        </a>
+
+                        <a href="/truth-check/" class="card card--action" aria-label="Run a Truth Check">
+                            <div class="card__icon card__icon--green">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                            </div>
+                            <div class="card__title">Run Truth Check</div>
+                            <div class="card__desc">Structured pre-HM screening in 10 minutes</div>
+                        </a>
+
+                        <a href="/confidence-pack/" class="card card--action" aria-label="Build a Confidence Pack">
+                            <div class="card__icon card__icon--amber">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                            </div>
+                            <div class="card__title">Build Confidence Pack</div>
+                            <div class="card__desc">Create evidence-backed candidate submissions</div>
+                        </a>
+
+                        <a href="/prompts/" class="card card--action" aria-label="Open Prompt Arsenal">
+                            <div class="card__icon card__icon--purple">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                            </div>
+                            <div class="card__title">Prompt Arsenal</div>
+                            <div class="card__desc">Stage-organized prompts for every workflow</div>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Pipeline Signal -->
+                <section class="pipeline-signal fade-in-up fade-in-up-delay-2">
+                    <div class="section-header">
+                        <h2>Pipeline Signal</h2>
+                        <div class="section-header__line"></div>
+                    </div>
+                    <div class="card-grid card-grid--4">
+                        <div class="card card--stat">
+                            <div class="stat__label">Active Roles</div>
+                            <div class="stat__value">--</div>
+                            <div class="stat__change text-muted">Track in Telemetry</div>
+                        </div>
+                        <div class="card card--stat">
+                            <div class="stat__label">Shortlists Sent</div>
+                            <div class="stat__value">--</div>
+                            <div class="stat__change text-muted">This week</div>
+                        </div>
+                        <div class="card card--stat">
+                            <div class="stat__label">HM Pass-through</div>
+                            <div class="stat__value">--</div>
+                            <div class="stat__change text-muted">Acceptance rate</div>
+                        </div>
+                        <div class="card card--stat">
+                            <div class="stat__label">Truth Checks Run</div>
+                            <div class="stat__value">--</div>
+                            <div class="stat__change text-muted">This week</div>
+                        </div>
+                    </div>
+                    <div class="pipeline-bar" aria-label="Pipeline health indicator">
+                        <div class="pipeline-bar__segment pipeline-bar__segment--green" style="width: 50%"></div>
+                        <div class="pipeline-bar__segment pipeline-bar__segment--amber" style="width: 30%"></div>
+                        <div class="pipeline-bar__segment pipeline-bar__segment--red" style="width: 20%"></div>
+                    </div>
+                    <div class="pipeline-legend">
+                        <div class="pipeline-legend__item">
+                            <span class="signal-dot signal-dot--green"></span> On Track
+                        </div>
+                        <div class="pipeline-legend__item">
+                            <span class="signal-dot signal-dot--amber"></span> Needs Attention
+                        </div>
+                        <div class="pipeline-legend__item">
+                            <span class="signal-dot signal-dot--red"></span> At Risk
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Rituals + Recent -->
+                <div class="dashboard-grid fade-in-up fade-in-up-delay-3">
+
+                    <!-- Weekly Rituals -->
+                    <section class="rituals-section">
+                        <div class="section-header">
+                            <h2>This Week's Rituals</h2>
+                            <div class="section-header__line"></div>
+                        </div>
+
+                        <div class="card card--ritual" data-ritual="monday">
+                            <div class="ritual__day">Mon</div>
+                            <div class="ritual__info">
+                                <div class="ritual__name">Signal Kickoff</div>
+                                <div class="ritual__desc">Top req + top blocker per person. Align on what matters.</div>
+                            </div>
+                            <div class="ritual__time">15 min</div>
+                            <button class="ritual__toggle" data-ritual-toggle="monday" aria-label="Mark Monday ritual as done"></button>
+                        </div>
+
+                        <div class="card card--ritual" data-ritual="wednesday" style="margin-top: var(--space-2);">
+                            <div class="ritual__day">Wed</div>
+                            <div class="ritual__info">
+                                <div class="ritual__name">Pipeline Truth Check</div>
+                                <div class="ritual__desc">Review stuck roles. Volume problem or relevance problem?</div>
+                            </div>
+                            <div class="ritual__time">15 min</div>
+                            <button class="ritual__toggle" data-ritual-toggle="wednesday" aria-label="Mark Wednesday ritual as done"></button>
+                        </div>
+
+                        <div class="card card--ritual" data-ritual="friday" style="margin-top: var(--space-2);">
+                            <div class="ritual__day">Fri</div>
+                            <div class="ritual__info">
+                                <div class="ritual__name">Proof + Learn</div>
+                                <div class="ritual__desc">One win demo. One miss share. One asset captured.</div>
+                            </div>
+                            <div class="ritual__time">20 min</div>
+                            <button class="ritual__toggle" data-ritual-toggle="friday" aria-label="Mark Friday ritual as done"></button>
+                        </div>
+
+                        <a href="/rituals/" style="display:inline-flex;align-items:center;gap:6px;font-size:var(--font-xs);color:var(--text-muted);margin-top:var(--space-3);text-decoration:none;transition:color 0.15s ease;">
+                            Open full ritual detail
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                    </section>
+
+                    <!-- Explore Sections -->
+                    <section>
+                        <div class="section-header">
+                            <h2>Explore</h2>
+                            <div class="section-header__line"></div>
+                        </div>
+                        <div class="recent-list">
+                            <a href="/stages/" class="recent-item">
+                                <div class="recent-item__icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+                                </div>
+                                <div class="recent-item__info">
+                                    <div class="recent-item__title">The 12 Stages</div>
+                                    <div class="recent-item__meta">Complete recruiting workflow with AI at every step</div>
+                                </div>
+                            </a>
+                            <a href="/prompts/" class="recent-item">
+                                <div class="recent-item__icon" style="background: var(--accent-purple-dim); color: var(--accent-purple);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                                </div>
+                                <div class="recent-item__info">
+                                    <div class="recent-item__title">Prompt Arsenal</div>
+                                    <div class="recent-item__meta">Ready-to-use prompts organized by pipeline stage</div>
+                                </div>
+                            </a>
+                            <a href="/manifesto/" class="recent-item">
+                                <div class="recent-item__icon" style="background: var(--accent-amber-dim); color: var(--accent-amber);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                                </div>
+                                <div class="recent-item__info">
+                                    <div class="recent-item__title">The Manifesto</div>
+                                    <div class="recent-item__meta">Why we're changing and where we're going</div>
+                                </div>
+                            </a>
+                            <a href="/academy/" class="recent-item">
+                                <div class="recent-item__icon" style="background: var(--accent-green-dim); color: var(--accent-green);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 8 3 12 0v-5"/></svg>
+                                </div>
+                                <div class="recent-item__info">
+                                    <div class="recent-item__title">Academy</div>
+                                    <div class="recent-item__meta">8-week AI-Ready Sourcer program</div>
+                                </div>
+                            </a>
+                            <a href="/telemetry/" class="recent-item">
+                                <div class="recent-item__icon" style="background: rgba(244,114,182,0.1); color: #f472b6;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                                </div>
+                                <div class="recent-item__info">
+                                    <div class="recent-item__title">Telemetry</div>
+                                    <div class="recent-item__meta">Track metrics, visualize trends, identify bottlenecks</div>
+                                </div>
+                            </a>
+                            <a href="/profile/" class="recent-item">
+                                <div class="recent-item__icon" style="background: rgba(251,146,60,0.1); color: #fb923c;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </div>
+                                <div class="recent-item__info">
+                                    <div class="recent-item__title">My Profile</div>
+                                    <div class="recent-item__meta">Badge progress, skill assessment, certification</div>
+                                </div>
+                            </a>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Manifesto Teaser -->
+                <section class="manifesto-teaser fade-in-up fade-in-up-delay-4">
+                    <p class="manifesto-teaser__quote">
+                        "AI will not reward those who work harder.<br>
+                        It will reward those who <span>think clearer.</span>"
+                    </p>
+                    <p class="manifesto-teaser__sub">
+                        When everyone has AI, the advantage goes to those who verify. Every tool here exists to build proof — not just output.
+                    </p>
+                    <a href="/manifesto/" class="btn btn-secondary">Read the Manifesto</a>
+                </section>
+
+            </div><!-- /content-container -->
+        </main>
+    </div><!-- /app-layout -->
+
+    <!-- Scripts -->
+    <script src="shared/sidebar.js"></script>
+    <script src="shared/v2-footer.js"></script>
+    <script>
+        // Ritual toggle persistence
+        (function() {
+            const weekKey = 'rituals-' + getWeekId();
+
+            function getWeekId() {
+                const now = new Date();
+                const start = new Date(now.getFullYear(), 0, 1);
+                const week = Math.ceil(((now - start) / 86400000 + start.getDay() + 1) / 7);
+                return now.getFullYear() + '-W' + week;
+            }
+
+            function loadRituals() {
+                try {
+                    return JSON.parse(localStorage.getItem(weekKey)) || {};
+                } catch(e) {
+                    return {};
+                }
+            }
+
+            function saveRituals(data) {
+                localStorage.setItem(weekKey, JSON.stringify(data));
+            }
+
+            const rituals = loadRituals();
+
+            document.querySelectorAll('.ritual__toggle').forEach(function(btn) {
+                const day = btn.getAttribute('data-ritual-toggle');
+                if (rituals[day]) {
+                    btn.classList.add('done');
+                }
+
+                btn.addEventListener('click', function() {
+                    btn.classList.toggle('done');
+                    rituals[day] = btn.classList.contains('done');
+                    saveRituals(rituals);
+                });
+            });
+
+            function getNextWorkbookStage() {
+                try {
+                    const raw = localStorage.getItem('aihub-stage-workbook-v1');
+                    const state = raw ? JSON.parse(raw) : {};
+                    for (let i = 1; i <= 12; i++) {
+                        const stage = state[String(i)];
+                        if (!stage || !stage.done) return i;
+                    }
+                    return 12;
+                } catch (e) {
+                    return 1;
+                }
+            }
+
+            const workbookLink = document.getElementById('continueWorkbookLink');
+            if (workbookLink) {
+                const nextStage = getNextWorkbookStage();
+                workbookLink.href = '/stages/#stage-' + nextStage;
+                if (nextStage === 12) {
+                    workbookLink.textContent = 'Open Final Stage Workbook';
+                } else {
+                    workbookLink.textContent = 'Continue 12-Stage Workbook (Stage ' + nextStage + ')';
+                }
+            }
+        })();
+    </script>
+</body>
+</html>

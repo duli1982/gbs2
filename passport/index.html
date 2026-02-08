@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>Role Passport Builder — AI Hub v2.0 | Randstad GBS</title>
+
+    <meta name="description" content="Turn messy hiring manager intake into structured role requirements. AI-powered preflight checks catch gaps before they cost you.">
+    <meta name="author" content="Randstad GBS">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Role Passport Builder — AI Hub v2.0">
+    <meta property="og:description" content="Turn messy intake into structured requirements. AI-powered preflight checks catch gaps before they cost you.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/sidebar.css">
+    <link rel="stylesheet" href="../shared/v2-buttons.css">
+    <link rel="stylesheet" href="../shared/v2-cards.css">
+
+    <style>
+        /* --- Page Header --- */
+        .passport-header {
+            margin-bottom: var(--space-8);
+        }
+
+        .passport-header__title {
+            font-size: var(--font-4xl);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .passport-header__title span {
+            color: var(--accent-cyan);
+        }
+
+        .passport-header__subtitle {
+            font-size: var(--font-base);
+            color: var(--text-secondary);
+            margin-top: var(--space-2);
+            max-width: 640px;
+            line-height: var(--leading-relaxed);
+        }
+
+        /* --- Step Indicator --- */
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: var(--space-10);
+            padding: var(--space-6) var(--space-4);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            overflow-x: auto;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            flex-shrink: 0;
+        }
+
+        .step-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-2);
+            min-width: 100px;
+        }
+
+        .step-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            font-family: var(--font-mono);
+            border: 2px solid var(--border-default);
+            background: var(--bg-primary);
+            color: var(--text-muted);
+            transition: all var(--transition-base);
+        }
+
+        .step-circle--active {
+            background: var(--accent-cyan);
+            color: var(--text-inverse);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
+        }
+
+        .step-circle--completed {
+            background: var(--accent-green);
+            color: var(--text-inverse);
+            border-color: var(--accent-green);
+            box-shadow: 0 0 12px rgba(0, 214, 143, 0.3);
+        }
+
+        .step-label {
+            font-size: var(--font-xs);
+            font-weight: var(--weight-medium);
+            color: var(--text-muted);
+            text-align: center;
+            transition: color var(--transition-base);
+        }
+
+        .step-label--active {
+            color: var(--accent-cyan);
+        }
+
+        .step-label--completed {
+            color: var(--accent-green);
+        }
+
+        .step-connector {
+            width: 48px;
+            height: 2px;
+            background: var(--border-default);
+            flex-shrink: 0;
+            margin-bottom: var(--space-6);
+            transition: background var(--transition-base);
+        }
+
+        .step-connector--completed {
+            background: var(--accent-green);
+        }
+
+        /* --- Step Content Panels --- */
+        .step-panel {
+            display: none;
+            animation: fadeInUp 0.4s ease both;
+        }
+
+        .step-panel.active {
+            display: block;
+        }
+
+        /* --- Form Styles --- */
+        .form-group {
+            margin-bottom: var(--space-6);
+        }
+
+        .form-label {
+            display: block;
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-2);
+        }
+
+        .form-label--required::after {
+            content: ' *';
+            color: var(--accent-red);
+        }
+
+        .form-note {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            margin-top: var(--space-1);
+            line-height: var(--leading-normal);
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: var(--space-3) var(--space-4);
+            font-family: var(--font-family);
+            font-size: var(--font-sm);
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+            outline: none;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.1);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            line-height: var(--leading-relaxed);
+        }
+
+        .form-error {
+            font-size: var(--font-xs);
+            color: var(--accent-red);
+            margin-top: var(--space-1);
+            display: none;
+        }
+
+        .form-error.visible {
+            display: block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-6);
+        }
+
+        /* --- Loading Overlay --- */
+        .loading-overlay {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-16) 0;
+            text-align: center;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border-default);
+            border-top-color: var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: var(--space-4);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+            font-weight: var(--weight-medium);
+        }
+
+        /* --- Error Banner --- */
+        .error-banner {
+            display: none;
+            padding: var(--space-4);
+            background: var(--accent-red-dim);
+            border: 1px solid var(--accent-red);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-6);
+        }
+
+        .error-banner.visible {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .error-banner__text {
+            font-size: var(--font-sm);
+            color: var(--accent-red);
+            flex: 1;
+        }
+
+        .error-banner__dismiss {
+            background: none;
+            border: none;
+            color: var(--accent-red);
+            cursor: pointer;
+            padding: var(--space-1);
+            font-size: var(--font-lg);
+            line-height: 1;
+        }
+
+        /* --- Preflight Cards --- */
+        .preflight-section {
+            margin-bottom: var(--space-8);
+        }
+
+        .preflight-section__title {
+            font-size: var(--font-lg);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-4);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .preflight-section__count {
+            font-size: var(--font-xs);
+            font-family: var(--font-mono);
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            font-weight: var(--weight-medium);
+        }
+
+        .preflight-section__count--amber {
+            background: var(--accent-amber-dim);
+            color: var(--accent-amber);
+        }
+
+        .preflight-section__count--red {
+            background: var(--accent-red-dim);
+            color: var(--accent-red);
+        }
+
+        .issue-card {
+            background: var(--bg-surface);
+            border-radius: var(--radius-md);
+            padding: var(--space-5);
+            margin-bottom: var(--space-3);
+        }
+
+        .issue-card--amber {
+            border: 1px solid var(--accent-amber);
+            border-left: 3px solid var(--accent-amber);
+        }
+
+        .issue-card--red {
+            border: 1px solid var(--accent-red);
+            border-left: 3px solid var(--accent-red);
+        }
+
+        .issue-card--green {
+            border: 1px solid var(--accent-green);
+            border-left: 3px solid var(--accent-green);
+        }
+
+        .issue-card--cyan {
+            border: 1px solid var(--accent-cyan);
+            border-left: 3px solid var(--accent-cyan);
+        }
+
+        .issue-card__title {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-2);
+        }
+
+        .issue-card__body {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+            margin-bottom: var(--space-3);
+        }
+
+        .issue-card__question {
+            font-size: var(--font-sm);
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: var(--space-3);
+            font-style: italic;
+        }
+
+        .issue-card__question::before {
+            content: 'Ask HM: ';
+            font-style: normal;
+            font-weight: var(--weight-semibold);
+            color: var(--accent-cyan);
+        }
+
+        /* --- Assessment Card --- */
+        .assessment-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: var(--space-5);
+            margin-bottom: var(--space-3);
+        }
+
+        .assessment-card__label {
+            font-size: var(--font-xs);
+            font-weight: var(--weight-semibold);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: var(--space-2);
+        }
+
+        .assessment-card__text {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+        }
+
+        /* --- Readiness Badge --- */
+        .readiness-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-full);
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .readiness-badge--green {
+            background: var(--accent-green-dim);
+            color: var(--accent-green);
+            border: 1px solid rgba(0, 214, 143, 0.2);
+        }
+
+        .readiness-badge--amber {
+            background: var(--accent-amber-dim);
+            color: var(--accent-amber);
+            border: 1px solid rgba(255, 184, 0, 0.2);
+        }
+
+        .readiness-badge--red {
+            background: var(--accent-red-dim);
+            color: var(--accent-red);
+            border: 1px solid rgba(255, 76, 106, 0.2);
+        }
+
+        .readiness-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .readiness-dot--green {
+            background: var(--accent-green);
+            box-shadow: 0 0 6px var(--accent-green);
+        }
+
+        .readiness-dot--amber {
+            background: var(--accent-amber);
+            box-shadow: 0 0 6px var(--accent-amber);
+        }
+
+        .readiness-dot--red {
+            background: var(--accent-red);
+            box-shadow: 0 0 6px var(--accent-red);
+        }
+
+        /* --- Preflight Actions --- */
+        .preflight-actions {
+            display: flex;
+            gap: var(--space-3);
+            margin-top: var(--space-8);
+        }
+
+        /* --- Passport Document --- */
+        .passport-doc {
+            max-width: 800px;
+        }
+
+        .passport-doc__header {
+            margin-bottom: var(--space-8);
+            padding-bottom: var(--space-6);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .passport-doc__role {
+            font-size: var(--font-3xl);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: var(--space-3);
+        }
+
+        .passport-doc__meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-4);
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+        }
+
+        .passport-doc__meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .passport-doc__meta-item svg {
+            width: 14px;
+            height: 14px;
+            color: var(--text-muted);
+        }
+
+        .passport-section {
+            margin-bottom: var(--space-8);
+        }
+
+        .passport-section__title {
+            font-size: var(--font-lg);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-4);
+            padding-bottom: var(--space-2);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .passport-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .passport-list__item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+        }
+
+        .passport-list__item--numbered::before {
+            counter-increment: passport-item;
+            content: counter(passport-item);
+            font-family: var(--font-mono);
+            font-size: var(--font-xs);
+            font-weight: var(--weight-bold);
+            color: var(--accent-cyan);
+            background: var(--accent-cyan-dim);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .passport-list--numbered {
+            counter-reset: passport-item;
+        }
+
+        .passport-list__item--red {
+            border-left: 3px solid var(--accent-red);
+        }
+
+        .passport-list__item--red::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-red);
+            box-shadow: 0 0 6px var(--accent-red);
+            flex-shrink: 0;
+            margin-top: 6px;
+        }
+
+        .passport-text-block {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+            padding: var(--space-4);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+        }
+
+        .evidence-item {
+            display: flex;
+            gap: var(--space-4);
+            padding: var(--space-4);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-3);
+        }
+
+        .evidence-item__req {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            min-width: 140px;
+            flex-shrink: 0;
+        }
+
+        .evidence-item__proof {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+        }
+
+        /* --- Export Bar --- */
+        .export-bar {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-4);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            margin-top: var(--space-6);
+            margin-bottom: var(--space-6);
+        }
+
+        .export-bar__label {
+            font-size: var(--font-xs);
+            font-weight: var(--weight-semibold);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-right: auto;
+        }
+
+        /* --- Calibration Profiles --- */
+        .calibration-group {
+            margin-bottom: var(--space-8);
+        }
+
+        .calibration-group__title {
+            font-size: var(--font-lg);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-4);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .calibration-group__count {
+            font-size: var(--font-xs);
+            font-family: var(--font-mono);
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            font-weight: var(--weight-medium);
+        }
+
+        .calibration-group__count--green {
+            background: var(--accent-green-dim);
+            color: var(--accent-green);
+        }
+
+        .calibration-group__count--red {
+            background: var(--accent-red-dim);
+            color: var(--accent-red);
+        }
+
+        .profile-card {
+            background: var(--bg-surface);
+            border-radius: var(--radius-md);
+            padding: var(--space-5);
+            margin-bottom: var(--space-4);
+        }
+
+        .profile-card--green {
+            border: 1px solid var(--accent-green);
+            border-left: 3px solid var(--accent-green);
+        }
+
+        .profile-card--red {
+            border: 1px solid var(--accent-red);
+            border-left: 3px solid var(--accent-red);
+        }
+
+        .profile-card__number {
+            font-family: var(--font-mono);
+            font-size: var(--font-xs);
+            font-weight: var(--weight-bold);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: var(--space-3);
+        }
+
+        .profile-card__number--green {
+            color: var(--accent-green);
+        }
+
+        .profile-card__number--red {
+            color: var(--accent-red);
+        }
+
+        .profile-card__section {
+            margin-bottom: var(--space-3);
+        }
+
+        .profile-card__section:last-child {
+            margin-bottom: 0;
+        }
+
+        .profile-card__label {
+            font-size: var(--font-xs);
+            font-weight: var(--weight-semibold);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-1);
+        }
+
+        .profile-card__text {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+        }
+
+        /* --- Full-width button helper --- */
+        .btn-block {
+            width: 100%;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step-indicator {
+                padding: var(--space-4) var(--space-3);
+            }
+
+            .step-connector {
+                width: 24px;
+            }
+
+            .step-node {
+                min-width: 60px;
+            }
+
+            .step-label {
+                font-size: 10px;
+            }
+
+            .step-circle {
+                width: 30px;
+                height: 30px;
+                font-size: var(--font-xs);
+            }
+
+            .preflight-actions {
+                flex-direction: column;
+            }
+
+            .export-bar {
+                flex-wrap: wrap;
+            }
+
+            .evidence-item {
+                flex-direction: column;
+                gap: var(--space-2);
+            }
+
+            .evidence-item__req {
+                min-width: unset;
+            }
+
+            .passport-doc__meta {
+                flex-direction: column;
+                gap: var(--space-2);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <main class="app-main">
+            <div class="content-container">
+
+                <!-- Page Header -->
+                <header class="passport-header fade-in-up">
+                    <h1 class="passport-header__title">Role <span>Passport</span> Builder</h1>
+                    <p class="passport-header__subtitle">Turn messy intake into structured requirements. AI-powered preflight checks catch gaps before they cost you.</p>
+                    <p style="font-size:var(--font-sm);color:var(--text-muted);margin-top:var(--space-2);max-width:640px;">When every team has AI-generated JDs and sourcing, the difference is whether your requirements were verified before sourcing began. This tool makes sure they are.</p>
+                </header>
+
+                <!-- Step Indicator -->
+                <div class="step-indicator fade-in-up fade-in-up-delay-1" id="stepIndicator">
+                    <div class="step-item">
+                        <div class="step-node">
+                            <div class="step-circle step-circle--active" data-step="1">1</div>
+                            <div class="step-label step-label--active" data-step-label="1">Input</div>
+                        </div>
+                    </div>
+                    <div class="step-connector" data-connector="1"></div>
+                    <div class="step-item">
+                        <div class="step-node">
+                            <div class="step-circle" data-step="2">2</div>
+                            <div class="step-label" data-step-label="2">Preflight Check</div>
+                        </div>
+                    </div>
+                    <div class="step-connector" data-connector="2"></div>
+                    <div class="step-item">
+                        <div class="step-node">
+                            <div class="step-circle" data-step="3">3</div>
+                            <div class="step-label" data-step-label="3">Role Passport</div>
+                        </div>
+                    </div>
+                    <div class="step-connector" data-connector="3"></div>
+                    <div class="step-item">
+                        <div class="step-node">
+                            <div class="step-circle" data-step="4">4</div>
+                            <div class="step-label" data-step-label="4">Calibration Pack</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Banner -->
+                <div class="error-banner" id="errorBanner">
+                    <div class="error-banner__text" id="errorText"></div>
+                    <button class="error-banner__dismiss" id="errorDismiss" aria-label="Dismiss error">&times;</button>
+                </div>
+
+                <!-- ==============================
+                     STEP 1: INPUT
+                     ============================== -->
+                <div class="step-panel active fade-in-up fade-in-up-delay-2" id="step1">
+                    <form id="intakeForm" autocomplete="off">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label form-label--required" for="roleTitle">Role Title</label>
+                                <input type="text" class="form-input" id="roleTitle" placeholder="e.g. Senior Data Engineer" required>
+                                <div class="form-error" id="roleTitleError">Role title is required.</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="department">Department / Business Unit</label>
+                                <input type="text" class="form-input" id="department" placeholder="e.g. Engineering, Finance, Marketing">
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="location">Location</label>
+                                <input type="text" class="form-input" id="location" placeholder="e.g. New York, NY - Hybrid (3 days onsite)">
+                                <div class="form-note">Include onsite/remote/hybrid requirements</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="compRange">Compensation Range</label>
+                                <input type="text" class="form-input" id="compRange" placeholder="e.g. $140,000 - $170,000 base + 15% bonus">
+                                <div class="form-note">What's actually approved, not aspirational</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="hmNotes">Hiring Manager Notes</label>
+                            <textarea class="form-textarea" id="hmNotes" rows="8" placeholder="Paste the HM's email, Slack message, meeting notes, or any raw intake information here..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="mustHaves">Must-Haves</label>
+                            <textarea class="form-textarea" id="mustHaves" rows="4" placeholder="List the absolute requirements. Be specific."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="niceToHaves">Nice-to-Haves</label>
+                            <textarea class="form-textarea" id="niceToHaves" rows="3" placeholder="What would be great but isn't a dealbreaker?"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="dealbreakers">Dealbreakers</label>
+                            <textarea class="form-textarea" id="dealbreakers" rows="2" placeholder="What immediately disqualifies a candidate?"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg btn-block" id="runPreflightBtn">
+                            Run Preflight Check
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Loading Overlay (reusable) -->
+                <div class="loading-overlay" id="loadingOverlay">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text" id="loadingText">Analyzing...</div>
+                </div>
+
+                <!-- ==============================
+                     STEP 2: PREFLIGHT CHECK
+                     ============================== -->
+                <div class="step-panel" id="step2">
+                    <div id="preflightContent">
+                        <!-- Rendered by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- ==============================
+                     STEP 3: ROLE PASSPORT
+                     ============================== -->
+                <div class="step-panel" id="step3">
+                    <div id="passportContent">
+                        <!-- Rendered by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- ==============================
+                     STEP 4: CALIBRATION PACK
+                     ============================== -->
+                <div class="step-panel" id="step4">
+                    <div id="calibrationContent">
+                        <!-- Rendered by JavaScript -->
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../shared/sidebar.js"></script>
+    <script src="../shared/v2-footer.js"></script>
+    <script src="../shared/export-utils.js"></script>
+    <script src="../shared/ai-service.js"></script>
+    <script>
+    (function() {
+        'use strict';
+
+        /* =============================================
+           State
+           ============================================= */
+        var currentStep = 1;
+        var intakeData = {};
+        var preflightData = null;
+        var passportData = null;
+        var calibrationData = null;
+
+        /* =============================================
+           DOM References
+           ============================================= */
+        var stepPanels = {
+            1: document.getElementById('step1'),
+            2: document.getElementById('step2'),
+            3: document.getElementById('step3'),
+            4: document.getElementById('step4')
+        };
+
+        var loadingOverlay = document.getElementById('loadingOverlay');
+        var loadingText = document.getElementById('loadingText');
+        var errorBanner = document.getElementById('errorBanner');
+        var errorText = document.getElementById('errorText');
+        var errorDismiss = document.getElementById('errorDismiss');
+        var intakeForm = document.getElementById('intakeForm');
+
+        /* =============================================
+           Step Navigation
+           ============================================= */
+        function goToStep(step) {
+            currentStep = step;
+
+            // Update panels
+            for (var key in stepPanels) {
+                if (stepPanels.hasOwnProperty(key)) {
+                    if (parseInt(key, 10) === step) {
+                        stepPanels[key].classList.add('active');
+                    } else {
+                        stepPanels[key].classList.remove('active');
+                    }
+                }
+            }
+
+            // Hide loading
+            loadingOverlay.classList.remove('active');
+
+            // Update step indicator
+            updateStepIndicator(step);
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateStepIndicator(activeStep) {
+            for (var i = 1; i <= 4; i++) {
+                var circle = document.querySelector('[data-step="' + i + '"]');
+                var label = document.querySelector('[data-step-label="' + i + '"]');
+
+                if (!circle || !label) continue;
+
+                // Reset
+                circle.classList.remove('step-circle--active', 'step-circle--completed');
+                label.classList.remove('step-label--active', 'step-label--completed');
+
+                if (i < activeStep) {
+                    // Completed
+                    circle.classList.add('step-circle--completed');
+                    circle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+                    label.classList.add('step-label--completed');
+                } else if (i === activeStep) {
+                    // Active
+                    circle.classList.add('step-circle--active');
+                    circle.textContent = i;
+                    label.classList.add('step-label--active');
+                } else {
+                    // Pending
+                    circle.textContent = i;
+                }
+            }
+
+            // Update connectors
+            for (var c = 1; c <= 3; c++) {
+                var connector = document.querySelector('[data-connector="' + c + '"]');
+                if (!connector) continue;
+                if (c < activeStep) {
+                    connector.classList.add('step-connector--completed');
+                } else {
+                    connector.classList.remove('step-connector--completed');
+                }
+            }
+        }
+
+        /* =============================================
+           Loading / Error
+           ============================================= */
+        function showLoading(message) {
+            loadingText.textContent = message || 'Analyzing...';
+            loadingOverlay.classList.add('active');
+
+            // Hide all step panels while loading
+            for (var key in stepPanels) {
+                if (stepPanels.hasOwnProperty(key)) {
+                    stepPanels[key].classList.remove('active');
+                }
+            }
+        }
+
+        function hideLoading() {
+            loadingOverlay.classList.remove('active');
+        }
+
+        function showError(message) {
+            errorText.textContent = message;
+            errorBanner.classList.add('visible');
+        }
+
+        function hideError() {
+            errorBanner.classList.remove('visible');
+        }
+
+        errorDismiss.addEventListener('click', hideError);
+
+        /* =============================================
+           Collect Form Data
+           ============================================= */
+        function collectIntakeData() {
+            return {
+                roleTitle: document.getElementById('roleTitle').value.trim(),
+                department: document.getElementById('department').value.trim(),
+                location: document.getElementById('location').value.trim(),
+                compRange: document.getElementById('compRange').value.trim(),
+                hmNotes: document.getElementById('hmNotes').value.trim(),
+                mustHaves: document.getElementById('mustHaves').value.trim(),
+                niceToHaves: document.getElementById('niceToHaves').value.trim(),
+                dealbreakers: document.getElementById('dealbreakers').value.trim()
+            };
+        }
+
+        /* =============================================
+           Validate
+           ============================================= */
+        function validateIntake(data) {
+            var valid = true;
+            var roleTitleError = document.getElementById('roleTitleError');
+
+            if (!data.roleTitle) {
+                roleTitleError.classList.add('visible');
+                document.getElementById('roleTitle').focus();
+                valid = false;
+            } else {
+                roleTitleError.classList.remove('visible');
+            }
+
+            return valid;
+        }
+
+        /* =============================================
+           Escape HTML
+           ============================================= */
+        function esc(str) {
+            if (!str) return '';
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        /* =============================================
+           Parse JSON from AI response
+           ============================================= */
+        function parseAIJSON(text) {
+            // Try parsing the raw text first
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                // Try extracting JSON from markdown code block
+                var match = text.match(/```(?:json)?\s*([\s\S]*?)```/);
+                if (match) {
+                    try {
+                        return JSON.parse(match[1].trim());
+                    } catch (e2) {
+                        // ignore
+                    }
+                }
+                // Try finding first { to last }
+                var first = text.indexOf('{');
+                var last = text.lastIndexOf('}');
+                if (first !== -1 && last !== -1 && last > first) {
+                    try {
+                        return JSON.parse(text.substring(first, last + 1));
+                    } catch (e3) {
+                        // ignore
+                    }
+                }
+                throw new Error('Could not parse AI response as JSON');
+            }
+        }
+
+        /* =============================================
+           STEP 1 -> STEP 2: Run Preflight Check
+           ============================================= */
+        intakeForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            hideError();
+
+            intakeData = collectIntakeData();
+            if (!validateIntake(intakeData)) return;
+
+            showLoading('Running preflight analysis...');
+
+            var prompt = buildPreflightPrompt(intakeData);
+
+            AIService.query(prompt, {
+                systemPrompt: 'You are a senior recruiting operations analyst. Analyze the hiring manager intake data and return a structured JSON response. Always respond with valid JSON only, no additional text.',
+                maxTokens: 3000
+            }).then(function(result) {
+                if (result.error) {
+                    hideLoading();
+                    goToStep(1);
+                    showError('AI analysis failed: ' + result.error + ' — Please try again.');
+                    return;
+                }
+
+                try {
+                    preflightData = parseAIJSON(result.text);
+                    renderPreflight(preflightData);
+                    goToStep(2);
+                } catch (parseErr) {
+                    hideLoading();
+                    goToStep(1);
+                    showError('Failed to parse AI response. Please try again.');
+                    console.error('[Passport] Parse error:', parseErr, result.text);
+                }
+            });
+        });
+
+        function buildPreflightPrompt(data) {
+            return [
+                'Analyze this hiring manager intake and identify issues. Return JSON only.',
+                '',
+                'INTAKE DATA:',
+                '- Role Title: ' + (data.roleTitle || 'Not provided'),
+                '- Department: ' + (data.department || 'Not provided'),
+                '- Location: ' + (data.location || 'Not provided'),
+                '- Compensation Range: ' + (data.compRange || 'Not provided'),
+                '- Hiring Manager Notes: ' + (data.hmNotes || 'Not provided'),
+                '- Must-Haves: ' + (data.mustHaves || 'Not provided'),
+                '- Nice-to-Haves: ' + (data.niceToHaves || 'Not provided'),
+                '- Dealbreakers: ' + (data.dealbreakers || 'Not provided'),
+                '',
+                'Return this exact JSON structure:',
+                '{',
+                '  "missingInfo": [',
+                '    { "issue": "string", "whyItMatters": "string", "suggestedQuestion": "string" }',
+                '  ],',
+                '  "conflicts": [',
+                '    { "issue": "string", "whyItMatters": "string", "suggestedQuestion": "string" }',
+                '  ],',
+                '  "locationAssessment": "string describing location reality and any concerns",',
+                '  "compAssessment": "string describing compensation competitiveness and any concerns",',
+                '  "readiness": "green|amber|red"',
+                '}',
+                '',
+                'Rules:',
+                '- missingInfo: Fields left blank or vague. Minimum 1, maximum 6.',
+                '- conflicts: Contradictions between requirements (e.g. junior pay for senior role). Can be empty array if none.',
+                '- readiness: "green" = ready to recruit, "amber" = gaps to address, "red" = significant issues.',
+                '- Be specific and practical. These questions go directly to the hiring manager.',
+                '- Return valid JSON only. No markdown, no explanation outside JSON.'
+            ].join('\n');
+        }
+
+        /* =============================================
+           Render Preflight (Step 2)
+           ============================================= */
+        function renderPreflight(data) {
+            var html = '';
+
+            // Readiness badge
+            var readiness = (data.readiness || 'amber').toLowerCase();
+            var readinessLabels = { green: 'Ready to Recruit', amber: 'Gaps to Address', red: 'Significant Issues' };
+            html += '<div style="margin-bottom: var(--space-8); text-align: center;">';
+            html += '<div style="font-size: var(--font-xs); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--space-2);">Overall Readiness</div>';
+            html += '<span class="readiness-badge readiness-badge--' + readiness + '">';
+            html += '<span class="readiness-dot readiness-dot--' + readiness + '"></span>';
+            html += (readinessLabels[readiness] || 'Assessment Complete');
+            html += '</span>';
+            html += '</div>';
+
+            // Missing Information
+            if (data.missingInfo && data.missingInfo.length > 0) {
+                html += '<div class="preflight-section">';
+                html += '<div class="preflight-section__title">';
+                html += 'Missing Information';
+                html += '<span class="preflight-section__count preflight-section__count--amber">' + data.missingInfo.length + '</span>';
+                html += '</div>';
+                for (var i = 0; i < data.missingInfo.length; i++) {
+                    var item = data.missingInfo[i];
+                    html += '<div class="issue-card issue-card--amber">';
+                    html += '<div class="issue-card__title">' + esc(item.issue) + '</div>';
+                    html += '<div class="issue-card__body">' + esc(item.whyItMatters) + '</div>';
+                    if (item.suggestedQuestion) {
+                        html += '<div class="issue-card__question">' + esc(item.suggestedQuestion) + '</div>';
+                    }
+                    html += '</div>';
+                }
+                html += '</div>';
+            }
+
+            // Conflicts Detected
+            if (data.conflicts && data.conflicts.length > 0) {
+                html += '<div class="preflight-section">';
+                html += '<div class="preflight-section__title">';
+                html += 'Conflicts Detected';
+                html += '<span class="preflight-section__count preflight-section__count--red">' + data.conflicts.length + '</span>';
+                html += '</div>';
+                for (var j = 0; j < data.conflicts.length; j++) {
+                    var conflict = data.conflicts[j];
+                    html += '<div class="issue-card issue-card--red">';
+                    html += '<div class="issue-card__title">' + esc(conflict.issue) + '</div>';
+                    html += '<div class="issue-card__body">' + esc(conflict.whyItMatters) + '</div>';
+                    if (conflict.suggestedQuestion) {
+                        html += '<div class="issue-card__question">' + esc(conflict.suggestedQuestion) + '</div>';
+                    }
+                    html += '</div>';
+                }
+                html += '</div>';
+            }
+
+            // Location Reality
+            if (data.locationAssessment) {
+                html += '<div class="assessment-card">';
+                html += '<div class="assessment-card__label">Location Reality</div>';
+                html += '<div class="assessment-card__text">' + esc(data.locationAssessment) + '</div>';
+                html += '</div>';
+            }
+
+            // Compensation Reality
+            if (data.compAssessment) {
+                html += '<div class="assessment-card" style="margin-bottom: var(--space-8);">';
+                html += '<div class="assessment-card__label">Compensation Reality</div>';
+                html += '<div class="assessment-card__text">' + esc(data.compAssessment) + '</div>';
+                html += '</div>';
+            }
+
+            // Action buttons
+            html += '<div class="preflight-actions">';
+            html += '<button class="btn btn-secondary btn-lg" id="editInputsBtn">Edit Inputs</button>';
+            html += '<button class="btn btn-primary btn-lg" style="flex: 1;" id="generatePassportBtn">Generate Passport</button>';
+            html += '</div>';
+
+            document.getElementById('preflightContent').innerHTML = html;
+
+            // Bind buttons
+            document.getElementById('editInputsBtn').addEventListener('click', function() {
+                goToStep(1);
+            });
+
+            document.getElementById('generatePassportBtn').addEventListener('click', function() {
+                generatePassport();
+            });
+        }
+
+        /* =============================================
+           STEP 2 -> STEP 3: Generate Passport
+           ============================================= */
+        function generatePassport() {
+            hideError();
+            showLoading('Generating role passport...');
+
+            var prompt = buildPassportPrompt(intakeData, preflightData);
+
+            AIService.query(prompt, {
+                systemPrompt: 'You are a senior recruiting strategist. Generate a structured role passport from the intake data and preflight analysis. Always respond with valid JSON only, no additional text.',
+                maxTokens: 4000
+            }).then(function(result) {
+                if (result.error) {
+                    hideLoading();
+                    goToStep(2);
+                    showError('AI generation failed: ' + result.error + ' — Please try again.');
+                    return;
+                }
+
+                try {
+                    passportData = parseAIJSON(result.text);
+                    renderPassport(passportData);
+                    goToStep(3);
+                } catch (parseErr) {
+                    hideLoading();
+                    goToStep(2);
+                    showError('Failed to parse AI response. Please try again.');
+                    console.error('[Passport] Parse error:', parseErr, result.text);
+                }
+            });
+        }
+
+        function buildPassportPrompt(intake, preflight) {
+            return [
+                'Generate a structured Role Passport based on this intake data and preflight analysis. Return JSON only.',
+                '',
+                'INTAKE DATA:',
+                '- Role Title: ' + (intake.roleTitle || 'Not provided'),
+                '- Department: ' + (intake.department || 'Not provided'),
+                '- Location: ' + (intake.location || 'Not provided'),
+                '- Compensation Range: ' + (intake.compRange || 'Not provided'),
+                '- Must-Haves: ' + (intake.mustHaves || 'Not provided'),
+                '- Nice-to-Haves: ' + (intake.niceToHaves || 'Not provided'),
+                '- Dealbreakers: ' + (intake.dealbreakers || 'Not provided'),
+                '- HM Notes: ' + (intake.hmNotes || 'Not provided'),
+                '',
+                'PREFLIGHT FINDINGS:',
+                '- Readiness: ' + (preflight.readiness || 'unknown'),
+                '- Location Assessment: ' + (preflight.locationAssessment || 'N/A'),
+                '- Compensation Assessment: ' + (preflight.compAssessment || 'N/A'),
+                '- Missing Info Count: ' + ((preflight.missingInfo || []).length),
+                '- Conflicts Count: ' + ((preflight.conflicts || []).length),
+                '',
+                'Return this exact JSON structure:',
+                '{',
+                '  "roleTitle": "string",',
+                '  "department": "string",',
+                '  "location": "string",',
+                '  "mustHaves": [',
+                '    { "requirement": "string", "binaryCheck": "Yes/No question to evaluate this" }',
+                '  ],',
+                '  "dealbreakers": ["string"],',
+                '  "locationReality": "string",',
+                '  "compensationRange": "string",',
+                '  "keyMotivators": ["string - what would attract the right person"],',
+                '  "evidenceRequirements": [',
+                '    { "requirement": "string", "evidence": "what proof to look for" }',
+                '  ],',
+                '  "clarificationsNeeded": ["string - any remaining unknowns"]',
+                '}',
+                '',
+                'Rules:',
+                '- mustHaves: 3-8 items. Each with a binary yes/no screening question.',
+                '- dealbreakers: 1-4 items. Hard stops.',
+                '- keyMotivators: 3-5 items. What sells this role to a great candidate.',
+                '- evidenceRequirements: Match each must-have with specific proof to look for.',
+                '- clarificationsNeeded: Any gaps that still exist after preflight. Can be empty array.',
+                '- Return valid JSON only.'
+            ].join('\n');
+        }
+
+        /* =============================================
+           Render Passport (Step 3)
+           ============================================= */
+        function renderPassport(data) {
+            var html = '';
+
+            // Document header
+            html += '<div class="passport-doc">';
+            html += '<div class="passport-doc__header">';
+            html += '<div class="passport-doc__role">' + esc(data.roleTitle || intakeData.roleTitle) + '</div>';
+            html += '<div class="passport-doc__meta">';
+            if (data.department) {
+                html += '<div class="passport-doc__meta-item">';
+                html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
+                html += esc(data.department);
+                html += '</div>';
+            }
+            if (data.location) {
+                html += '<div class="passport-doc__meta-item">';
+                html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+                html += esc(data.location);
+                html += '</div>';
+            }
+            html += '</div>';
+            html += '</div>';
+
+            // Must-Haves
+            if (data.mustHaves && data.mustHaves.length > 0) {
+                html += '<div class="passport-section">';
+                html += '<div class="passport-section__title">Must-Haves</div>';
+                html += '<ol class="passport-list passport-list--numbered">';
+                for (var i = 0; i < data.mustHaves.length; i++) {
+                    var mh = data.mustHaves[i];
+                    html += '<li class="passport-list__item passport-list__item--numbered">';
+                    html += '<div>';
+                    html += '<strong style="color: var(--text-primary);">' + esc(mh.requirement) + '</strong>';
+                    if (mh.binaryCheck) {
+                        html += '<div style="margin-top: var(--space-1); font-size: var(--font-xs); color: var(--text-muted);">Screen: ' + esc(mh.binaryCheck) + '</div>';
+                    }
+                    html += '</div>';
+                    html += '</li>';
+                }
+                html += '</ol>';
+                html += '</div>';
+            }
+
+            // Dealbreakers
+            if (data.dealbreakers && data.dealbreakers.length > 0) {
+                html += '<div class="passport-section">';
+                html += '<div class="passport-section__title">Dealbreakers</div>';
+                html += '<ul class="passport-list">';
+                for (var d = 0; d < data.dealbreakers.length; d++) {
+                    html += '<li class="passport-list__item passport-list__item--red">';
+                    html += esc(data.dealbreakers[d]);
+                    html += '</li>';
+                }
+                html += '</ul>';
+                html += '</div>';
+            }
+
+            // Location Reality
+            if (data.locationReality) {
+                html += '<div class="passport-section">';
+                html += '<div class="passport-section__title">Location Reality</div>';
+                html += '<div class="passport-text-block">' + esc(data.locationReality) + '</div>';
+                html += '</div>';
+            }
+
+            // Compensation Range
+            if (data.compensationRange) {
+                html += '<div class="passport-section">';
+                html += '<div class="passport-section__title">Compensation Range</div>';
+                html += '<div class="passport-text-block">' + esc(data.compensationRange) + '</div>';
+                html += '</div>';
+            }
+
+            // Key Motivators
+            if (data.keyMotivators && data.keyMotivators.length > 0) {
+                html += '<div class="passport-section">';
+                html += '<div class="passport-section__title">Key Motivators</div>';
+                html += '<ul class="passport-list">';
+                for (var k = 0; k < data.keyMotivators.length; k++) {
+                    html += '<li class="passport-list__item">';
+                    html += '<span style="color: var(--accent-green); flex-shrink: 0; margin-top: 2px;">';
+                    html += '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+                    html += '</span>';
+                    html += esc(data.keyMotivators[k]);
+                    html += '</li>';
+                }
+                html += '</ul>';
+                html += '</div>';
+            }
+
+            // Evidence Requirements
+            if (data.evidenceRequirements && data.evidenceRequirements.length > 0) {
+                html += '<div class="passport-section">';
+                html += '<div class="passport-section__title">Evidence Requirements</div>';
+                for (var ev = 0; ev < data.evidenceRequirements.length; ev++) {
+                    var evi = data.evidenceRequirements[ev];
+                    html += '<div class="evidence-item">';
+                    html += '<div class="evidence-item__req">' + esc(evi.requirement) + '</div>';
+                    html += '<div class="evidence-item__proof">' + esc(evi.evidence) + '</div>';
+                    html += '</div>';
+                }
+                html += '</div>';
+            }
+
+            // Clarifications Needed
+            if (data.clarificationsNeeded && data.clarificationsNeeded.length > 0) {
+                html += '<div class="passport-section">';
+                html += '<div class="passport-section__title">Clarifications Needed</div>';
+                html += '<ul class="passport-list">';
+                for (var cl = 0; cl < data.clarificationsNeeded.length; cl++) {
+                    html += '<li class="passport-list__item" style="border-left: 3px solid var(--accent-amber);">';
+                    html += '<span style="color: var(--accent-amber); flex-shrink: 0; margin-top: 2px;">';
+                    html += '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+                    html += '</span>';
+                    html += esc(data.clarificationsNeeded[cl]);
+                    html += '</li>';
+                }
+                html += '</ul>';
+                html += '</div>';
+            }
+
+            html += '</div>'; // .passport-doc
+
+            // Export bar
+            html += '<div class="export-bar">';
+            html += '<div class="export-bar__label">Export</div>';
+            html += '<button class="btn btn-copy btn-sm" id="passportCopyBtn">Copy All</button>';
+            html += '<button class="btn btn-secondary btn-sm" id="passportPrintBtn">Print</button>';
+            html += '<button class="btn btn-secondary btn-sm" id="passportDownloadBtn">Download</button>';
+            html += '</div>';
+
+            // Generate Calibration Pack button
+            html += '<button class="btn btn-primary btn-lg btn-block" id="generateCalibrationBtn">Generate Calibration Pack</button>';
+
+            document.getElementById('passportContent').innerHTML = html;
+
+            // Bind export buttons
+            document.getElementById('passportCopyBtn').addEventListener('click', function() {
+                var text = buildPassportPlainText(data);
+                ExportUtils.copyToClipboard(text, this);
+            });
+
+            document.getElementById('passportPrintBtn').addEventListener('click', function() {
+                var printHtml = buildPassportPrintHtml(data);
+                ExportUtils.printContent('Role Passport: ' + (data.roleTitle || intakeData.roleTitle), printHtml);
+            });
+
+            document.getElementById('passportDownloadBtn').addEventListener('click', function() {
+                var text = buildPassportPlainText(data);
+                var filename = 'role-passport-' + (data.roleTitle || 'role').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.txt';
+                ExportUtils.downloadFile(filename, text);
+            });
+
+            document.getElementById('generateCalibrationBtn').addEventListener('click', function() {
+                generateCalibration();
+            });
+        }
+
+        /* =============================================
+           Passport Export Helpers
+           ============================================= */
+        function buildPassportPlainText(data) {
+            var lines = [];
+            lines.push('ROLE PASSPORT');
+            lines.push('=============');
+            lines.push('');
+            lines.push('Role: ' + (data.roleTitle || ''));
+            lines.push('Department: ' + (data.department || ''));
+            lines.push('Location: ' + (data.location || ''));
+            lines.push('');
+
+            if (data.mustHaves && data.mustHaves.length > 0) {
+                lines.push('MUST-HAVES');
+                lines.push('----------');
+                for (var i = 0; i < data.mustHaves.length; i++) {
+                    lines.push((i + 1) + '. ' + data.mustHaves[i].requirement);
+                    if (data.mustHaves[i].binaryCheck) {
+                        lines.push('   Screen: ' + data.mustHaves[i].binaryCheck);
+                    }
+                }
+                lines.push('');
+            }
+
+            if (data.dealbreakers && data.dealbreakers.length > 0) {
+                lines.push('DEALBREAKERS');
+                lines.push('------------');
+                for (var d = 0; d < data.dealbreakers.length; d++) {
+                    lines.push('- ' + data.dealbreakers[d]);
+                }
+                lines.push('');
+            }
+
+            if (data.locationReality) {
+                lines.push('LOCATION REALITY');
+                lines.push(data.locationReality);
+                lines.push('');
+            }
+
+            if (data.compensationRange) {
+                lines.push('COMPENSATION RANGE');
+                lines.push(data.compensationRange);
+                lines.push('');
+            }
+
+            if (data.keyMotivators && data.keyMotivators.length > 0) {
+                lines.push('KEY MOTIVATORS');
+                lines.push('--------------');
+                for (var k = 0; k < data.keyMotivators.length; k++) {
+                    lines.push('- ' + data.keyMotivators[k]);
+                }
+                lines.push('');
+            }
+
+            if (data.evidenceRequirements && data.evidenceRequirements.length > 0) {
+                lines.push('EVIDENCE REQUIREMENTS');
+                lines.push('---------------------');
+                for (var ev = 0; ev < data.evidenceRequirements.length; ev++) {
+                    lines.push(data.evidenceRequirements[ev].requirement + ': ' + data.evidenceRequirements[ev].evidence);
+                }
+                lines.push('');
+            }
+
+            if (data.clarificationsNeeded && data.clarificationsNeeded.length > 0) {
+                lines.push('CLARIFICATIONS NEEDED');
+                lines.push('---------------------');
+                for (var cl = 0; cl < data.clarificationsNeeded.length; cl++) {
+                    lines.push('- ' + data.clarificationsNeeded[cl]);
+                }
+                lines.push('');
+            }
+
+            lines.push('---');
+            lines.push('Generated by AI Hub v2.0 - The Confidence Engine');
+
+            return lines.join('\n');
+        }
+
+        function buildPassportPrintHtml(data) {
+            var html = '';
+
+            html += '<p><strong>Department:</strong> ' + esc(data.department || 'N/A') + '</p>';
+            html += '<p><strong>Location:</strong> ' + esc(data.location || 'N/A') + '</p>';
+
+            if (data.mustHaves && data.mustHaves.length > 0) {
+                html += '<h2>Must-Haves</h2><ol>';
+                for (var i = 0; i < data.mustHaves.length; i++) {
+                    html += '<li><strong>' + esc(data.mustHaves[i].requirement) + '</strong>';
+                    if (data.mustHaves[i].binaryCheck) {
+                        html += '<br><small>Screen: ' + esc(data.mustHaves[i].binaryCheck) + '</small>';
+                    }
+                    html += '</li>';
+                }
+                html += '</ol>';
+            }
+
+            if (data.dealbreakers && data.dealbreakers.length > 0) {
+                html += '<h2>Dealbreakers</h2><ul>';
+                for (var d = 0; d < data.dealbreakers.length; d++) {
+                    html += '<li><span class="badge badge--risk">STOP</span> ' + esc(data.dealbreakers[d]) + '</li>';
+                }
+                html += '</ul>';
+            }
+
+            if (data.locationReality) {
+                html += '<h2>Location Reality</h2><p>' + esc(data.locationReality) + '</p>';
+            }
+
+            if (data.compensationRange) {
+                html += '<h2>Compensation Range</h2><p>' + esc(data.compensationRange) + '</p>';
+            }
+
+            if (data.keyMotivators && data.keyMotivators.length > 0) {
+                html += '<h2>Key Motivators</h2><ul>';
+                for (var k = 0; k < data.keyMotivators.length; k++) {
+                    html += '<li>' + esc(data.keyMotivators[k]) + '</li>';
+                }
+                html += '</ul>';
+            }
+
+            if (data.evidenceRequirements && data.evidenceRequirements.length > 0) {
+                html += '<h2>Evidence Requirements</h2>';
+                for (var ev = 0; ev < data.evidenceRequirements.length; ev++) {
+                    html += '<div class="section"><h3>' + esc(data.evidenceRequirements[ev].requirement) + '</h3>';
+                    html += '<p>' + esc(data.evidenceRequirements[ev].evidence) + '</p></div>';
+                }
+            }
+
+            if (data.clarificationsNeeded && data.clarificationsNeeded.length > 0) {
+                html += '<h2>Clarifications Needed</h2><ul>';
+                for (var cl = 0; cl < data.clarificationsNeeded.length; cl++) {
+                    html += '<li><span class="badge badge--watch">OPEN</span> ' + esc(data.clarificationsNeeded[cl]) + '</li>';
+                }
+                html += '</ul>';
+            }
+
+            return html;
+        }
+
+        /* =============================================
+           STEP 3 -> STEP 4: Generate Calibration Pack
+           ============================================= */
+        function generateCalibration() {
+            hideError();
+            showLoading('Generating calibration profiles...');
+
+            var prompt = buildCalibrationPrompt(passportData);
+
+            AIService.query(prompt, {
+                systemPrompt: 'You are a senior recruiting strategist creating calibration profiles to help a team align on candidate evaluation. Always respond with valid JSON only, no additional text.',
+                maxTokens: 4000
+            }).then(function(result) {
+                if (result.error) {
+                    hideLoading();
+                    goToStep(3);
+                    showError('AI generation failed: ' + result.error + ' — Please try again.');
+                    return;
+                }
+
+                try {
+                    calibrationData = parseAIJSON(result.text);
+                    renderCalibration(calibrationData);
+                    goToStep(4);
+                } catch (parseErr) {
+                    hideLoading();
+                    goToStep(3);
+                    showError('Failed to parse AI response. Please try again.');
+                    console.error('[Passport] Parse error:', parseErr, result.text);
+                }
+            });
+        }
+
+        function buildCalibrationPrompt(passport) {
+            return [
+                'Generate 6 calibration profile sketches for this role. Return JSON only.',
+                '',
+                'ROLE PASSPORT:',
+                '- Role: ' + (passport.roleTitle || ''),
+                '- Department: ' + (passport.department || ''),
+                '- Location: ' + (passport.location || ''),
+                '- Must-Haves: ' + (passport.mustHaves || []).map(function(m) { return m.requirement; }).join('; '),
+                '- Dealbreakers: ' + (passport.dealbreakers || []).join('; '),
+                '- Compensation: ' + (passport.compensationRange || ''),
+                '',
+                'Return this exact JSON structure:',
+                '{',
+                '  "strongFit": [',
+                '    {',
+                '      "background": "2-3 line professional summary",',
+                '      "whyTheyMatch": "specific evidence of fit against must-haves",',
+                '      "potentialRisk": "one concern or watch item"',
+                '    }',
+                '  ],',
+                '  "poorFit": [',
+                '    {',
+                '      "background": "2-3 line professional summary",',
+                '      "whyTheyLookGood": "surface-level appeal that could mislead",',
+                '      "actualGap": "the real disqualifying factor"',
+                '    }',
+                '  ]',
+                '}',
+                '',
+                'Rules:',
+                '- Exactly 3 strongFit profiles and 3 poorFit profiles.',
+                '- Make profiles realistic and specific to this role.',
+                '- Strong fits should vary in background (not all identical paths).',
+                '- Poor fits should be genuinely tricky — people who look good on paper but miss key requirements.',
+                '- Return valid JSON only.'
+            ].join('\n');
+        }
+
+        /* =============================================
+           Render Calibration (Step 4)
+           ============================================= */
+        function renderCalibration(data) {
+            var html = '';
+
+            // Strong Fit Profiles
+            if (data.strongFit && data.strongFit.length > 0) {
+                html += '<div class="calibration-group">';
+                html += '<div class="calibration-group__title">';
+                html += 'Strong Fit Profiles';
+                html += '<span class="calibration-group__count calibration-group__count--green">' + data.strongFit.length + '</span>';
+                html += '</div>';
+                for (var s = 0; s < data.strongFit.length; s++) {
+                    var strong = data.strongFit[s];
+                    html += '<div class="profile-card profile-card--green">';
+                    html += '<div class="profile-card__number profile-card__number--green">Profile ' + (s + 1) + ' - Strong Fit</div>';
+                    html += '<div class="profile-card__section">';
+                    html += '<div class="profile-card__label">Background</div>';
+                    html += '<div class="profile-card__text">' + esc(strong.background) + '</div>';
+                    html += '</div>';
+                    html += '<div class="profile-card__section">';
+                    html += '<div class="profile-card__label">Why They Match</div>';
+                    html += '<div class="profile-card__text">' + esc(strong.whyTheyMatch) + '</div>';
+                    html += '</div>';
+                    html += '<div class="profile-card__section">';
+                    html += '<div class="profile-card__label">Potential Risk</div>';
+                    html += '<div class="profile-card__text">' + esc(strong.potentialRisk) + '</div>';
+                    html += '</div>';
+                    html += '</div>';
+                }
+                html += '</div>';
+            }
+
+            // Poor Fit Profiles
+            if (data.poorFit && data.poorFit.length > 0) {
+                html += '<div class="calibration-group">';
+                html += '<div class="calibration-group__title">';
+                html += 'Poor Fit Profiles';
+                html += '<span class="calibration-group__count calibration-group__count--red">' + data.poorFit.length + '</span>';
+                html += '</div>';
+                for (var p = 0; p < data.poorFit.length; p++) {
+                    var poor = data.poorFit[p];
+                    html += '<div class="profile-card profile-card--red">';
+                    html += '<div class="profile-card__number profile-card__number--red">Profile ' + (p + 1) + ' - Poor Fit</div>';
+                    html += '<div class="profile-card__section">';
+                    html += '<div class="profile-card__label">Background</div>';
+                    html += '<div class="profile-card__text">' + esc(poor.background) + '</div>';
+                    html += '</div>';
+                    html += '<div class="profile-card__section">';
+                    html += '<div class="profile-card__label">Why They Look Good on Surface</div>';
+                    html += '<div class="profile-card__text">' + esc(poor.whyTheyLookGood) + '</div>';
+                    html += '</div>';
+                    html += '<div class="profile-card__section">';
+                    html += '<div class="profile-card__label">The Actual Gap</div>';
+                    html += '<div class="profile-card__text">' + esc(poor.actualGap) + '</div>';
+                    html += '</div>';
+                    html += '</div>';
+                }
+                html += '</div>';
+            }
+
+            // Export bar
+            html += '<div class="export-bar">';
+            html += '<div class="export-bar__label">Export</div>';
+            html += '<button class="btn btn-copy btn-sm" id="calibrationCopyBtn">Copy All</button>';
+            html += '<button class="btn btn-secondary btn-sm" id="calibrationPrintBtn">Print</button>';
+            html += '<button class="btn btn-secondary btn-sm" id="calibrationDownloadBtn">Download</button>';
+            html += '</div>';
+
+            // Start Over
+            html += '<button class="btn btn-secondary btn-lg btn-block" id="startOverBtn">Start Over</button>';
+
+            document.getElementById('calibrationContent').innerHTML = html;
+
+            // Bind export buttons
+            document.getElementById('calibrationCopyBtn').addEventListener('click', function() {
+                var text = buildCalibrationPlainText(data);
+                ExportUtils.copyToClipboard(text, this);
+            });
+
+            document.getElementById('calibrationPrintBtn').addEventListener('click', function() {
+                var printHtml = buildCalibrationPrintHtml(data);
+                ExportUtils.printContent('Calibration Pack: ' + (passportData.roleTitle || intakeData.roleTitle), printHtml);
+            });
+
+            document.getElementById('calibrationDownloadBtn').addEventListener('click', function() {
+                var text = buildCalibrationPlainText(data);
+                var filename = 'calibration-pack-' + (passportData.roleTitle || 'role').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.txt';
+                ExportUtils.downloadFile(filename, text);
+            });
+
+            document.getElementById('startOverBtn').addEventListener('click', function() {
+                startOver();
+            });
+        }
+
+        /* =============================================
+           Calibration Export Helpers
+           ============================================= */
+        function buildCalibrationPlainText(data) {
+            var lines = [];
+            lines.push('CALIBRATION PACK');
+            lines.push('================');
+            lines.push('Role: ' + (passportData.roleTitle || intakeData.roleTitle || ''));
+            lines.push('');
+
+            if (data.strongFit && data.strongFit.length > 0) {
+                lines.push('STRONG FIT PROFILES');
+                lines.push('-------------------');
+                for (var s = 0; s < data.strongFit.length; s++) {
+                    var strong = data.strongFit[s];
+                    lines.push('');
+                    lines.push('Profile ' + (s + 1) + ' - Strong Fit');
+                    lines.push('Background: ' + strong.background);
+                    lines.push('Why They Match: ' + strong.whyTheyMatch);
+                    lines.push('Potential Risk: ' + strong.potentialRisk);
+                }
+                lines.push('');
+            }
+
+            if (data.poorFit && data.poorFit.length > 0) {
+                lines.push('POOR FIT PROFILES');
+                lines.push('-----------------');
+                for (var p = 0; p < data.poorFit.length; p++) {
+                    var poor = data.poorFit[p];
+                    lines.push('');
+                    lines.push('Profile ' + (p + 1) + ' - Poor Fit');
+                    lines.push('Background: ' + poor.background);
+                    lines.push('Why They Look Good: ' + poor.whyTheyLookGood);
+                    lines.push('Actual Gap: ' + poor.actualGap);
+                }
+                lines.push('');
+            }
+
+            lines.push('---');
+            lines.push('Generated by AI Hub v2.0 - The Confidence Engine');
+
+            return lines.join('\n');
+        }
+
+        function buildCalibrationPrintHtml(data) {
+            var html = '';
+
+            if (data.strongFit && data.strongFit.length > 0) {
+                html += '<h2>Strong Fit Profiles</h2>';
+                for (var s = 0; s < data.strongFit.length; s++) {
+                    var strong = data.strongFit[s];
+                    html += '<div class="section">';
+                    html += '<h3><span class="badge badge--strong">STRONG FIT</span> Profile ' + (s + 1) + '</h3>';
+                    html += '<p><strong>Background:</strong> ' + esc(strong.background) + '</p>';
+                    html += '<p><strong>Why They Match:</strong> ' + esc(strong.whyTheyMatch) + '</p>';
+                    html += '<p><strong>Potential Risk:</strong> ' + esc(strong.potentialRisk) + '</p>';
+                    html += '</div>';
+                }
+            }
+
+            if (data.poorFit && data.poorFit.length > 0) {
+                html += '<h2>Poor Fit Profiles</h2>';
+                for (var p = 0; p < data.poorFit.length; p++) {
+                    var poor = data.poorFit[p];
+                    html += '<div class="section">';
+                    html += '<h3><span class="badge badge--risk">POOR FIT</span> Profile ' + (p + 1) + '</h3>';
+                    html += '<p><strong>Background:</strong> ' + esc(poor.background) + '</p>';
+                    html += '<p><strong>Surface Appeal:</strong> ' + esc(poor.whyTheyLookGood) + '</p>';
+                    html += '<p><strong>Actual Gap:</strong> ' + esc(poor.actualGap) + '</p>';
+                    html += '</div>';
+                }
+            }
+
+            return html;
+        }
+
+        /* =============================================
+           Start Over
+           ============================================= */
+        function startOver() {
+            // Reset state
+            currentStep = 1;
+            intakeData = {};
+            preflightData = null;
+            passportData = null;
+            calibrationData = null;
+
+            // Reset form
+            intakeForm.reset();
+
+            // Clear rendered content
+            document.getElementById('preflightContent').innerHTML = '';
+            document.getElementById('passportContent').innerHTML = '';
+            document.getElementById('calibrationContent').innerHTML = '';
+
+            // Hide errors
+            hideError();
+            document.getElementById('roleTitleError').classList.remove('visible');
+
+            // Go to step 1
+            goToStep(1);
+        }
+
+    })();
+    </script>
+</body>
+</html>

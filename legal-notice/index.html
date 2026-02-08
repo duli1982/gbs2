@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>Legal Notice | AI Hub v2.0 — The Confidence Engine</title>
+    <meta name="description" content="Legal Notice and Imprint for AI Hub - Company information and legal disclosures">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Theme -->
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/sidebar.css">
+
+    <style>
+        .page-breadcrumb { margin-bottom: var(--space-8); }
+        .page-breadcrumb a { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--font-sm); color: var(--text-muted); }
+        .page-breadcrumb a:hover { color: var(--text-secondary); }
+        .page-breadcrumb svg { width: 14px; height: 14px; }
+
+        .page-content { max-width: 860px; margin: 0 auto; }
+
+        .section-card {
+            background: var(--bg-surface); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl); padding: var(--space-8); margin-bottom: var(--space-6);
+        }
+
+        .section-title { font-size: var(--font-2xl); margin-bottom: var(--space-4); }
+        .section-subtitle { font-size: var(--font-xl); font-weight: var(--weight-semibold); margin-bottom: var(--space-3); margin-top: var(--space-6); }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(0,229,255,0.05) 0%, rgba(167,139,250,0.05) 100%);
+            border: 1px solid rgba(0,229,255,0.12);
+            border-radius: var(--radius-lg); padding: var(--space-6); margin-bottom: var(--space-5);
+        }
+        .info-box h3 { font-size: var(--font-xl); margin-bottom: var(--space-4); }
+
+        .detail-row {
+            background: var(--bg-surface); padding: var(--space-4); border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle); margin-top: var(--space-3);
+        }
+        .detail-row p { font-size: var(--font-sm); color: var(--text-secondary); }
+
+        .contact-box {
+            background: var(--bg-elevated); padding: var(--space-5); border-radius: var(--radius-lg);
+        }
+        .contact-box p { font-size: var(--font-sm); color: var(--text-secondary); }
+
+        .info-block {
+            background: var(--accent-cyan-dim); border-left: 3px solid var(--accent-cyan);
+            padding: var(--space-5); border-radius: var(--radius-md); margin-bottom: var(--space-4);
+        }
+        .info-block p { font-size: var(--font-sm); color: var(--text-secondary); }
+
+        .detail-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4);
+        }
+        .detail-card {
+            background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg); padding: var(--space-5);
+        }
+        .detail-card--cyan { border-left: 3px solid var(--accent-cyan); }
+        .detail-card--green { border-left: 3px solid var(--accent-green); }
+        .detail-card--purple { border-left: 3px solid var(--accent-purple); }
+        .detail-card--amber { border-left: 3px solid var(--accent-amber); }
+        .detail-card h4 { font-size: var(--font-sm); font-weight: var(--weight-semibold); margin-bottom: var(--space-2); }
+        .detail-card p { font-size: var(--font-xs); color: var(--text-muted); }
+
+        .regulation-item {
+            display: flex; align-items: flex-start; gap: var(--space-3); margin-bottom: var(--space-4);
+        }
+        .regulation-item__icon {
+            width: 36px; height: 36px; background: var(--accent-cyan-dim); border-radius: var(--radius-md);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .regulation-item__icon svg { width: 18px; height: 18px; color: var(--accent-cyan); }
+        .regulation-item h4 { font-size: var(--font-sm); font-weight: var(--weight-semibold); }
+        .regulation-item p { font-size: var(--font-xs); color: var(--text-muted); }
+
+        .service-block {
+            background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg); padding: var(--space-5); margin-bottom: var(--space-4);
+        }
+        .service-block h4 { font-size: var(--font-base); font-weight: var(--weight-semibold); margin-bottom: var(--space-2); }
+        .service-block p { font-size: var(--font-sm); color: var(--text-secondary); margin-bottom: var(--space-1); }
+
+        .cta-link {
+            display: inline-block; padding: var(--space-2) var(--space-5); background: var(--accent-cyan);
+            color: var(--text-inverse) !important; font-size: var(--font-sm); font-weight: var(--weight-semibold);
+            border-radius: var(--radius-md); text-decoration: none !important; transition: background var(--transition-fast);
+        }
+        .cta-link:hover { background: var(--accent-cyan-hover); }
+        .cta-link--purple { background: var(--accent-purple); }
+        .cta-link--purple:hover { background: #9575f0; }
+
+        .legal-contact-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4);
+            margin-top: var(--space-5);
+        }
+        .legal-contact-card {
+            background: var(--bg-surface); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg); padding: var(--space-4);
+        }
+        .legal-contact-card h4 { font-size: var(--font-sm); font-weight: var(--weight-semibold); margin-bottom: var(--space-2); display: flex; align-items: center; gap: var(--space-2); }
+        .legal-contact-card h4 svg { width: 16px; height: 16px; color: var(--accent-cyan); }
+        .legal-contact-card p { font-size: var(--font-xs); color: var(--text-muted); }
+
+        .content-list { list-style: none; padding: 0; }
+        .content-list li { display: flex; align-items: flex-start; gap: var(--space-3); color: var(--text-secondary); font-size: var(--font-sm); padding: var(--space-2) 0; }
+        .content-list li::before { content: ''; width: 6px; height: 6px; background: var(--accent-cyan); border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+
+        .related-links { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--border-subtle); }
+
+        .version-footer {
+            background: var(--bg-elevated); border-radius: var(--radius-lg);
+            padding: var(--space-5); text-align: center;
+        }
+        .version-footer p { font-size: var(--font-sm); color: var(--text-muted); }
+        .version-footer .small { font-size: var(--font-xs); margin-top: var(--space-2); }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <main class="app-main">
+            <div class="content-container">
+
+                <div class="page-breadcrumb">
+                    <a href="../index.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                        Back to Command Center
+                    </a>
+                </div>
+
+                <div class="page-content">
+
+                    <!-- Header -->
+                    <div class="section-card">
+                        <h1 style="font-size: var(--font-4xl); margin-bottom: var(--space-3);">Legal Notice / Imprint</h1>
+                        <p style="margin-bottom: var(--space-2);"><strong>Impressum / Legal Disclosure</strong></p>
+                        <p style="margin-bottom: var(--space-4); color: var(--text-muted); font-size: var(--font-sm);"><strong>Last Updated:</strong> November 2025</p>
+                        <p>This legal notice (Impressum) provides required information about the operator of this website in accordance with applicable laws including &sect;5 TMG (Germany), E-Commerce Directive 2000/31/EC, and other EU regulations.</p>
+                    </div>
+
+                    <!-- Section 1: Platform Operator -->
+                    <section class="section-card">
+                        <h2 class="section-title">Platform Operator / Service Provider</h2>
+
+                        <div class="info-box">
+                            <h3>GBS EMEA</h3>
+                            <p style="font-size: var(--font-sm); color: var(--text-secondary); margin-bottom: var(--space-4);">GBS EMEA operates as an internal learning and development platform for authorized employees and contractors. This platform is part of a larger organizational structure focused on Human Resources, Recruitment, and Training services.</p>
+                            <div class="detail-row">
+                                <p><strong>Industry Sector:</strong> Human Resources, Recruitment, Training &amp; Development</p>
+                                <p><strong>Service Type:</strong> Internal Learning Hub for Employee Development</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-box">
+                            <h4 style="font-weight: var(--weight-semibold); margin-bottom: var(--space-3);">Contact Information</h4>
+                            <p style="margin-bottom: var(--space-4);">For any inquiries related to this legal notice or our platform:</p>
+                            <a href="../contact-us/" class="cta-link">Contact Us</a>
+                            <p style="margin-top: var(--space-4);"><strong>Website:</strong> <a href="/">AI Hub</a></p>
+                        </div>
+                    </section>
+
+                    <!-- Section 2: Authorized Representatives -->
+                    <section class="section-card">
+                        <h2 class="section-title">Authorized Representatives</h2>
+                        <div class="info-block">
+                            <p style="margin-bottom: var(--space-2);">This platform is managed by authorized personnel within the GBS EMEA organization structure.</p>
+                            <p>For information about organizational leadership and authorized representatives, please contact us through the contact form or reach out to your HR department.</p>
+                        </div>
+                    </section>
+
+                    <!-- Section 3: Responsible for Content -->
+                    <section class="section-card">
+                        <h2 class="section-title">Responsible for Content</h2>
+                        <p style="margin-bottom: var(--space-4);">Content responsibility according to applicable media regulations:</p>
+                        <div style="background: linear-gradient(135deg, rgba(167,139,250,0.05) 0%, rgba(0,229,255,0.05) 100%); border: 1px solid rgba(167,139,250,0.12); border-radius: var(--radius-lg); padding: var(--space-6);">
+                            <p style="margin-bottom: var(--space-3);">All content on this platform is curated and managed by the GBS EMEA Learning &amp; Development team.</p>
+                            <p style="font-size: var(--font-sm); color: var(--text-muted); margin-bottom: var(--space-4);">For questions or concerns about platform content, please use our contact form:</p>
+                            <a href="../contact-us/" class="cta-link cta-link--purple">Contact Us - Content Inquiry</a>
+                        </div>
+                    </section>
+
+                    <!-- Section 4: Data Protection Officer -->
+                    <section class="section-card">
+                        <h2 class="section-title">Data Protection Officer</h2>
+                        <p style="margin-bottom: var(--space-4);">As required by GDPR Article 37, our Data Protection Officer can be contacted at:</p>
+                        <div style="background: var(--accent-purple-dim); padding: var(--space-6); border-radius: var(--radius-lg);">
+                            <p style="font-size: var(--font-sm); color: var(--text-secondary); margin-bottom: var(--space-4);">For data protection inquiries and to contact our Data Protection Officer:</p>
+                            <a href="../contact-us/" class="cta-link cta-link--purple">Contact DPO - Privacy Inquiry</a>
+                            <div style="margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid rgba(167,139,250,0.2);">
+                                <p style="font-size: var(--font-sm); color: var(--text-muted);">For data protection matters, please refer to our <a href="../privacy-policy/">Privacy Policy</a>.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 5: Regulatory Compliance -->
+                    <section class="section-card">
+                        <h2 class="section-title">Regulatory Compliance</h2>
+                        <p style="margin-bottom: var(--space-5);">This platform operates in compliance with applicable regulations including:</p>
+
+                        <div class="regulation-item">
+                            <div class="regulation-item__icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            </div>
+                            <div>
+                                <h4>GDPR (General Data Protection Regulation)</h4>
+                                <p>EU Regulation 2016/679 on data protection and privacy</p>
+                            </div>
+                        </div>
+
+                        <div class="regulation-item">
+                            <div class="regulation-item__icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                            </div>
+                            <div>
+                                <h4>E-Commerce Directive</h4>
+                                <p>EU Directive 2000/31/EC on electronic commerce</p>
+                            </div>
+                        </div>
+
+                        <div class="regulation-item">
+                            <div class="regulation-item__icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            </div>
+                            <div>
+                                <h4>National Data Protection Laws</h4>
+                                <p>Applicable national data protection and privacy legislation</p>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--border-subtle);">
+                            <p style="font-size: var(--font-sm); color: var(--text-muted);">For data protection supervisory authorities, visit: <a href="https://edpb.europa.eu/about-edpb/about-edpb/members_en" target="_blank" rel="noopener noreferrer">EU Data Protection Authorities</a></p>
+                        </div>
+                    </section>
+
+                    <!-- Section 6: Professional Designations -->
+                    <section class="section-card">
+                        <h2 class="section-title">Professional Designations</h2>
+                        <div class="detail-grid">
+                            <div class="detail-card detail-card--cyan">
+                                <h4>Industry Sector</h4>
+                                <p>Human Resources, Recruitment, Training &amp; Development</p>
+                            </div>
+                            <div class="detail-card detail-card--green">
+                                <h4>Service Focus</h4>
+                                <p>Internal Learning &amp; Development Platform</p>
+                            </div>
+                            <div class="detail-card detail-card--purple">
+                                <h4>Applicable Regulations</h4>
+                                <p>GDPR, E-Commerce Directive, National Data Protection Laws</p>
+                            </div>
+                            <div class="detail-card detail-card--amber">
+                                <h4>Platform Type</h4>
+                                <p>Educational Technology &amp; Learning Management</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 7: Dispute Resolution -->
+                    <section class="section-card">
+                        <h2 class="section-title">Online Dispute Resolution</h2>
+
+                        <h3 class="section-subtitle" style="margin-top: 0;">EU Online Dispute Resolution Platform</h3>
+                        <p style="margin-bottom: var(--space-3);">The European Commission provides a platform for online dispute resolution (OS) which can be found at:</p>
+                        <p style="margin-bottom: var(--space-5);"><a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" style="font-weight: var(--weight-semibold);">https://ec.europa.eu/consumers/odr</a></p>
+
+                        <h3 class="section-subtitle">Consumer Dispute Resolution</h3>
+                        <p>We are not willing or obliged to participate in dispute resolution proceedings before a consumer arbitration board. However, we are committed to resolving any disputes amicably through direct communication.</p>
+                    </section>
+
+                    <!-- Section 8: Liability Disclaimer -->
+                    <section class="section-card">
+                        <h2 class="section-title">Liability Disclaimer</h2>
+
+                        <h3 class="section-subtitle" style="margin-top: 0;">Liability for Content</h3>
+                        <p style="margin-bottom: var(--space-5);">As a service provider, we are responsible for our own content on these pages in accordance with general laws. However, we are not obligated to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity. Obligations to remove or block the use of information under general laws remain unaffected.</p>
+
+                        <h3 class="section-subtitle">Liability for Links</h3>
+                        <p style="margin-bottom: var(--space-5);">Our platform may contain links to external third-party websites over whose content we have no control. Therefore, we cannot accept any liability for this external content. The respective provider or operator of the pages is always responsible for the content of the linked pages. The linked pages were checked for possible legal violations at the time of linking. Illegal content was not recognizable at the time of linking.</p>
+
+                        <h3 class="section-subtitle">Copyright</h3>
+                        <p>The content and works on these pages created by the platform operators are subject to copyright law. The duplication, processing, distribution, and any kind of exploitation outside the limits of copyright require the written consent of the respective author or creator. Downloads and copies of these pages are only permitted for private, non-commercial use.</p>
+                    </section>
+
+                    <!-- Section 9: Third-Party Services -->
+                    <section class="section-card">
+                        <h2 class="section-title">Third-Party Services Used</h2>
+                        <p style="margin-bottom: var(--space-5);">This platform uses the following third-party services:</p>
+
+                        <div class="service-block">
+                            <h4>Google Analytics</h4>
+                            <p><strong>Provider:</strong> Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland</p>
+                            <p><strong>Purpose:</strong> Web analytics and usage statistics</p>
+                            <p><strong>Privacy Policy:</strong> <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">https://policies.google.com/privacy</a></p>
+                        </div>
+
+                        <div class="service-block">
+                            <h4>Google Apps Script / Google Sheets</h4>
+                            <p><strong>Provider:</strong> Google Ireland Limited</p>
+                            <p><strong>Purpose:</strong> Form submissions and data processing</p>
+                            <p><strong>Privacy Policy:</strong> <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">https://policies.google.com/privacy</a></p>
+                        </div>
+
+                        <div class="info-block" style="margin-top: var(--space-5);">
+                            <p>For more information about third-party data processing, please see our <a href="../privacy-policy/">Privacy Policy</a> and <a href="../cookie-policy/">Cookie Policy</a>.</p>
+                        </div>
+                    </section>
+
+                    <!-- Section 10: Hosting -->
+                    <section class="section-card">
+                        <h2 class="section-title">Hosting Information</h2>
+                        <div style="background: linear-gradient(135deg, rgba(0,214,143,0.05) 0%, rgba(0,229,255,0.05) 100%); border: 1px solid rgba(0,214,143,0.12); border-radius: var(--radius-lg); padding: var(--space-6);">
+                            <div class="detail-row" style="margin-top: 0; margin-bottom: var(--space-3);">
+                                <p><strong>Hosting Infrastructure:</strong> This platform is hosted on professional cloud infrastructure with enterprise-grade security and reliability.</p>
+                            </div>
+                            <div class="detail-row" style="margin-bottom: var(--space-3);">
+                                <p><strong>Data Center Locations:</strong> Servers are located in secure data centers within GDPR-compliant jurisdictions.</p>
+                            </div>
+                            <div class="detail-row" style="margin-bottom: var(--space-4);">
+                                <p><strong>Data Processing:</strong> All data is processed in accordance with GDPR requirements and applicable data protection laws.</p>
+                            </div>
+                            <p style="font-size: var(--font-sm); color: var(--text-muted);">For detailed information about data processing and storage, please see our <a href="../privacy-policy/">Privacy Policy</a>.</p>
+                        </div>
+                    </section>
+
+                    <!-- Section 11: Image Credits -->
+                    <section class="section-card">
+                        <h2 class="section-title">Image Credits &amp; Sources</h2>
+                        <p style="margin-bottom: var(--space-4);">Images and graphics used on this platform are either:</p>
+                        <ul class="content-list">
+                            <li>Proprietary content created by GBS EMEA</li>
+                            <li>Licensed stock images from authorized providers</li>
+                            <li>AI-generated images created for educational purposes</li>
+                            <li>Icons from open-source libraries (with appropriate attribution)</li>
+                        </ul>
+                        <p style="margin-top: var(--space-4);">All images are used in compliance with applicable copyright and licensing terms.</p>
+                    </section>
+
+                    <!-- Section 12: Contact for Legal Matters -->
+                    <section class="section-card">
+                        <h2 class="section-title">Contact for Legal Matters</h2>
+                        <div class="info-box">
+                            <div style="margin-bottom: var(--space-5);">
+                                <a href="../contact-us/" class="cta-link">Contact Us - Legal Inquiry</a>
+                            </div>
+
+                            <div class="legal-contact-grid">
+                                <div class="legal-contact-card">
+                                    <h4>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                        General Legal
+                                    </h4>
+                                    <p>Use the contact form and select "Legal Inquiry"</p>
+                                </div>
+                                <div class="legal-contact-card">
+                                    <h4>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                        Data Protection
+                                    </h4>
+                                    <p>Use the contact form and select "Privacy Question"</p>
+                                </div>
+                                <div class="legal-contact-card">
+                                    <h4>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+                                        Copyright Issues
+                                    </h4>
+                                    <p>Contact through your legal department or use the contact form</p>
+                                </div>
+                                <div class="legal-contact-card">
+                                    <h4>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                                        Technical Support
+                                    </h4>
+                                    <p>Use the contact form and select "Technical Issue"</p>
+                                </div>
+                            </div>
+
+                            <div class="related-links">
+                                <a href="../privacy-policy/" style="font-size: var(--font-sm);">Privacy Policy</a>
+                                <a href="../cookie-policy/" style="font-size: var(--font-sm);">Cookie Policy</a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Version Footer -->
+                    <div class="version-footer">
+                        <p><strong>Document Version:</strong> 2.0 | <strong>Last Updated:</strong> November 2025 | <strong>Language:</strong> English</p>
+                        <p class="small">This legal notice is provided in compliance with EU regulations and applicable national laws.</p>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../shared/sidebar.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,272 @@
+[
+  {
+    "id": "1-01",
+    "stage": 1,
+    "stageTitle": "Intake & Role Passport",
+    "type": "intake",
+    "title": "Intake Clarifier",
+    "preview": "Transform messy hiring manager notes into structured role requirements with binary must-haves.",
+    "content": "You are a senior recruiting strategist. I will provide you with raw intake notes from a hiring manager. Your job is to convert these into a structured Role Passport.\n\nExtract and organize:\n1. MUST-HAVES (binary yes/no — no 'nice to haves' disguised as musts)\n2. DEALBREAKERS (what immediately disqualifies)\n3. LOCATION REALITY (onsite requirements, relocation expectations, timezone needs)\n4. COMPENSATION RANGE (what is actually approved, not aspirational)\n5. KEY MOTIVATORS (what would attract the right person to this role)\n6. EVIDENCE REQUIREMENTS (what proof do we need to see for each must-have)\n\nFor any vague or missing information, flag it explicitly as: [CLARIFICATION NEEDED: specific question]\n\nDo NOT fill in assumptions. If something is unclear, say so.\n\nHere are the intake notes:\n[PASTE INTAKE NOTES HERE]",
+    "usageNotes": "Use this at the very start of every new role. Paste the HM's email, Slack message, or meeting notes directly. The output becomes your Role Passport draft."
+  },
+  {
+    "id": "1-02",
+    "stage": 1,
+    "stageTitle": "Intake & Role Passport",
+    "type": "execution",
+    "title": "Calibration Pack Generator",
+    "preview": "Generate 3 strong-fit and 3 poor-fit profile sketches based on role requirements.",
+    "content": "Based on the following role requirements, generate a calibration pack to align the recruiting team and hiring manager.\n\nCreate:\n\nSTRONG FIT PROFILES (3):\nFor each, describe:\n- Background summary (2-3 sentences)\n- Why they match the must-haves (with specific evidence you'd expect to see)\n- Potential risk and how you'd validate it\n\nPOOR FIT PROFILES (3):\nFor each, describe:\n- Background summary (2-3 sentences)\n- Why they look good on the surface but would fail\n- The specific gap or mismatch\n\nRole requirements:\n[PASTE ROLE PASSPORT HERE]",
+    "usageNotes": "Share the calibration pack with the HM and your team before sourcing begins. Use it to align on what 'good' actually looks like. Saves hours of misaligned screening later."
+  },
+  {
+    "id": "1-03",
+    "stage": 1,
+    "stageTitle": "Intake & Role Passport",
+    "type": "verification",
+    "title": "Intake Preflight Check",
+    "preview": "Audit a role passport for gaps, conflicts, and unrealistic expectations before sourcing begins.",
+    "content": "You are a quality auditor for recruiting operations. Review the following Role Passport and identify:\n\n1. MISSING INFORMATION — What critical fields are empty or vague?\n2. INTERNAL CONFLICTS — Do any requirements contradict each other? (e.g., junior salary + senior expectations)\n3. LOCATION REALITY — Is the location requirement realistic for the talent market?\n4. COMPENSATION REALITY — Is the range competitive for what's being asked?\n5. TIMELINE REALITY — Is the expected fill time realistic given the requirements?\n6. HIDDEN ASSUMPTIONS — What is being assumed but not stated?\n\nFor each issue found, provide:\n- The specific problem\n- Why it matters (impact on recruiting)\n- A suggested question to ask the hiring manager\n\nRole Passport:\n[PASTE ROLE PASSPORT HERE]",
+    "usageNotes": "Run this before you start sourcing. Every issue caught here saves days of wasted effort downstream. Share the findings with the HM directly."
+  },
+  {
+    "id": "2-01",
+    "stage": 2,
+    "stageTitle": "JD & Attraction",
+    "type": "intake",
+    "title": "JD Analyzer",
+    "preview": "Analyze an existing job description for vague language, missing information, and candidate deterrents.",
+    "content": "Analyze the following job description from a candidate's perspective. Identify:\n\n1. VAGUE PHRASES — List every phrase that doesn't describe observable behavior (e.g., 'self-starter', 'fast-paced', 'team player'). For each, suggest a concrete replacement.\n2. MISSING INFORMATION — What would a qualified candidate need to know that isn't here? (comp range, team size, reporting structure, tech stack, day-to-day reality)\n3. CANDIDATE DETERRENTS — What in this JD would cause a strong candidate to skip it?\n4. UNREALISTIC COMBINATIONS — Requirements that are rarely found together in one person\n5. READABILITY — Is it too long? Too corporate? Too generic?\n\nRate the JD overall: Strong / Needs Work / Complete Rewrite\n\nJob Description:\n[PASTE JD HERE]",
+    "usageNotes": "Use before posting any JD. Share the analysis with the HM to start a conversation about what really matters vs. what's copy-paste boilerplate."
+  },
+  {
+    "id": "2-02",
+    "stage": 2,
+    "stageTitle": "JD & Attraction",
+    "type": "execution",
+    "title": "Candidate-First JD Writer",
+    "preview": "Rewrite a job description focused on outcomes, reality, and what the candidate actually cares about.",
+    "content": "Rewrite the following job description in a candidate-first format. The output should answer what a strong candidate actually wants to know:\n\n1. WHAT YOU'LL DO (day-to-day reality, not corporate fluff)\n2. WHAT SUCCESS LOOKS LIKE (measurable outcomes in first 6-12 months)\n3. WHAT YOU NEED (only true must-haves, with evidence expectations)\n4. WHAT'S IN IT FOR YOU (real value proposition, not generic benefits)\n5. WHAT'S HARD ABOUT THIS ROLE (honest — builds credibility)\n\nRules:\n- No jargon or cliches\n- Every requirement must describe observable behavior or verifiable experience\n- Keep it under 500 words\n- Write in direct second person ('You will...')\n\nOriginal JD:\n[PASTE ORIGINAL JD HERE]",
+    "usageNotes": "Use this rewrite as the external posting. Keep the original as the internal hiring brief. The gap between the two will reveal alignment issues."
+  },
+  {
+    "id": "2-03",
+    "stage": 2,
+    "stageTitle": "JD & Attraction",
+    "type": "verification",
+    "title": "JD Truth Version",
+    "preview": "Generate an internal 'truth version' of what a role really involves day-to-day.",
+    "content": "Based on the following job description and any additional context, create the 'truth version' — an internal document that describes what this role ACTUALLY involves.\n\nInclude:\n1. REAL DAY-TO-DAY — What will this person actually spend their time on? (Be specific: % of time per activity)\n2. REAL CHALLENGES — What frustrations or obstacles will they face?\n3. REAL TEAM DYNAMICS — Who do they work with? What's the team culture really like?\n4. REAL GROWTH PATH — Where does this role actually lead?\n5. WHY THE LAST PERSON LEFT — If known, or what commonly causes turnover in this type of role\n6. THE UNWRITTEN REQUIREMENTS — What isn't in the JD but matters for success?\n\nThis document is for internal recruiting use only. Be honest.\n\nJob Description + Context:\n[PASTE JD AND ANY ADDITIONAL NOTES]",
+    "usageNotes": "This stays internal. Use it to prep for candidate conversations, screen calls, and to set honest expectations. Honesty early prevents declines later."
+  },
+  {
+    "id": "3-01",
+    "stage": 3,
+    "stageTitle": "Market & Competitor Reality",
+    "type": "intake",
+    "title": "Market Intelligence Brief",
+    "preview": "Generate a talent market analysis with supply/demand dynamics, competitor landscape, and realistic timelines.",
+    "content": "Create a talent market intelligence brief for the following role. I need a reality-based assessment, not optimism.\n\nAnalyze:\n1. TALENT SUPPLY — How many people with these qualifications realistically exist in this market? Is this a scarce or available profile?\n2. TITLE MAPPING — What alternative titles do these people use? What adjacent roles could transfer?\n3. COMPETITOR LANDSCAPE — Which companies are hiring for similar roles? Who are we competing against for this talent?\n4. COMPENSATION REALITY — What is the realistic market range? How does our range compare?\n5. LOCATION DYNAMICS — Is remote available from competitors? Are we at a location disadvantage?\n6. RISK ASSESSMENT — Rate this search: Easy / Moderate / Difficult / Unicorn Hunt. Explain why.\n7. TIMELINE EXPECTATION — Given the above, what's a realistic time to fill?\n\nSeparate FACTS from ASSUMPTIONS. Mark each data point accordingly.\n\nRole Details:\n[PASTE ROLE PASSPORT OR REQUIREMENTS]",
+    "usageNotes": "Present this to the HM before sourcing begins. It sets realistic expectations and positions you as a market advisor, not just a req-filler."
+  },
+  {
+    "id": "3-02",
+    "stage": 3,
+    "stageTitle": "Market & Competitor Reality",
+    "type": "execution",
+    "title": "Sourcing Strategy Builder",
+    "preview": "Create a multi-lane sourcing strategy with target companies, adjacent industries, and search approaches.",
+    "content": "Based on the role requirements and market context below, create a comprehensive sourcing strategy.\n\nBuild 4 SOURCING LANES:\n\n1. PRIMARY LANE — Direct competitors and obvious companies\n   - List 10 target companies\n   - Expected yield: High match, harder to attract\n\n2. ADJACENT INDUSTRY LANE — Companies with transferable talent\n   - List 5-8 industries/companies\n   - Why talent from here could work\n\n3. EMERGING TALENT LANE — Up-and-comers who may be ready to step up\n   - Where to find them\n   - What signals to look for\n\n4. PASSIVE CHANNEL LANE — Communities, events, content where these people engage\n   - Specific groups, forums, publications\n   - Engagement approach\n\nFor each lane, specify:\n- MUST-HAVE EVIDENCE — What proof you need to see\n- RED FLAGS — What to watch out for\n- OUTREACH ANGLE — Why they'd be interested\n\nRole Requirements:\n[PASTE ROLE PASSPORT]\n\nMarket Context:\n[PASTE ANY MARKET NOTES]",
+    "usageNotes": "This becomes your sourcing plan one-pager. Review it with the team during Monday Signal Kickoff. Update it weekly based on what's working."
+  },
+  {
+    "id": "3-03",
+    "stage": 3,
+    "stageTitle": "Market & Competitor Reality",
+    "type": "verification",
+    "title": "Risk Memo Generator",
+    "preview": "Create a structured risk memo explaining why a role will be easy or hard to fill.",
+    "content": "Generate a RISK MEMO for the following role. This document goes to the hiring manager to set expectations.\n\nStructure:\n\nROLE: [Title]\nRISK RATING: [Green = straightforward / Amber = challenging / Red = very difficult]\n\nKEY RISKS:\n1. [Risk] — [Why it matters] — [What would mitigate it]\n2. [Risk] — [Why it matters] — [What would mitigate it]\n3. [Risk] — [Why it matters] — [What would mitigate it]\n\nWHAT WE RECOMMEND:\n- [Specific actions to improve odds]\n- [Trade-offs the HM should consider]\n\nWHAT WE NEED FROM YOU (HM):\n- [Specific decisions or flexibility needed]\n\nBe direct. Do not sugarcoat. The goal is informed decision-making, not comfort.\n\nRole Details + Market Context:\n[PASTE INFORMATION]",
+    "usageNotes": "Send this within 48 hours of intake. It positions you as a strategic partner and prevents the 'why is this taking so long?' conversation later."
+  },
+  {
+    "id": "4-01",
+    "stage": 4,
+    "stageTitle": "Sourcing Blueprint",
+    "type": "intake",
+    "title": "Persona Card Builder",
+    "preview": "Build a detailed target persona card with signals, motivators, and evidence markers for ideal candidates.",
+    "content": "Create a TARGET PERSONA CARD for this role. This is the profile of the ideal candidate — not a job description, but a person description.\n\nBuild:\n\n1. PROFILE SNAPSHOT\n   - Current likely title(s)\n   - Current likely company type/size\n   - Years of relevant experience range\n   - Education (if truly relevant, otherwise mark as 'not a differentiator')\n\n2. CAREER SIGNALS\n   - What their LinkedIn profile looks like\n   - Keywords that appear in their experience\n   - Projects or achievements they'd mention\n   - Certifications or skills that matter (vs. noise)\n\n3. MOTIVATORS (why they'd move)\n   - Career growth angle\n   - Technical/craft challenge angle\n   - Mission/impact angle\n   - What frustrates them in their current role\n\n4. EVIDENCE MARKERS\n   - What you'd see in their background that proves capability\n   - What's verifiable vs. what needs probing\n\n5. ANTI-PATTERNS (who looks right but isn't)\n   - Common false positives\n   - What to watch for\n\nRole Requirements:\n[PASTE ROLE PASSPORT]",
+    "usageNotes": "Share this with the full sourcing team. It ensures everyone is looking for the same person, not their own interpretation of the role."
+  },
+  {
+    "id": "4-02",
+    "stage": 4,
+    "stageTitle": "Sourcing Blueprint",
+    "type": "execution",
+    "title": "Boolean String Generator",
+    "preview": "Generate multi-variant Boolean search strings from strict to broad, with platform-specific syntax.",
+    "content": "Generate Boolean search strings for the following role. Create 3 variants:\n\n1. STRICT — High precision, low recall. Only strong matches.\n2. BALANCED — Good mix of precision and reach. Best for most searches.\n3. BROAD — Cast a wide net. Higher volume, more filtering needed.\n\nFor each variant, provide:\n- LinkedIn Recruiter syntax version\n- Google X-ray search version\n- Key assumptions and what to adjust\n\nAlso provide:\n- ALTERNATIVE TITLE SEARCHES — Different names for the same role\n- ADJACENT SKILL SEARCHES — Related skills that indicate transferability\n- COMPANY-TARGETED SEARCHES — Strings focused on specific target companies\n\nRole:\n[PASTE ROLE TITLE AND KEY REQUIREMENTS]\n\nTarget Companies (if any):\n[LIST TARGET COMPANIES]",
+    "usageNotes": "Start with STRICT. If pipeline is too thin after 2 days, move to BALANCED. BROAD is your last resort. Track which variant produces the best screen-to-interview conversion."
+  },
+  {
+    "id": "4-03",
+    "stage": 4,
+    "stageTitle": "Sourcing Blueprint",
+    "type": "verification",
+    "title": "Profile Scoring Rubric",
+    "preview": "Create a standardized scoring rubric to evaluate sourced profiles consistently across the team.",
+    "content": "Create a PROFILE SCORING RUBRIC for the following role. This will be used by the entire sourcing team to evaluate profiles consistently.\n\nFor each must-have requirement, create a scoring criteria:\n\nFORMAT:\nRequirement: [from Role Passport]\n- STRONG (3 pts): [What evidence looks like]\n- ADEQUATE (2 pts): [What evidence looks like]\n- WEAK (1 pt): [What evidence looks like]\n- ABSENT (0 pts): [How to identify]\n\nAlso include:\n- MINIMUM SCORE THRESHOLD to proceed to screen\n- AUTOMATIC DISQUALIFIERS (any score of 0 on which requirements = instant no)\n- BONUS SIGNALS (not required but indicate strong fit)\n\nRole Requirements:\n[PASTE ROLE PASSPORT MUST-HAVES]",
+    "usageNotes": "Give this to every sourcer working the role. It eliminates the 'I thought they looked good' problem. Review and recalibrate after the first 20 profiles."
+  },
+  {
+    "id": "5-01",
+    "stage": 5,
+    "stageTitle": "Outreach & Engagement",
+    "type": "intake",
+    "title": "Outreach Angle Analyzer",
+    "preview": "Identify the 3 strongest outreach angles for a specific persona based on motivators and market context.",
+    "content": "Based on the persona card and role details below, identify the 3 strongest outreach angles. For each angle, explain:\n\n1. THE HOOK — What's the core appeal? (1 sentence)\n2. WHY IT WORKS — What motivator does it tap into?\n3. WHO IT WORKS FOR — Which segment of the target persona responds to this?\n4. RISK — When does this angle backfire or feel tone-deaf?\n\nThe 3 angles should be meaningfully different:\n- ANGLE A: Mission / Impact / Purpose\n- ANGLE B: Craft / Mastery / Technical Challenge  \n- ANGLE C: Career Trajectory / Growth / Opportunity\n\nAlso flag: What angle should we AVOID for this specific persona and why?\n\nPersona Card:\n[PASTE PERSONA CARD]\n\nRole Details:\n[PASTE KEY ROLE INFO]",
+    "usageNotes": "Pick the angle most relevant to each specific candidate. Don't blast the same message to everyone. Tag each outreach with the angle code (A/B/C) so you can track reply rates."
+  },
+  {
+    "id": "5-02",
+    "stage": 5,
+    "stageTitle": "Outreach & Engagement",
+    "type": "execution",
+    "title": "Outreach Message Writer",
+    "preview": "Generate personalized outreach messages in 3 angles with follow-up sequences.",
+    "content": "Write outreach messages for the following candidate and role. Generate 3 versions — one per angle.\n\nFor each angle, write:\n\n1. INITIAL MESSAGE (under 100 words)\n   - Personal hook (specific to this candidate's background)\n   - The angle\n   - One clear ask (not 'let me know if interested' — specific next step)\n\n2. FOLLOW-UP 1 (sent 4 days later, under 80 words)\n   - Adds one new piece of value (not 'just bumping this')\n   - Different framing of the opportunity\n\n3. FOLLOW-UP 2 (sent 7 days later, under 60 words)\n   - Final touch, respectful close\n   - Leave door open without being pushy\n\nRULES:\n- No buzzwords, no recruiter cliches\n- No 'I came across your profile'\n- Short sentences. Direct language.\n- Sound like a person, not a template\n\nCandidate Background:\n[PASTE CANDIDATE INFO]\n\nRole + Angle Details:\n[PASTE ROLE INFO AND CHOSEN ANGLES]",
+    "usageNotes": "Tag every message sent with the angle code (A/B/C). Track reply rates per angle in your weekly Telemetry. After 2 weeks, double down on the winning angle."
+  },
+  {
+    "id": "5-03",
+    "stage": 5,
+    "stageTitle": "Outreach & Engagement",
+    "type": "verification",
+    "title": "Outreach Quality Check",
+    "preview": "Audit an outreach message for recruiter cliches, weak CTAs, and misalignment with candidate motivators.",
+    "content": "Review the following outreach message and provide a brutally honest assessment.\n\nCheck for:\n1. RECRUITER CLICHES — Flag any generic phrases ('exciting opportunity', 'I came across your profile', 'perfect fit')\n2. CTA STRENGTH — Is the ask clear and specific? Or vague and easy to ignore?\n3. PERSONALIZATION — Is this message clearly written for THIS person? Or could it go to anyone?\n4. LENGTH — Is it respectfully short? (Under 100 words for initial outreach)\n5. VALUE — Does it give the candidate a reason to respond? What's in it for them?\n6. ANGLE CLARITY — Which motivator is this message targeting? Is it clear?\n7. TONE — Does it sound like a person or a template?\n\nRate: Strong / Needs Work / Rewrite\n\nProvide a rewritten version if rating is 'Needs Work' or 'Rewrite'.\n\nOutreach Message:\n[PASTE MESSAGE]",
+    "usageNotes": "Run every outreach template through this before using it. Use it in Friday Proof + Learn sessions to improve as a team."
+  },
+  {
+    "id": "6-01",
+    "stage": 6,
+    "stageTitle": "Recruiter Screen",
+    "type": "intake",
+    "title": "Screen Script Generator",
+    "preview": "Generate a structured screening script with evidence-based questions aligned to role must-haves.",
+    "content": "Generate a structured SCREENING SCRIPT for the following role. This is a 15-20 minute call, not an interview. Focus on qualifying, not selling.\n\nStructure:\n\n1. OPENING (1 minute)\n   - Quick context on the role and the call purpose\n   - Set expectation: 'This is a quick conversation to explore fit on both sides'\n\n2. EVIDENCE QUESTIONS (3 questions, 8-10 minutes)\n   For each must-have requirement, generate one targeted question:\n   - The question (behavioral: 'Tell me about a time when...')\n   - What a strong answer sounds like\n   - What a weak answer sounds like\n   - Follow-up probe if the answer is vague\n\n3. CONSTRAINT CHECK (2 minutes)\n   - Location/availability question\n   - Compensation expectations question\n   - Notice period question\n\n4. MOTIVATION CHECK (2 minutes)\n   - 'Why are you considering a move right now?'\n   - 'What would make this the right next step for you?'\n\n5. CLOSE (1 minute)\n   - Clear next step\n   - Timeline\n\nRole Requirements:\n[PASTE ROLE PASSPORT]",
+    "usageNotes": "Use this script for every screen on this role. Consistency lets you compare candidates fairly. Adapt the evidence questions if the role passport updates."
+  },
+  {
+    "id": "6-02",
+    "stage": 6,
+    "stageTitle": "Recruiter Screen",
+    "type": "execution",
+    "title": "Screen Notes Structurer",
+    "preview": "Convert raw screen notes into structured evidence, separating facts from interpretation.",
+    "content": "Structure the following raw screening notes into a formatted assessment. Separate EVIDENCE from INTERPRETATION.\n\nFormat:\n\nCANDIDATE: [Name]\nROLE: [Title]\nSCREEN DATE: [Date]\n\nEVIDENCE SUMMARY:\nFor each area discussed:\n- What the candidate SAID (direct evidence)\n- What this SUGGESTS (your interpretation)\n- Confidence level: High / Medium / Low\n\nCONSTRAINT CHECK:\n- Location: [Confirmed / Risk / Blocker]\n- Compensation: [Aligned / Risk / Blocker]\n- Availability: [Confirmed / Risk / Blocker]\n\nMOTIVATION:\n- Primary driver: [what]\n- Evidence this is genuine: [how you know]\n- Risk: [what could change their mind]\n\nOVERALL ASSESSMENT:\n- Recommendation: Advance / Hold / Pass\n- Confidence: High / Medium / Low\n- Missing evidence: [what you still don't know]\n\nRaw Screen Notes:\n[PASTE YOUR NOTES]",
+    "usageNotes": "Do this immediately after every screen. The structured output becomes your Truth Check record and feeds directly into the Confidence Pack if the candidate advances."
+  },
+  {
+    "id": "6-03",
+    "stage": 6,
+    "stageTitle": "Recruiter Screen",
+    "type": "verification",
+    "title": "Screen Decision Validator",
+    "preview": "Challenge a screen recommendation by testing for bias, missing evidence, and false confidence.",
+    "content": "Review the following screening assessment and challenge the recommendation. Act as a quality control checkpoint.\n\nCheck:\n1. EVIDENCE STRENGTH — Is the recommendation supported by specific evidence, or based on impression?\n2. MISSING DATA — What critical questions were not asked or answered?\n3. BIAS CHECK — Are there signs of:\n   - Confirmation bias (interpreting everything as positive)?\n   - Halo effect (one strong point overshadowing gaps)?\n   - Similarity bias (the candidate 'feels like a fit' without evidence)?\n4. RISK BLINDSPOTS — What could go wrong that isn't flagged?\n5. DECISION CONFIDENCE — Given the evidence available, is the recommendation justified?\n\nOutput:\n- Agree / Disagree / Need More Info\n- Key concerns (if any)\n- Suggested next steps\n\nScreening Assessment:\n[PASTE STRUCTURED SCREEN NOTES]",
+    "usageNotes": "Run this on any candidate you're advancing. It takes 2 minutes and catches issues before they become HM rejections."
+  },
+  {
+    "id": "7-01",
+    "stage": 7,
+    "stageTitle": "Submission & HM Prep",
+    "type": "intake",
+    "title": "Submission Requirements Check",
+    "preview": "Verify all required evidence is present before building a submission package.",
+    "content": "Before building a candidate submission, verify all requirements are met.\n\nChecklist — for each item, confirm Present / Missing / Partial:\n\n1. [ ] Must-have #1 evidence captured with specific example\n2. [ ] Must-have #2 evidence captured with specific example\n3. [ ] Must-have #3 evidence captured with specific example\n4. [ ] Location confirmed and realistic\n5. [ ] Compensation expectations within approved range\n6. [ ] Availability/notice period documented\n7. [ ] Motivation is genuine and verified\n8. [ ] At least one risk identified with mitigation plan\n9. [ ] Screen notes structured (not raw)\n10. [ ] Candidate has confirmed interest in THIS specific role\n\nFor any MISSING or PARTIAL item:\n- What's missing\n- Can we proceed without it? (Yes/No/Risk)\n- How to get it\n\nCandidate Details:\n[PASTE CANDIDATE INFO AND SCREEN NOTES]",
+    "usageNotes": "If more than 2 items are missing, do NOT submit. Go back and gather the evidence. A weak submission erodes HM trust."
+  },
+  {
+    "id": "7-02",
+    "stage": 7,
+    "stageTitle": "Submission & HM Prep",
+    "type": "execution",
+    "title": "Confidence Pack Writer",
+    "preview": "Generate a one-page candidate submission with match evidence, risks, and HM interview recommendations.",
+    "content": "Create a CONFIDENCE PACK for the following candidate. This is a one-page submission document that gives the hiring manager everything they need to make a decision.\n\nFormat:\n\nCANDIDATE: [Name]\nCURRENT: [Title @ Company]\nROLE: [Target role]\n\nWHY THIS CANDIDATE (3 match reasons):\n1. [Must-have #1] — Evidence: [specific example from screen]\n2. [Must-have #2] — Evidence: [specific example from screen]\n3. [Must-have #3] — Evidence: [specific example from screen]\n\nRISK TO KNOW:\n- [The primary risk] — Mitigation: [how to address it]\n\nRECOMMENDED NEXT STEP:\n- [Specific recommendation: interview format, who should interview, what to test]\n\nSUGGESTED INTERVIEW FOCUS:\n- [What the HM should probe that wasn't fully covered in screen]\n\nRules:\n- Every claim must have evidence\n- Be honest about risks — don't hide them\n- Keep it under 250 words\n\nCandidate Details + Screen Notes:\n[PASTE ALL CANDIDATE INFO]",
+    "usageNotes": "This replaces the typical 'here's a CV, let me know what you think' email. Every shortlist member gets a Confidence Pack. It's how you build HM trust."
+  },
+  {
+    "id": "7-03",
+    "stage": 7,
+    "stageTitle": "Submission & HM Prep",
+    "type": "verification",
+    "title": "HM Briefing Questions Generator",
+    "preview": "Generate targeted interview questions for the hiring manager based on what still needs validation.",
+    "content": "Based on the candidate's Confidence Pack and remaining unknowns, generate a briefing for the hiring manager.\n\nProvide:\n\n1. INTERVIEW FOCUS AREAS (top 3)\n   For each:\n   - What to test\n   - Why it matters for this role\n   - A specific question to ask\n   - What a strong answer sounds like\n   - What a concerning answer sounds like\n\n2. DON'T RE-ASK\n   - [Areas already validated in screen — save time]\n\n3. CANDIDATE'S LIKELY QUESTIONS\n   - What will the candidate ask you?\n   - Suggested answers that are honest and compelling\n\n4. DECISION FRAMEWORK\n   After the interview, the HM should be able to answer:\n   - Can this person do the job? (Evidence)\n   - Will this person do the job here? (Motivation)\n   - Can we close them? (Realistic)\n\nConfidence Pack:\n[PASTE CONFIDENCE PACK]\n\nRemaining Unknowns:\n[LIST WHAT WASN'T FULLY VALIDATED]",
+    "usageNotes": "Send this to the HM with the Confidence Pack. It guides their interview so they test what matters, not whatever comes to mind."
+  },
+  {
+    "id": "8-01",
+    "stage": 8,
+    "stageTitle": "Interview Loop Design",
+    "type": "execution",
+    "title": "Interview Loop Planner",
+    "preview": "Design a structured interview loop assigning specific competencies to each interviewer to eliminate redundancy.",
+    "content": "Design a structured INTERVIEW LOOP for the following role. The goal is maximum signal with minimum redundancy.\n\nInputs needed:\n- Number of interviewers: [NUMBER]\n- Competencies to assess: [LIST FROM ROLE PASSPORT]\n\nFor each interviewer, assign:\n\nINTERVIEWER [N]: [Name/Role]\n- OWNS: [1-2 competencies to assess]\n- DO NOT ASK ABOUT: [competencies assigned to others]\n- QUESTIONS: [2-3 specific questions with scoring anchors]\n- FORMAT: [Behavioral / Technical / Case / Presentation]\n- DURATION: [minutes]\n\nLOOP RULES:\n- No competency assessed by more than 2 interviewers\n- Every must-have competency assessed by at least 1 interviewer\n- Total loop time should not exceed [X] hours\n- Include debrief guidelines\n\nRole Requirements:\n[PASTE ROLE PASSPORT]",
+    "usageNotes": "Distribute to all interviewers before the interview. Each person knows exactly what to test. The debrief becomes evidence-based, not a vibe session."
+  },
+  {
+    "id": "9-01",
+    "stage": 9,
+    "stageTitle": "Debrief & Decision",
+    "type": "execution",
+    "title": "Debrief Summarizer",
+    "preview": "Compile interview feedback into an evidence matrix showing agreement, contradictions, and decision factors.",
+    "content": "Compile the following interview feedback into a structured DEBRIEF SUMMARY.\n\nCreate:\n\n1. EVIDENCE MATRIX\n   For each competency assessed:\n   | Competency | Interviewer 1 | Interviewer 2 | Consensus |\n   - Rating: Strong / Adequate / Weak\n   - Key evidence cited\n\n2. CONTRADICTIONS\n   - Where interviewers disagreed\n   - What might explain the disagreement\n   - What additional data would resolve it\n\n3. DECISION OPTIONS\n   Option A: HIRE — Supporting evidence + risks accepted\n   Option B: PASS — Specific gaps that can't be mitigated\n   Option C: NEED MORE — What additional step would resolve uncertainty\n\n4. 'WHAT WOULD CHANGE MY MIND?' TRIGGERS\n   - If hiring: What would make you regret this?\n   - If passing: What would change this to a yes?\n\nFlag any 'vibe language' (felt off, seemed great, good culture fit) and translate to observable evidence.\n\nInterview Feedback:\n[PASTE ALL INTERVIEWER NOTES]",
+    "usageNotes": "Use this in the debrief meeting. It keeps the conversation evidence-based and produces a defensible decision record."
+  },
+  {
+    "id": "10-01",
+    "stage": 10,
+    "stageTitle": "Offer & Close",
+    "type": "execution",
+    "title": "Offer Close Plan Builder",
+    "preview": "Create a structured close plan with motivator mapping, objection counters, and timeline milestones.",
+    "content": "Build an OFFER CLOSE PLAN for the following candidate.\n\n1. MOTIVATOR MAP\n   - Primary motivator: [what] — Evidence: [how you know]\n   - Secondary motivator: [what] — Evidence: [how you know]\n   - What they care LEAST about: [important for negotiation framing]\n\n2. LIKELY OBJECTIONS + COUNTERS\n   For each potential objection:\n   - Objection: [what they might push back on]\n   - Counter: [how to address it]\n   - Proof point: [evidence or data to support the counter]\n\n3. COMPETITIVE RISK\n   - Are they interviewing elsewhere? [Yes/No/Unknown]\n   - Who are we competing against?\n   - Our advantage over alternatives:\n   - Our disadvantage:\n\n4. CLOSE TIMELINE\n   - Day 1: [Action — who does what]\n   - Day 2-3: [Follow-up action]\n   - Day 5: [Decision deadline]\n   - Escalation trigger: [when to involve leadership]\n\n5. SINGLE CTA\n   - The ONE thing you want the candidate to do after receiving the offer\n\nCandidate Details:\n[PASTE CANDIDATE INFO + INTERVIEW NOTES + OFFER DETAILS]",
+    "usageNotes": "Build this before extending the offer, not after. Anticipate objections and have answers ready. The close starts at the first outreach, not at the offer."
+  },
+  {
+    "id": "10-02",
+    "stage": 10,
+    "stageTitle": "Offer & Close",
+    "type": "verification",
+    "title": "Decline Analysis",
+    "preview": "Analyze an offer decline to extract learning, assign reason codes, and improve future close strategies.",
+    "content": "Analyze the following offer decline and extract actionable learning.\n\nStructure:\n\n1. DECLINE REASON CODE (select primary):\n   - COMP: Compensation gap\n   - COUNTER: Accepted counter-offer\n   - COMPETITOR: Chose another company\n   - FIT: Role/culture mismatch perceived\n   - PERSONAL: Personal/family reasons\n   - TIMELINE: Process took too long\n   - UNKNOWN: Candidate ghosted or gave vague reason\n\n2. ROOT CAUSE ANALYSIS\n   - What was the stated reason?\n   - What was the likely real reason?\n   - At what stage did we lose them? (Was the signal there earlier?)\n\n3. WHAT COULD WE HAVE DONE DIFFERENTLY?\n   - In sourcing/outreach?\n   - In screening?\n   - In the interview process?\n   - In the offer/close?\n\n4. REUSABLE LEARNING\n   - What should we change for the next candidate on this role?\n   - What should we change for similar roles in the future?\n\nDecline Details:\n[PASTE ALL RELEVANT INFORMATION]",
+    "usageNotes": "Do this for every decline. The learning compounds over time. Share in Friday Proof + Learn and update the Asset Library."
+  },
+  {
+    "id": "11-01",
+    "stage": 11,
+    "stageTitle": "Preboarding & Compliance",
+    "type": "execution",
+    "title": "Preboarding Sequence Generator",
+    "preview": "Create a structured preboarding communication sequence from offer acceptance to day one.",
+    "content": "Create a PREBOARDING COMMUNICATION SEQUENCE for the following hire.\n\nGenerate messages for each milestone:\n\n1. OFFER ACCEPTANCE (Day 0)\n   - Congratulatory message\n   - What happens next (clear timeline)\n   - Key contacts\n\n2. DOCUMENTS & COMPLIANCE (Day 1-3)\n   - What's needed, by when\n   - How to submit\n   - Who to contact if stuck\n\n3. MID-POINT CHECK-IN (Halfway to start)\n   - Warm touchpoint\n   - Any questions?\n   - Excitement builder about the team/role\n\n4. WEEK BEFORE START\n   - Day 1 logistics (where, when, who to ask for)\n   - What to expect in week 1\n   - Informal: team intro or welcome note\n\n5. INTERNAL CHECKLIST (for us)\n   - [ ] Background check initiated\n   - [ ] Equipment ordered\n   - [ ] Access/accounts requested\n   - [ ] Manager briefed on start date\n   - [ ] Onboarding schedule confirmed\n\nRules:\n- Warm but professional tone\n- Each message under 150 words\n- Always include a clear next step\n\nNew Hire Details:\n[PASTE NAME, ROLE, START DATE, RELEVANT DETAILS]",
+    "usageNotes": "Set these up as templates that can be personalized per hire. The goal: zero radio silence between offer and start. That's where ghosting happens."
+  },
+  {
+    "id": "12-01",
+    "stage": 12,
+    "stageTitle": "Postmortem & Improvement",
+    "type": "execution",
+    "title": "Pipeline Autopsy",
+    "preview": "Run a structured postmortem analyzing where candidates dropped, what worked, and what to change.",
+    "content": "Run a PIPELINE AUTOPSY for the following role (or set of roles). This is a monthly learning exercise.\n\nAnalyze:\n\n1. FUNNEL ANALYSIS\n   - How many sourced → screened → submitted → interviewed → offered → hired?\n   - Where was the biggest drop-off?\n   - Was the drop-off a volume problem or a relevance problem?\n\n2. WHAT WORKED\n   - Which sourcing lane produced the best candidates?\n   - Which outreach angle got the best replies?\n   - What screening questions were most predictive?\n\n3. WHAT DIDN'T WORK\n   - Where did we waste the most time?\n   - What assumption was wrong?\n   - What would we do differently if starting over?\n\n4. TEMPLATE UPDATES NEEDED\n   - Role Passport: [what to change]\n   - Sourcing Blueprint: [what to change]\n   - Screen Script: [what to change]\n   - Outreach Angles: [what to change]\n\n5. THREE LEARNING ENTRIES\n   - Learning 1: [specific, actionable]\n   - Learning 2: [specific, actionable]\n   - Learning 3: [specific, actionable]\n\nRole Data:\n[PASTE PIPELINE NUMBERS AND NOTES]",
+    "usageNotes": "Run this monthly for all closed roles. Share findings in the monthly postmortem. Update the Asset Library with improved templates."
+  }
+]

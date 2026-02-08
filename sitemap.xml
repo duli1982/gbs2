@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- NOTE: Replace https://gbs-emea-ai-hub.vercel.app with your actual production domain -->
+
+  <!-- Command Center (Home) -->
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Core Pages -->
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/stages/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/prompts/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/manifesto/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Tools -->
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/passport/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/truth-check/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/confidence-pack/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Learning -->
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/academy/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/library/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Tracking & Team -->
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/telemetry/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/rituals/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/profile/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Utility Pages -->
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/contact-us/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/feedback/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/submit-content/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Legal & Governance -->
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/ai-governance/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/privacy-policy/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/cookie-policy/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/legal-notice/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://gbs-emea-ai-hub.vercel.app/terms-of-service/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+</urlset>

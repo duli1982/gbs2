@@ -1,0 +1,23 @@
+{
+  "name": "gbs-emea-ai-hub-v2",
+  "version": "2.0.0",
+  "description": "AI Hub v2.0 — The Confidence Engine | Randstad GBS EMEA",
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "node scripts/build-static.mjs",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "ai",
+    "learning",
+    "gemini",
+    "recruitment",
+    "gbs"
+  ],
+  "author": "",
+  "license": "ISC"
+}

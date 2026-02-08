@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>Submit Content | AI Hub v2.0 — The Confidence Engine</title>
+    <meta name="description" content="Share your AI prompts and success stories with the GBS EMEA community.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Theme -->
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/sidebar.css">
+
+    <style>
+        .page-breadcrumb { margin-bottom: var(--space-8); }
+        .page-breadcrumb a {
+            display: inline-flex; align-items: center; gap: var(--space-2);
+            font-size: var(--font-sm); color: var(--text-muted);
+        }
+        .page-breadcrumb a:hover { color: var(--text-secondary); }
+        .page-breadcrumb svg { width: 14px; height: 14px; }
+
+        .page-header { text-align: center; margin-bottom: var(--space-10); }
+        .page-title { margin-bottom: var(--space-3); }
+        .page-subtitle {
+            color: var(--text-secondary); max-width: 600px; margin: 0 auto;
+            line-height: var(--leading-relaxed);
+        }
+
+        .page-content { max-width: 720px; margin: 0 auto; }
+
+        /* Tab buttons */
+        .tab-buttons { display: flex; gap: var(--space-3); margin-bottom: var(--space-8); }
+        .tab-btn {
+            flex: 1; padding: var(--space-4);
+            background: var(--bg-surface); border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg); color: var(--text-secondary);
+            font-size: var(--font-sm); font-weight: var(--weight-semibold);
+            font-family: var(--font-family); cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .tab-btn:hover { border-color: var(--border-strong); color: var(--text-primary); }
+        .tab-btn.active {
+            background: var(--accent-cyan); border-color: var(--accent-cyan);
+            color: var(--text-inverse);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Form Card */
+        .form-card {
+            background: var(--bg-surface); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl); padding: var(--space-8); margin-bottom: var(--space-6);
+        }
+        .form-card h2 { font-size: var(--font-xl); margin-bottom: var(--space-2); }
+        .form-card > p { color: var(--text-secondary); margin-bottom: var(--space-6); }
+
+        /* Guidelines */
+        .guidelines {
+            background: var(--accent-amber-dim); border: 1px solid rgba(255, 184, 0, 0.25);
+            border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-6);
+        }
+        .guidelines strong { color: var(--accent-amber); font-size: var(--font-sm); }
+        .guidelines ul { list-style: none; padding: 0; margin-top: var(--space-2); }
+        .guidelines li {
+            display: flex; align-items: flex-start; gap: var(--space-3);
+            font-size: var(--font-sm); color: var(--text-secondary); padding: var(--space-1) 0;
+        }
+        .guidelines li::before {
+            content: ''; width: 5px; height: 5px; background: var(--accent-amber);
+            border-radius: 50%; margin-top: 7px; flex-shrink: 0;
+        }
+
+        /* Form controls */
+        .form-group { margin-bottom: var(--space-5); }
+        .form-label {
+            display: block; font-weight: var(--weight-semibold);
+            color: var(--text-primary); margin-bottom: var(--space-2);
+            font-size: var(--font-sm);
+        }
+        .form-label .required { color: var(--accent-red); }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%; padding: var(--space-3) var(--space-4);
+            background: var(--bg-primary); border: 1px solid var(--border-default);
+            border-radius: var(--radius-md); color: var(--text-primary);
+            font-size: var(--font-sm); font-family: var(--font-family);
+            transition: border-color var(--transition-fast);
+        }
+        .form-input::placeholder,
+        .form-textarea::placeholder { color: var(--text-disabled); }
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none; border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px var(--accent-cyan-dim);
+        }
+        .form-textarea { resize: vertical; }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 12px center;
+            padding-right: 36px;
+        }
+        .form-select option { background: var(--bg-surface); color: var(--text-primary); }
+
+        .form-help { font-size: var(--font-xs); color: var(--text-muted); margin-top: var(--space-1); }
+
+        /* Radio group */
+        .radio-group { display: flex; flex-direction: column; gap: var(--space-3); }
+        .radio-option {
+            display: flex; align-items: center; gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            background: var(--bg-primary); border: 1px solid var(--border-default);
+            border-radius: var(--radius-md); cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .radio-option:hover { border-color: var(--accent-cyan); background: var(--accent-cyan-dim); }
+        .radio-option input[type="radio"] { accent-color: var(--accent-cyan); }
+        .radio-option span { font-size: var(--font-sm); color: var(--text-secondary); }
+
+        /* Submit button */
+        .submit-btn {
+            width: 100%; padding: var(--space-4);
+            background: var(--accent-cyan); color: var(--text-inverse);
+            border: none; border-radius: var(--radius-md);
+            font-size: var(--font-base); font-weight: var(--weight-semibold);
+            font-family: var(--font-family); cursor: pointer;
+            transition: all var(--transition-fast); margin-top: var(--space-4);
+        }
+        .submit-btn:hover:not(:disabled) {
+            background: var(--accent-cyan-hover); box-shadow: var(--shadow-glow-cyan);
+        }
+        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Success / Error */
+        .success-message {
+            display: none; text-align: center;
+            background: var(--accent-green-dim); border: 1px solid rgba(0, 214, 143, 0.3);
+            border-radius: var(--radius-xl); padding: var(--space-8);
+        }
+        .success-message.show { display: block; }
+        .success-message h3 {
+            font-size: var(--font-xl); color: var(--accent-green); margin-bottom: var(--space-3);
+        }
+        .success-message p {
+            font-size: var(--font-sm); color: var(--text-secondary); margin-bottom: var(--space-5);
+        }
+        .success-message .reset-btn {
+            display: inline-block; padding: var(--space-3) var(--space-5);
+            background: var(--accent-green); color: var(--text-inverse);
+            border: none; border-radius: var(--radius-md);
+            font-size: var(--font-sm); font-weight: var(--weight-semibold);
+            font-family: var(--font-family); cursor: pointer;
+            transition: background var(--transition-fast);
+        }
+        .success-message .reset-btn:hover { filter: brightness(1.1); }
+
+        .error-message {
+            display: none; text-align: center;
+            background: rgba(255, 76, 106, 0.08); border: 1px solid rgba(255, 76, 106, 0.3);
+            border-radius: var(--radius-lg); padding: var(--space-5); margin-top: var(--space-5);
+        }
+        .error-message.show { display: block; }
+        .error-message h3 { font-size: var(--font-lg); color: var(--accent-red); margin-bottom: var(--space-2); }
+        .error-message p { font-size: var(--font-sm); color: var(--accent-red); }
+
+        /* Loading spinner */
+        .loading-spinner {
+            display: inline-block; width: 16px; height: 16px;
+            border: 2px solid rgba(255,255,255,0.3); border-radius: 50%;
+            border-top-color: white; animation: spin 0.8s linear infinite;
+            margin-left: var(--space-2); vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <main class="app-main">
+            <div class="content-container">
+
+                <!-- Breadcrumb -->
+                <div class="page-breadcrumb">
+                    <a href="../index.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                        Back to Command Center
+                    </a>
+                </div>
+
+                <div class="page-content">
+
+                    <!-- Header -->
+                    <div class="page-header">
+                        <h1 class="page-title">Share with the Community</h1>
+                        <p class="page-subtitle">Help others learn and grow by sharing your best AI prompts and success stories. Your contributions make our community stronger.</p>
+                    </div>
+
+                    <!-- Tab Buttons -->
+                    <div id="tab-container" class="tab-buttons">
+                        <button class="tab-btn active" onclick="switchTab('prompt', this)">Submit Prompt</button>
+                        <button class="tab-btn" onclick="switchTab('story', this)">Share Success Story</button>
+                    </div>
+
+                    <!-- Prompt Submission -->
+                    <div id="prompt-tab" class="tab-content active">
+                        <div class="form-card">
+                            <h2>Share Your Best AI Prompt</h2>
+                            <p>Help others by sharing prompts that worked well for you</p>
+
+                            <div class="guidelines">
+                                <strong>Guidelines</strong>
+                                <ul>
+                                    <li>Share clear, reusable prompts that solved real problems</li>
+                                    <li>Remove any confidential or personal information</li>
+                                    <li>Explain the context and expected outcome</li>
+                                </ul>
+                            </div>
+
+                            <form id="prompt-form">
+                                <div class="form-group">
+                                    <label class="form-label">Your Name <span class="required">*</span></label>
+                                    <input type="text" class="form-input" id="prompt-name" required placeholder="John Doe">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Prompt Title <span class="required">*</span></label>
+                                    <input type="text" class="form-input" id="prompt-title" required placeholder="e.g., Professional Interview Invitation Email">
+                                    <div class="form-help">A short, descriptive title for your prompt</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Category <span class="required">*</span></label>
+                                    <select class="form-select" id="prompt-category" required>
+                                        <option value="">Select a category...</option>
+                                        <option value="Emails & Communication">Emails &amp; Communication</option>
+                                        <option value="Candidate Sourcing">Candidate Sourcing</option>
+                                        <option value="Job Descriptions">Job Descriptions</option>
+                                        <option value="Interview Prep">Interview Prep</option>
+                                        <option value="Data Analysis">Data Analysis</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">The Prompt <span class="required">*</span></label>
+                                    <textarea class="form-textarea" id="prompt-content" rows="6" required placeholder="Write a professional email to..."></textarea>
+                                    <div class="form-help">The actual prompt you used with AI</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Why This Works</label>
+                                    <textarea class="form-textarea" id="prompt-why" rows="4" placeholder="Explain what makes this prompt effective..."></textarea>
+                                    <div class="form-help">Optional: Share tips on why this prompt is effective</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Time Saved (Estimate)</label>
+                                    <div class="radio-group">
+                                        <label class="radio-option">
+                                            <input type="radio" name="timeSaved" value="5-15 minutes per use">
+                                            <span>5-15 minutes per use</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="timeSaved" value="30+ minutes per use">
+                                            <span>30+ minutes per use</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="timeSaved" value="1+ hours per use">
+                                            <span>1+ hours per use</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="submit-btn" id="prompt-submit-btn">Submit Prompt for Review</button>
+                            </form>
+
+                            <div id="prompt-error" class="error-message">
+                                <h3>Submission Failed</h3>
+                                <p id="prompt-error-message"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Success Story Submission -->
+                    <div id="story-tab" class="tab-content">
+                        <div class="form-card">
+                            <h2>Share Your Success Story</h2>
+                            <p>Inspire others by sharing how AI improved your work</p>
+
+                            <div class="guidelines">
+                                <strong>What Makes a Great Story</strong>
+                                <ul>
+                                    <li>Specific results (time saved, quality improved, etc.)</li>
+                                    <li>Real examples from your work</li>
+                                    <li>Challenges overcome and lessons learned</li>
+                                </ul>
+                            </div>
+
+                            <form id="story-form">
+                                <div class="form-group">
+                                    <label class="form-label">Your Name <span class="required">*</span></label>
+                                    <input type="text" class="form-input" id="story-name" required placeholder="John Doe">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Story Title <span class="required">*</span></label>
+                                    <input type="text" class="form-input" id="story-title" required placeholder="e.g., How AI Reduced My Screening Time by 50%">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Your Role</label>
+                                    <select class="form-select" id="story-role">
+                                        <option value="">Select your role...</option>
+                                        <option value="Recruiter">Recruiter</option>
+                                        <option value="Coordinator">Coordinator</option>
+                                        <option value="Analyst">Analyst</option>
+                                        <option value="Manager">Manager</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Your Story <span class="required">*</span></label>
+                                    <textarea class="form-textarea" id="story-content" rows="10" required placeholder="Share your story: What was the challenge? How did AI help? What were the results?"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Quantifiable Impact</label>
+                                    <input type="text" class="form-input" id="story-impact" placeholder="e.g., Saved 10 hours per week, Increased response rate by 30%">
+                                    <div class="form-help">Optional: Numbers that demonstrate your success</div>
+                                </div>
+
+                                <button type="submit" class="submit-btn" id="story-submit-btn">Submit Story for Review</button>
+                            </form>
+
+                            <div id="story-error" class="error-message">
+                                <h3>Submission Failed</h3>
+                                <p id="story-error-message"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Success Message -->
+                    <div id="success-message" class="success-message">
+                        <h3>Thank You!</h3>
+                        <p>Your submission has been received and will be reviewed by our team.</p>
+                        <button onclick="resetForm()" class="reset-btn">Submit Another</button>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../shared/sidebar.js"></script>
+
+    <!-- Hidden iframe for Apps Script submission -->
+    <iframe name="submitFrame" style="display:none;"></iframe>
+
+    <script>
+        // Apps Script deploy URL (preserved from v1)
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz2OkLE7V7gG6Vy1cupZKgGIO3AAKGHcqs5fwmXp4vdn7TVtDYg09UG4vhio0Q6qt8cIg/exec';
+
+        function createHiddenFormAndSubmit(fieldsObj) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = APPS_SCRIPT_URL;
+            form.target = 'submitFrame';
+            form.style.display = 'none';
+
+            for (const key in fieldsObj) {
+                if (!fieldsObj.hasOwnProperty(key)) continue;
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = fieldsObj[key];
+                form.appendChild(input);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+            setTimeout(function () {
+                if (form && form.parentNode) form.parentNode.removeChild(form);
+            }, 2000);
+        }
+
+        function showSuccessMessage(formType) {
+            if (formType === 'prompt') {
+                document.getElementById('prompt-form').reset();
+                var btn = document.getElementById('prompt-submit-btn');
+                btn.disabled = false;
+                btn.innerHTML = 'Submit Prompt for Review';
+            } else {
+                document.getElementById('story-form').reset();
+                var btn = document.getElementById('story-submit-btn');
+                btn.disabled = false;
+                btn.innerHTML = 'Submit Story for Review';
+            }
+
+            document.querySelectorAll('.tab-content').forEach(function (tab) { tab.style.display = 'none'; });
+            document.getElementById('tab-container').style.display = 'none';
+            document.getElementById('success-message').classList.add('show');
+            document.getElementById('success-message').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Prompt submit
+        document.getElementById('prompt-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var submitBtn = document.getElementById('prompt-submit-btn');
+            var errorDiv = document.getElementById('prompt-error');
+            errorDiv.classList.remove('show');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Submitting<span class="loading-spinner"></span>';
+
+            var formData = {
+                formType: 'prompt',
+                name: document.getElementById('prompt-name').value || '',
+                promptTitle: document.getElementById('prompt-title').value || '',
+                category: document.getElementById('prompt-category').value || '',
+                prompt: document.getElementById('prompt-content').value || '',
+                whyItWorks: document.getElementById('prompt-why').value || '',
+                timeSaved: (document.querySelector('input[name="timeSaved"]:checked') || {}).value || ''
+            };
+
+            createHiddenFormAndSubmit(formData);
+            showSuccessMessage('prompt');
+        });
+
+        // Story submit
+        document.getElementById('story-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var submitBtn = document.getElementById('story-submit-btn');
+            var errorDiv = document.getElementById('story-error');
+            errorDiv.classList.remove('show');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Submitting<span class="loading-spinner"></span>';
+
+            var formData = {
+                formType: 'story',
+                name: document.getElementById('story-name').value || '',
+                storyTitle: document.getElementById('story-title').value || '',
+                role: document.getElementById('story-role').value || '',
+                story: document.getElementById('story-content').value || '',
+                impact: document.getElementById('story-impact').value || ''
+            };
+
+            createHiddenFormAndSubmit(formData);
+            showSuccessMessage('story');
+        });
+
+        // Tab switching
+        function switchTab(tab, btnElement) {
+            document.querySelectorAll('.tab-btn').forEach(function (btn) { btn.classList.remove('active'); });
+            if (btnElement) btnElement.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(function (content) { content.classList.remove('active'); });
+            var tabEl = document.getElementById(tab + '-tab');
+            if (tabEl) tabEl.classList.add('active');
+            document.getElementById('prompt-error').classList.remove('show');
+            document.getElementById('story-error').classList.remove('show');
+        }
+
+        function resetForm() {
+            document.getElementById('success-message').classList.remove('show');
+            document.querySelectorAll('.tab-content').forEach(function (tab) { tab.style.display = 'block'; });
+            document.getElementById('tab-container').style.display = 'flex';
+            document.querySelectorAll('.tab-content').forEach(function (content) { content.classList.remove('active'); });
+            document.getElementById('prompt-tab').classList.add('active');
+            document.querySelectorAll('.tab-btn').forEach(function (btn) { btn.classList.remove('active'); });
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>My Profile | AI Hub v2.0 — The Confidence Engine | Randstad GBS</title>
+
+    <meta name="description" content="AI-Ready Sourcer Badge, skill assessment, and team certification tracking.">
+    <meta name="author" content="Randstad GBS">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Chart.js for Radar -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/sidebar.css">
+    <link rel="stylesheet" href="../shared/v2-buttons.css">
+    <link rel="stylesheet" href="../shared/v2-cards.css">
+
+    <style>
+        .prof-header { margin-bottom: var(--space-8); }
+        .prof-header__label { font-size: var(--font-sm); color: var(--text-muted); font-weight: var(--weight-medium); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--space-2); }
+        .prof-header__title { font-size: var(--font-4xl); font-weight: var(--weight-bold); color: var(--text-primary); letter-spacing: -0.02em; }
+        .prof-header__title span { color: var(--accent-cyan); }
+
+        /* Tabs */
+        .prof-tabs { display: flex; gap: var(--space-1); border-bottom: 1px solid var(--border-subtle); margin-bottom: var(--space-8); }
+        .prof-tab { padding: var(--space-3) var(--space-5); font-size: var(--font-sm); font-weight: var(--weight-medium); color: var(--text-muted); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; transition: all var(--transition-fast); font-family: inherit; }
+        .prof-tab:hover { color: var(--text-secondary); }
+        .prof-tab.active { color: var(--accent-cyan); border-bottom-color: var(--accent-cyan); }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; animation: fadeInUp 0.3s ease both; }
+
+        /* === BADGE TAB === */
+        .badge-hero { display: flex; align-items: center; gap: var(--space-8); margin-bottom: var(--space-8); flex-wrap: wrap; }
+        .badge-visual { width: 160px; height: 160px; border-radius: 50%; background: conic-gradient(var(--signal-strong) var(--badge-pct, 0%), var(--bg-tertiary) var(--badge-pct, 0%)); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .badge-visual__inner { width: 130px; height: 130px; border-radius: 50%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .badge-visual__pct { font-size: var(--font-3xl); font-weight: var(--weight-bold); color: var(--text-primary); font-family: var(--font-mono); }
+        .badge-visual__label { font-size: var(--font-xs); color: var(--text-muted); }
+        .badge-info { flex: 1; min-width: 240px; }
+        .badge-info__title { font-size: var(--font-xl); font-weight: var(--weight-bold); color: var(--text-primary); margin-bottom: var(--space-2); }
+        .badge-info__desc { font-size: var(--font-sm); color: var(--text-secondary); line-height: 1.6; margin-bottom: var(--space-4); }
+
+        .badge-checklist { display: flex; flex-direction: column; gap: var(--space-3); max-width: 560px; }
+        .badge-item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); cursor: pointer; user-select: none; transition: border-color var(--transition-fast); }
+        .badge-item:hover { border-color: var(--border-default); }
+        .badge-item input[type="checkbox"] { display: none; }
+        .badge-check { width: 22px; height: 22px; border-radius: var(--radius-sm); border: 2px solid var(--border-default); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all var(--transition-fast); }
+        .badge-check svg { width: 13px; height: 13px; color: var(--bg-primary); opacity: 0; }
+        .badge-item input:checked + .badge-check { background: var(--signal-strong); border-color: var(--signal-strong); }
+        .badge-item input:checked + .badge-check svg { opacity: 1; }
+        .badge-item__text { font-size: var(--font-sm); color: var(--text-secondary); line-height: 1.4; }
+        .badge-item input:checked ~ .badge-item__text { color: var(--signal-strong); }
+
+        .badge-export { margin-top: var(--space-6); display: flex; gap: var(--space-3); }
+        .btn-primary { padding: 10px 24px; background: var(--accent-cyan); color: var(--bg-primary); border: none; border-radius: var(--radius-md); font-size: var(--font-sm); font-weight: var(--weight-semibold); cursor: pointer; font-family: inherit; }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-secondary { padding: 10px 24px; background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); font-size: var(--font-sm); font-weight: var(--weight-medium); cursor: pointer; font-family: inherit; }
+        .btn-secondary:hover { color: var(--text-primary); border-color: var(--border-default); }
+
+        /* === ASSESSMENT TAB === */
+        .assess-intro { max-width: 640px; margin-bottom: var(--space-8); }
+        .assess-intro p { font-size: var(--font-sm); color: var(--text-secondary); line-height: 1.6; }
+
+        /* Assessment Progress */
+        .assess-progress { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-6); }
+        .assess-progress__bar { flex: 1; height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden; }
+        .assess-progress__fill { height: 100%; background: var(--accent-cyan); border-radius: 3px; transition: width 0.3s ease; }
+        .assess-progress__text { font-size: var(--font-sm); color: var(--text-muted); white-space: nowrap; font-family: var(--font-mono); }
+
+        /* Question Card */
+        .question-card { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--space-6); max-width: 680px; }
+        .question-card__category { font-size: var(--font-xs); font-weight: var(--weight-semibold); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--space-3); }
+        .question-card__category--sourcing { color: #818cf8; }
+        .question-card__category--screening { color: #34d399; }
+        .question-card__category--submission { color: #fbbf24; }
+        .question-card__category--operations { color: #f472b6; }
+        .question-card__category--coaching { color: #fb923c; }
+        .question-card__text { font-size: var(--font-base); font-weight: var(--weight-medium); color: var(--text-primary); margin-bottom: var(--space-5); line-height: 1.5; }
+        .question-card__options { display: flex; flex-direction: column; gap: var(--space-2); }
+        .q-option { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); background: var(--bg-primary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); cursor: pointer; transition: all var(--transition-fast); }
+        .q-option:hover { border-color: var(--border-default); }
+        .q-option.selected { border-color: var(--accent-cyan); background: rgba(0,229,255,0.06); }
+        .q-option input { display: none; }
+        .q-radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border-default); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all var(--transition-fast); }
+        .q-radio__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-cyan); opacity: 0; transition: opacity var(--transition-fast); }
+        .q-option.selected .q-radio { border-color: var(--accent-cyan); }
+        .q-option.selected .q-radio__dot { opacity: 1; }
+        .q-option__text { font-size: var(--font-sm); color: var(--text-secondary); }
+        .q-option.selected .q-option__text { color: var(--text-primary); }
+
+        .question-nav { display: flex; justify-content: space-between; margin-top: var(--space-5); }
+        .btn-nav { padding: 8px 20px; background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); font-size: var(--font-sm); font-weight: var(--weight-medium); cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: var(--space-2); transition: all var(--transition-fast); }
+        .btn-nav:hover { color: var(--text-primary); border-color: var(--border-default); }
+        .btn-nav:disabled { opacity: 0.3; pointer-events: none; }
+        .btn-nav svg { width: 14px; height: 14px; }
+        .btn-finish { padding: 10px 28px; background: var(--signal-strong); color: var(--bg-primary); border: none; border-radius: var(--radius-md); font-size: var(--font-sm); font-weight: var(--weight-semibold); cursor: pointer; font-family: inherit; }
+
+        /* Results */
+        .results-section { display: none; max-width: 720px; }
+        .results-section.active { display: block; animation: fadeInUp 0.3s ease both; }
+        .results-header { text-align: center; margin-bottom: var(--space-8); }
+        .results-grade { font-size: 72px; font-weight: var(--weight-bold); font-family: var(--font-mono); margin-bottom: var(--space-2); }
+        .results-grade--a { color: var(--signal-strong); }
+        .results-grade--b { color: var(--accent-cyan); }
+        .results-grade--c { color: var(--signal-amber); }
+        .results-grade--d { color: var(--signal-risk); }
+        .results-title { font-size: var(--font-lg); font-weight: var(--weight-semibold); color: var(--text-primary); }
+        .results-subtitle { font-size: var(--font-sm); color: var(--text-secondary); margin-top: var(--space-1); }
+
+        .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); margin-bottom: var(--space-8); }
+        .radar-card { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--space-5); }
+        .radar-card__title { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--text-primary); margin-bottom: var(--space-4); }
+        .radar-card canvas { max-height: 300px; }
+
+        .scores-card { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--space-5); }
+        .scores-card__title { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--text-primary); margin-bottom: var(--space-4); }
+        .score-row { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3); }
+        .score-row__label { font-size: var(--font-sm); color: var(--text-secondary); width: 110px; flex-shrink: 0; }
+        .score-row__bar { flex: 1; height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden; }
+        .score-row__fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+        .score-row__value { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--text-primary); font-family: var(--font-mono); width: 40px; text-align: right; }
+
+        .recs-section { margin-bottom: var(--space-8); }
+        .recs-section__title { font-size: var(--font-base); font-weight: var(--weight-semibold); color: var(--text-primary); margin-bottom: var(--space-4); }
+        .rec-card { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-3); }
+        .rec-card__title { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--text-primary); margin-bottom: var(--space-1); }
+        .rec-card__text { font-size: var(--font-sm); color: var(--text-secondary); line-height: 1.5; }
+
+        .results-actions { display: flex; gap: var(--space-3); }
+
+        /* === SHOWCASE TAB === */
+        .showcase-intro { font-size: var(--font-sm); color: var(--text-secondary); margin-bottom: var(--space-6); line-height: 1.6; max-width: 600px; }
+        .showcase-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-4); }
+        .showcase-member { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--space-5); text-align: center; }
+        .showcase-member__avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-3); font-size: var(--font-lg); font-weight: var(--weight-bold); color: var(--accent-cyan); }
+        .showcase-member__name { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--text-primary); }
+        .showcase-member__team { font-size: var(--font-xs); color: var(--text-muted); margin-top: 2px; }
+        .showcase-member__date { font-size: var(--font-xs); color: var(--signal-strong); margin-top: var(--space-2); }
+
+        /* Toast */
+        .toast { position: fixed; bottom: var(--space-6); right: var(--space-6); padding: var(--space-3) var(--space-5); background: var(--signal-strong); color: var(--bg-primary); border-radius: var(--radius-md); font-size: var(--font-sm); font-weight: var(--weight-medium); z-index: 1100; display: none; }
+        .toast.show { display: block; animation: fadeInUp 0.2s ease; }
+
+        @media (max-width: 768px) {
+            .badge-hero { flex-direction: column; text-align: center; }
+            .badge-visual { width: 120px; height: 120px; }
+            .badge-visual__inner { width: 96px; height: 96px; }
+            .results-grid { grid-template-columns: 1fr; }
+        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <main class="app-main">
+            <div class="content-container">
+
+                <header class="prof-header fade-in-up">
+                    <div class="prof-header__label">AI Hub v2.0</div>
+                    <h1 class="prof-header__title">My <span>Profile</span></h1>
+                </header>
+
+                <div class="prof-tabs" role="tablist">
+                    <button class="prof-tab active" data-tab="badge" role="tab">AI-Ready Badge</button>
+                    <button class="prof-tab" data-tab="assessment" role="tab">Skill Assessment</button>
+                    <button class="prof-tab" data-tab="showcase" role="tab">Team Showcase</button>
+                </div>
+
+                <!-- TAB: Badge -->
+                <div class="tab-panel active" id="tab-badge">
+                    <div class="badge-hero">
+                        <div class="badge-visual" id="badgeVisual">
+                            <div class="badge-visual__inner">
+                                <div class="badge-visual__pct" id="badgePct">0%</div>
+                                <div class="badge-visual__label">Complete</div>
+                            </div>
+                        </div>
+                        <div class="badge-info">
+                            <div class="badge-info__title">AI-Ready Sourcer Badge</div>
+                            <div class="badge-info__desc">Complete all 5 requirements to earn your certification. Each item requires evidence that you've applied the skill in a real workflow.</div>
+                        </div>
+                    </div>
+
+                    <div class="badge-checklist" id="badgeChecklist"></div>
+
+                    <div class="badge-export">
+                        <button class="btn-primary" id="exportBadge">Export My Progress</button>
+                        <button class="btn-secondary" id="printBadge">Print</button>
+                    </div>
+                </div>
+
+                <!-- TAB: Skill Assessment -->
+                <div class="tab-panel" id="tab-assessment">
+                    <div class="assess-intro" id="assessIntro">
+                        <p>Quick skill assessment across 5 dimensions of AI-powered recruiting. 15 questions, direct answers. Get your skill radar chart and personalized recommendations.</p>
+                        <br>
+                        <button class="btn-primary" id="startAssess">Start Assessment</button>
+                    </div>
+
+                    <div id="assessActive" style="display:none;">
+                        <div class="assess-progress">
+                            <div class="assess-progress__bar">
+                                <div class="assess-progress__fill" id="assessFill" style="width:0%"></div>
+                            </div>
+                            <span class="assess-progress__text" id="assessCount">0/15</span>
+                        </div>
+                        <div id="questionContainer"></div>
+                    </div>
+
+                    <div class="results-section" id="resultsSection">
+                        <div class="results-header">
+                            <div class="results-grade" id="resultsGrade"></div>
+                            <div class="results-title" id="resultsTitle"></div>
+                            <div class="results-subtitle" id="resultsSubtitle"></div>
+                        </div>
+
+                        <div class="results-grid">
+                            <div class="radar-card">
+                                <div class="radar-card__title">Skill Radar</div>
+                                <canvas id="radarChart"></canvas>
+                            </div>
+                            <div class="scores-card">
+                                <div class="scores-card__title">Dimension Scores</div>
+                                <div id="scoreRows"></div>
+                            </div>
+                        </div>
+
+                        <div class="recs-section">
+                            <div class="recs-section__title">Personalized Recommendations</div>
+                            <div id="recsContainer"></div>
+                        </div>
+
+                        <div class="results-actions">
+                            <button class="btn-primary" id="retakeAssess">Retake Assessment</button>
+                            <button class="btn-secondary" id="exportResults">Export Results</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Showcase -->
+                <div class="tab-panel" id="tab-showcase">
+                    <p class="showcase-intro">Team members who have earned their AI-Ready Sourcer Badge. This showcase celebrates those who completed the full certification requirements.</p>
+                    <div class="showcase-grid" id="showcaseGrid"></div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="../shared/sidebar.js"></script>
+    <script src="../shared/v2-footer.js"></script>
+    <script src="../shared/export-utils.js"></script>
+    <script>
+    (function() {
+        'use strict';
+
+        var BADGE_KEY = 'profile-badge';
+        var ASSESS_KEY = 'profile-assessment';
+        var radarChartInstance = null;
+
+        /* --- Tab Switching --- */
+        document.querySelectorAll('.prof-tab').forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.prof-tab').forEach(function(t) { t.classList.remove('active'); });
+                document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+                this.classList.add('active');
+                document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+            });
+        });
+
+        /* ============================================
+           BADGE SYSTEM
+           ============================================ */
+        var BADGE_ITEMS = [
+            { id: 'persona', text: 'Created one Role Persona Card using the Role Passport Builder' },
+            { id: 'sourcing', text: 'Completed one Sourcing Plan using AI-assisted strategy' },
+            { id: 'truthcheck', text: 'Conducted one Truth Check screen with Strong/OK/Risk scoring' },
+            { id: 'confidence', text: 'Sent one Confidence Pack to a hiring manager' },
+            { id: 'asset', text: 'Contributed one reusable asset to the Asset Library' }
+        ];
+
+        function getBadgeState() {
+            try { return JSON.parse(localStorage.getItem(BADGE_KEY)) || {}; } catch(e) { return {}; }
+        }
+
+        function renderBadge() {
+            var state = getBadgeState();
+            var completed = 0;
+
+            var html = '';
+            BADGE_ITEMS.forEach(function(item) {
+                var checked = state[item.id] === true;
+                if (checked) completed++;
+                html += '<label class="badge-item">';
+                html += '<input type="checkbox" data-badge="' + item.id + '"' + (checked ? ' checked' : '') + '>';
+                html += '<span class="badge-check"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>';
+                html += '<span class="badge-item__text">' + item.text + '</span>';
+                html += '</label>';
+            });
+
+            document.getElementById('badgeChecklist').innerHTML = html;
+
+            var pct = Math.round((completed / BADGE_ITEMS.length) * 100);
+            document.getElementById('badgePct').textContent = pct + '%';
+            document.getElementById('badgeVisual').style.setProperty('--badge-pct', pct + '%');
+
+            // Bind checkboxes
+            document.querySelectorAll('[data-badge]').forEach(function(cb) {
+                cb.addEventListener('change', function() {
+                    var s = getBadgeState();
+                    s[this.dataset.badge] = this.checked;
+                    localStorage.setItem(BADGE_KEY, JSON.stringify(s));
+                    renderBadge();
+                });
+            });
+        }
+
+        document.getElementById('exportBadge').addEventListener('click', function() {
+            var state = getBadgeState();
+            var completed = BADGE_ITEMS.filter(function(i) { return state[i.id]; });
+            var text = 'AI-Ready Sourcer Badge Progress\n';
+            text += '================================\n\n';
+            BADGE_ITEMS.forEach(function(item) {
+                text += (state[item.id] ? '[x]' : '[ ]') + ' ' + item.text + '\n';
+            });
+            text += '\nCompleted: ' + completed.length + ' / ' + BADGE_ITEMS.length;
+            text += '\nDate: ' + new Date().toLocaleDateString();
+            if (window.ExportUtils) ExportUtils.copyToClipboard(text, this);
+            else navigator.clipboard.writeText(text);
+            showToast('Copied to clipboard');
+        });
+
+        document.getElementById('printBadge').addEventListener('click', function() {
+            var state = getBadgeState();
+            var html = '<h2>AI-Ready Sourcer Badge Progress</h2><ul>';
+            BADGE_ITEMS.forEach(function(item) {
+                html += '<li>' + (state[item.id] ? '&#x2705; ' : '&#x2B1C; ') + item.text + '</li>';
+            });
+            html += '</ul>';
+            if (window.ExportUtils) ExportUtils.printContent('AI-Ready Sourcer Badge', html);
+        });
+
+        renderBadge();
+
+        /* ============================================
+           SKILL ASSESSMENT
+           ============================================ */
+        var DIMENSIONS = [
+            { id: 'sourcing', label: 'Sourcing & Strategy', color: '#818cf8' },
+            { id: 'screening', label: 'Screening & Verification', color: '#34d399' },
+            { id: 'submission', label: 'Submission & Influence', color: '#fbbf24' },
+            { id: 'operations', label: 'Ops & Automation', color: '#f472b6' },
+            { id: 'coaching', label: 'Coaching & Leadership', color: '#fb923c' }
+        ];
+
+        var QUESTIONS = [
+            // Sourcing (3)
+            { dim: 'sourcing', text: 'When you get a new role, how do you build your sourcing strategy?', options: [
+                { text: 'I start with a Boolean search on LinkedIn', score: 1 },
+                { text: 'I identify 2-3 channels and write targeted searches', score: 2 },
+                { text: 'I build a multi-lane strategy with target companies, adjacent industries, and evidence markers', score: 3 },
+                { text: 'I use AI to generate a full sourcing plan, validate against market data, and iterate based on response rates', score: 4 }
+            ]},
+            { dim: 'sourcing', text: 'How do you personalize outreach to passive candidates?', options: [
+                { text: 'I use a standard template with name/title swapped', score: 1 },
+                { text: 'I customize the opening line based on their profile', score: 2 },
+                { text: 'I choose an angle (mission/craft/career) based on profile signals and write accordingly', score: 3 },
+                { text: 'I use AI to analyze their profile, select the best angle, and generate personalized outreach with specific references to their work', score: 4 }
+            ]},
+            { dim: 'sourcing', text: 'How do you use AI to improve your sourcing process?', options: [
+                { text: 'I don\'t use AI for sourcing yet', score: 1 },
+                { text: 'I use AI to generate Boolean strings', score: 2 },
+                { text: 'I use AI for persona building, market mapping, and outreach generation', score: 3 },
+                { text: 'AI is integrated into every sourcing step: intake clarification, persona cards, lane strategy, outreach, and follow-up sequences', score: 4 }
+            ]},
+            // Screening (3)
+            { dim: 'screening', text: 'What does your candidate screening process look like?', options: [
+                { text: 'I review CVs and have a general conversation', score: 1 },
+                { text: 'I have a standard set of questions I ask every candidate', score: 2 },
+                { text: 'I use structured evidence questions tied to role requirements, with Strong/OK/Risk scoring', score: 3 },
+                { text: 'I run a Truth Check protocol: 3 evidence questions, 1 constraint check, 1 motivation probe, all scored against a calibrated rubric', score: 4 }
+            ]},
+            { dim: 'screening', text: 'How do you verify that a candidate\'s claims are real?', options: [
+                { text: 'I take their word for it if it sounds reasonable', score: 1 },
+                { text: 'I ask follow-up questions to get more detail', score: 2 },
+                { text: 'I ask for specific examples with measurable outcomes and distinguish individual vs team contribution', score: 3 },
+                { text: 'I systematically probe for evidence: specific project, their role, measurable outcome, and verify consistency across answers', score: 4 }
+            ]},
+            { dim: 'screening', text: 'How do you handle AI-polished CVs and inflated claims?', options: [
+                { text: 'I haven\'t thought about this as a specific risk', score: 1 },
+                { text: 'I\'m aware of it but don\'t have a specific approach', score: 2 },
+                { text: 'I ask questions that require specific evidence that\'s hard to fabricate', score: 3 },
+                { text: 'I have a structured approach to detect AI polish: I ask for measurable outcomes, dig into specifics, and look for consistency patterns', score: 4 }
+            ]},
+            // Submission (3)
+            { dim: 'submission', text: 'How do you present candidates to hiring managers?', options: [
+                { text: 'I forward the CV with a brief note', score: 1 },
+                { text: 'I write a summary paragraph about the candidate', score: 2 },
+                { text: 'I include match reasons and a recommendation', score: 3 },
+                { text: 'I send a Confidence Pack: 3 evidence-based match reasons, 1 identified risk with mitigation, constraint summary, and recommended next step', score: 4 }
+            ]},
+            { dim: 'submission', text: 'How do you handle hiring manager pushback on candidates?', options: [
+                { text: 'I accept their decision and move on', score: 1 },
+                { text: 'I ask why and try to address concerns', score: 2 },
+                { text: 'I use evidence from my screening to counter objections and propose trade-offs', score: 3 },
+                { text: 'I present data-backed trade-off proposals with multiple options, framing the conversation around evidence rather than opinions', score: 4 }
+            ]},
+            { dim: 'submission', text: 'How do you use data to influence hiring decisions?', options: [
+                { text: 'I don\'t typically use data in hiring conversations', score: 1 },
+                { text: 'I share general market feedback when relevant', score: 2 },
+                { text: 'I present pipeline data, response rates, and market comparisons', score: 3 },
+                { text: 'I proactively share data on market reality, present trade-off options backed by evidence, and track decision outcomes for continuous improvement', score: 4 }
+            ]},
+            // Operations (3)
+            { dim: 'operations', text: 'How much of your administrative work is automated or templatized?', options: [
+                { text: 'Most of my work is manual', score: 1 },
+                { text: 'I use some templates but still do a lot manually', score: 2 },
+                { text: 'Most repetitive tasks use templates; I\'ve automated 2-3 workflows', score: 3 },
+                { text: 'I\'ve systematically identified time-wasting tasks, built AI-powered templates for each, and contributed reusable assets to the team', score: 4 }
+            ]},
+            { dim: 'operations', text: 'How do you track and communicate hiring progress?', options: [
+                { text: 'I update when asked', score: 1 },
+                { text: 'I send occasional updates to hiring managers', score: 2 },
+                { text: 'I send structured weekly updates with pipeline data', score: 3 },
+                { text: 'I use a standard HM update format with pipeline metrics, actions taken, blockers, and recommended next steps — generated efficiently with AI assistance', score: 4 }
+            ]},
+            { dim: 'operations', text: 'How do you capture and share learnings from closed roles?', options: [
+                { text: 'I move on to the next role', score: 1 },
+                { text: 'I occasionally discuss what went well or poorly', score: 2 },
+                { text: 'I do informal retrospectives and share key takeaways', score: 3 },
+                { text: 'Every closed role generates a documented insight, shared with the team, and captured as a reusable asset or process improvement', score: 4 }
+            ]},
+            // Coaching (3)
+            { dim: 'coaching', text: 'How do you explain decisions to hiring managers?', options: [
+                { text: 'I give my opinion based on experience', score: 1 },
+                { text: 'I try to back up my recommendations with examples', score: 2 },
+                { text: 'I explain decisions using specific evidence from screening, never just opinions', score: 3 },
+                { text: 'I present evidence-only arguments, proactively surface risks with mitigations, and can explain pass/advance decisions using only verifiable data', score: 4 }
+            ]},
+            { dim: 'coaching', text: 'When requirements seem unrealistic, how do you respond?', options: [
+                { text: 'I do my best to meet them as stated', score: 1 },
+                { text: 'I mention it might be difficult', score: 2 },
+                { text: 'I present market data showing why the requirements are challenging and suggest specific adjustments', score: 3 },
+                { text: 'I prepare a trade-off proposal with 3 options (reduce requirements, increase comp, extend timeline), each with data and expected outcomes', score: 4 }
+            ]},
+            { dim: 'coaching', text: 'How do you develop your own recruiting capabilities?', options: [
+                { text: 'I learn on the job as situations arise', score: 1 },
+                { text: 'I occasionally read articles or attend training', score: 2 },
+                { text: 'I actively practice new techniques and seek feedback', score: 3 },
+                { text: 'I follow a structured development program, track my skill progression, contribute to team knowledge, and can coach others on AI-powered recruiting', score: 4 }
+            ]}
+        ];
+
+        var assessState = { current: 0, answers: [], active: false };
+
+        document.getElementById('startAssess').addEventListener('click', function() {
+            assessState = { current: 0, answers: new Array(QUESTIONS.length).fill(null), active: true };
+            document.getElementById('assessIntro').style.display = 'none';
+            document.getElementById('assessActive').style.display = 'block';
+            document.getElementById('resultsSection').classList.remove('active');
+            renderQuestion();
+        });
+
+        document.getElementById('retakeAssess').addEventListener('click', function() {
+            assessState = { current: 0, answers: new Array(QUESTIONS.length).fill(null), active: true };
+            document.getElementById('assessIntro').style.display = 'none';
+            document.getElementById('assessActive').style.display = 'block';
+            document.getElementById('resultsSection').classList.remove('active');
+            renderQuestion();
+        });
+
+        function renderQuestion() {
+            var q = QUESTIONS[assessState.current];
+            var dim = DIMENSIONS.find(function(d) { return d.id === q.dim; });
+
+            // Progress
+            var pct = Math.round((assessState.current / QUESTIONS.length) * 100);
+            document.getElementById('assessFill').style.width = pct + '%';
+            document.getElementById('assessCount').textContent = (assessState.current + 1) + '/' + QUESTIONS.length;
+
+            var html = '<div class="question-card">';
+            html += '<div class="question-card__category question-card__category--' + q.dim + '">' + dim.label + '</div>';
+            html += '<div class="question-card__text">' + q.text + '</div>';
+            html += '<div class="question-card__options">';
+            q.options.forEach(function(opt, i) {
+                var sel = assessState.answers[assessState.current] === i;
+                html += '<label class="q-option' + (sel ? ' selected' : '') + '">';
+                html += '<input type="radio" name="q" value="' + i + '"' + (sel ? ' checked' : '') + '>';
+                html += '<span class="q-radio"><span class="q-radio__dot"></span></span>';
+                html += '<span class="q-option__text">' + opt.text + '</span>';
+                html += '</label>';
+            });
+            html += '</div>';
+
+            html += '<div class="question-nav">';
+            html += '<button class="btn-nav" id="prevQ"' + (assessState.current === 0 ? ' disabled' : '') + '>';
+            html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back</button>';
+            if (assessState.current < QUESTIONS.length - 1) {
+                html += '<button class="btn-nav" id="nextQ">Next <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>';
+            } else {
+                html += '<button class="btn-finish" id="finishQ">See Results</button>';
+            }
+            html += '</div>';
+            html += '</div>';
+
+            document.getElementById('questionContainer').innerHTML = html;
+
+            // Bind option clicks
+            document.querySelectorAll('.q-option').forEach(function(opt) {
+                opt.addEventListener('click', function() {
+                    var val = parseInt(this.querySelector('input').value);
+                    assessState.answers[assessState.current] = val;
+                    document.querySelectorAll('.q-option').forEach(function(o) { o.classList.remove('selected'); });
+                    this.classList.add('selected');
+                });
+            });
+
+            // Nav
+            var prevBtn = document.getElementById('prevQ');
+            if (prevBtn) prevBtn.addEventListener('click', function() {
+                if (assessState.current > 0) { assessState.current--; renderQuestion(); }
+            });
+
+            var nextBtn = document.getElementById('nextQ');
+            if (nextBtn) nextBtn.addEventListener('click', function() {
+                if (assessState.answers[assessState.current] !== null) {
+                    assessState.current++;
+                    renderQuestion();
+                } else { showToast('Select an answer'); }
+            });
+
+            var finishBtn = document.getElementById('finishQ');
+            if (finishBtn) finishBtn.addEventListener('click', function() {
+                if (assessState.answers[assessState.current] !== null) {
+                    calculateResults();
+                } else { showToast('Select an answer'); }
+            });
+        }
+
+        function calculateResults() {
+            var dimScores = {};
+            DIMENSIONS.forEach(function(d) { dimScores[d.id] = { total: 0, count: 0 }; });
+
+            QUESTIONS.forEach(function(q, i) {
+                var ansIdx = assessState.answers[i];
+                if (ansIdx !== null) {
+                    var score = q.options[ansIdx].score;
+                    dimScores[q.dim].total += score;
+                    dimScores[q.dim].count++;
+                }
+            });
+
+            var results = {};
+            var overallTotal = 0;
+            var overallCount = 0;
+
+            DIMENSIONS.forEach(function(d) {
+                var ds = dimScores[d.id];
+                var pct = ds.count > 0 ? Math.round((ds.total / (ds.count * 4)) * 100) : 0;
+                results[d.id] = pct;
+                overallTotal += pct;
+                overallCount++;
+            });
+
+            var overall = overallCount > 0 ? Math.round(overallTotal / overallCount) : 0;
+            var grade = getGrade(overall);
+
+            // Save
+            localStorage.setItem(ASSESS_KEY, JSON.stringify({ results: results, overall: overall, grade: grade.letter, date: new Date().toISOString() }));
+
+            // Show results
+            document.getElementById('assessActive').style.display = 'none';
+            document.getElementById('resultsSection').classList.add('active');
+
+            document.getElementById('resultsGrade').textContent = grade.letter;
+            document.getElementById('resultsGrade').className = 'results-grade results-grade--' + grade.colorClass;
+            document.getElementById('resultsTitle').textContent = grade.title;
+            document.getElementById('resultsSubtitle').textContent = 'Overall Score: ' + overall + '%';
+
+            renderRadar(results);
+            renderScoreRows(results);
+            renderRecommendations(results);
+        }
+
+        function getGrade(score) {
+            if (score >= 90) return { letter: 'A+', title: 'Exceptional — AI-native recruiter', colorClass: 'a' };
+            if (score >= 80) return { letter: 'A', title: 'Excellent — Strong AI integration', colorClass: 'a' };
+            if (score >= 70) return { letter: 'B', title: 'Good — Solid foundation, room to grow', colorClass: 'b' };
+            if (score >= 60) return { letter: 'C', title: 'Average — Key gaps to address', colorClass: 'c' };
+            if (score >= 50) return { letter: 'D', title: 'Below Average — Significant development needed', colorClass: 'd' };
+            return { letter: 'F', title: 'Starting Out — Begin with the Academy program', colorClass: 'd' };
+        }
+
+        function renderRadar(results) {
+            if (radarChartInstance) radarChartInstance.destroy();
+            var ctx = document.getElementById('radarChart').getContext('2d');
+            radarChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: DIMENSIONS.map(function(d) { return d.label; }),
+                    datasets: [{
+                        label: 'Your Score',
+                        data: DIMENSIONS.map(function(d) { return results[d.id]; }),
+                        backgroundColor: 'rgba(0, 229, 255, 0.15)',
+                        borderColor: 'rgba(0, 229, 255, 0.8)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(0, 229, 255, 1)',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { stepSize: 25, color: '#6b7280', backdropColor: 'transparent', font: { size: 10 } },
+                            grid: { color: 'rgba(255,255,255,0.06)' },
+                            angleLines: { color: 'rgba(255,255,255,0.06)' },
+                            pointLabels: { color: '#a1a1b5', font: { size: 11 } }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        function renderScoreRows(results) {
+            var html = '';
+            DIMENSIONS.forEach(function(d) {
+                var score = results[d.id];
+                html += '<div class="score-row">';
+                html += '<span class="score-row__label">' + d.label + '</span>';
+                html += '<div class="score-row__bar"><div class="score-row__fill" style="width:' + score + '%;background:' + d.color + '"></div></div>';
+                html += '<span class="score-row__value">' + score + '</span>';
+                html += '</div>';
+            });
+            document.getElementById('scoreRows').innerHTML = html;
+        }
+
+        function renderRecommendations(results) {
+            var recs = [];
+            var sorted = DIMENSIONS.slice().sort(function(a, b) { return results[a.id] - results[b.id]; });
+
+            sorted.forEach(function(d) {
+                var score = results[d.id];
+                if (score < 75) {
+                    recs.push(getRecommendation(d.id, score));
+                }
+            });
+
+            if (recs.length === 0) {
+                recs.push({ title: 'Keep Leading', text: 'Your scores are strong across all dimensions. Focus on coaching others and contributing assets to help your team level up.' });
+            }
+
+            var html = '';
+            recs.slice(0, 4).forEach(function(rec) {
+                html += '<div class="rec-card"><div class="rec-card__title">' + rec.title + '</div><div class="rec-card__text">' + rec.text + '</div></div>';
+            });
+            document.getElementById('recsContainer').innerHTML = html;
+        }
+
+        function getRecommendation(dimId, score) {
+            var recs = {
+                sourcing: {
+                    title: 'Strengthen Your Sourcing Strategy',
+                    text: score < 50
+                        ? 'Start with Academy Week 3: AI Sourcing. Build a 4-lane sourcing strategy for your top role. Use the Role Passport Builder to clarify requirements before searching.'
+                        : 'Use the Prompt Arsenal to explore multi-lane sourcing prompts. Practice building Persona Cards with AI and test different outreach angles (Mission, Craft, Career) to improve reply rates.'
+                },
+                screening: {
+                    title: 'Improve Your Screening Rigor',
+                    text: score < 50
+                        ? 'Start with Academy Week 4: The Pre-HM Truth Check. Practice the 5-question Truth Check protocol with a colleague. Focus on asking for measurable outcomes, not opinions.'
+                        : 'Use the Truth Check tool to build custom scripts for your roles. Practice calibrating Strong/OK/Risk scoring with your team to ensure consistency.'
+                },
+                submission: {
+                    title: 'Elevate Your Submissions',
+                    text: score < 50
+                        ? 'Start with Academy Week 5: Confidence Packs. Convert your next candidate submission into the Confidence Pack format. Focus on 3 evidence-based match reasons.'
+                        : 'Use the Confidence Pack Builder for every submission. Practice writing trade-off proposals when HMs push back. Check the Asset Library for the Trade-off Playbooks.'
+                },
+                operations: {
+                    title: 'Automate Your Workflows',
+                    text: score < 50
+                        ? 'Start with Academy Week 6: AI for Ops Acceleration. List your top 3 most repetitive tasks and write an AI prompt that handles 80% of the first one.'
+                        : 'Identify 2 more workflows to templatize. Use the HM Update Draft template from the Asset Library. Contribute at least one reusable asset to the library.'
+                },
+                coaching: {
+                    title: 'Develop Your Influence',
+                    text: score < 50
+                        ? 'Start with Academy Week 7: Coaching. Practice explaining a pass decision using only evidence. Write one trade-off proposal for a current role.'
+                        : 'Challenge yourself to present all decisions evidence-first. Use the Trade-off Playbooks from the Asset Library when requirements conflict. Mentor a teammate through the Academy program.'
+                }
+            };
+            return recs[dimId] || { title: 'Keep Improving', text: 'Continue working through the Academy program and practicing with the Hub tools.' };
+        }
+
+        document.getElementById('exportResults').addEventListener('click', function() {
+            var saved = null;
+            try { saved = JSON.parse(localStorage.getItem(ASSESS_KEY)); } catch(e) {}
+            if (!saved) { showToast('No results to export'); return; }
+            var text = 'AI Skill Assessment Results\n';
+            text += '============================\n';
+            text += 'Grade: ' + saved.grade + ' (' + saved.overall + '%)\n';
+            text += 'Date: ' + new Date(saved.date).toLocaleDateString() + '\n\n';
+            DIMENSIONS.forEach(function(d) {
+                text += d.label + ': ' + (saved.results[d.id] || 0) + '%\n';
+            });
+            if (window.ExportUtils) ExportUtils.copyToClipboard(text, this);
+            else navigator.clipboard.writeText(text);
+            showToast('Results copied');
+        });
+
+        // Load previous results if they exist
+        (function() {
+            var saved = null;
+            try { saved = JSON.parse(localStorage.getItem(ASSESS_KEY)); } catch(e) {}
+            if (saved && saved.results) {
+                document.getElementById('assessIntro').querySelector('p').textContent += ' You last took this assessment on ' + new Date(saved.date).toLocaleDateString() + ' (Grade: ' + saved.grade + ').';
+            }
+        })();
+
+        /* ============================================
+           TEAM SHOWCASE
+           ============================================ */
+        var SHOWCASE_MEMBERS = [
+            { name: 'Alex M.', team: 'EMEA North', certified: '2025-01-28' },
+            { name: 'Sarah K.', team: 'EMEA South', certified: '2025-02-03' },
+            { name: 'James T.', team: 'EMEA Central', certified: '2025-02-10' },
+            { name: 'Lisa P.', team: 'EMEA North', certified: '2025-02-14' },
+            { name: 'Marco R.', team: 'APAC', certified: '2025-02-18' },
+            { name: 'Nina W.', team: 'EMEA South', certified: '2025-02-22' }
+        ];
+
+        function renderShowcase() {
+            var html = '';
+            SHOWCASE_MEMBERS.forEach(function(m) {
+                var initials = m.name.split(' ').map(function(n) { return n[0]; }).join('');
+                html += '<div class="showcase-member">';
+                html += '<div class="showcase-member__avatar">' + initials + '</div>';
+                html += '<div class="showcase-member__name">' + m.name + '</div>';
+                html += '<div class="showcase-member__team">' + m.team + '</div>';
+                html += '<div class="showcase-member__date">Certified ' + new Date(m.certified).toLocaleDateString() + '</div>';
+                html += '</div>';
+            });
+            document.getElementById('showcaseGrid').innerHTML = html;
+        }
+
+        renderShowcase();
+
+        /* --- Helpers --- */
+        function showToast(msg) {
+            var t = document.getElementById('toast');
+            t.textContent = msg; t.classList.add('show');
+            setTimeout(function() { t.classList.remove('show'); }, 2000);
+        }
+    })();
+    </script>
+</body>
+</html>
