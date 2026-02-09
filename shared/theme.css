@@ -7,6 +7,8 @@
 :root {
   /* Backgrounds */
   --bg-primary: #0D0F13;
+  --bg-secondary: #161921;
+  --bg-tertiary: #222633;
   --bg-surface: #161921;
   --bg-surface-hover: #1C1F2A;
   --bg-surface-active: #222633;

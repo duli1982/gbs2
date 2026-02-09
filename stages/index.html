@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <title>The 12 Stages — AI Hub v2.0 | Randstad GBS</title>
+    <title>The 12 Stages — AI Hub v2.0</title>
 
     <meta name="description" content="AI-powered workflow for every recruiting step. 12 stages from intake to postmortem, each with AI agent behavior, team advantages, and measurable metrics.">
-    <meta name="author" content="Randstad GBS">
+    <meta name="author" content="AI Hub v2.0">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="The 12 Stages — AI Hub v2.0">
@@ -650,6 +650,67 @@
             color: var(--text-secondary);
         }
 
+        /* --- Feedback Loops --- */
+        .feedback-loops {
+            margin-top: var(--space-6);
+            padding: var(--space-5);
+            background: rgba(167, 139, 250, 0.04);
+            border: 1px solid rgba(167, 139, 250, 0.15);
+            border-radius: var(--radius-lg);
+        }
+        .feedback-loops__title {
+            font-size: var(--font-xs);
+            font-weight: var(--weight-semibold);
+            color: var(--accent-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: var(--space-4);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        .feedback-loops__title svg { width: 14px; height: 14px; }
+        .feedback-loop-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-3);
+            padding: var(--space-3) 0;
+            border-bottom: 1px solid rgba(167, 139, 250, 0.08);
+        }
+        .feedback-loop-item:last-child { border-bottom: none; }
+        .feedback-loop-item__arrow {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(167, 139, 250, 0.1);
+            color: var(--accent-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-xs);
+            font-weight: var(--weight-bold);
+            font-family: var(--font-mono);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .feedback-loop-item__arrow:hover {
+            background: var(--accent-purple);
+            color: var(--text-inverse);
+        }
+        .feedback-loop-item__body { flex: 1; }
+        .feedback-loop-item__label {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+        .feedback-loop-item__trigger {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
         /* --- Stage Navigation Arrows --- */
         .stage-nav {
             display: flex;
@@ -813,8 +874,9 @@
 
                 <!-- Bottom CTA -->
                 <section class="stages-cta fade-in-up fade-in-up-delay-3">
-                    <p>Every stage produces evidence. Every tool demands proof. That is how you build confidence the hiring manager can trust.</p>
+                    <p>Every stage produces evidence. Every tool demands proof. Stage 12 feeds back to Stage 1 — because recruiting is not a line, it is a loop. The teams that measure and learn compound their advantage every month.</p>
                     <a href="/prompts/" class="btn btn-primary">See the prompts for every stage</a>
+                    <a href="/telemetry/" class="btn btn-secondary" style="margin-left:var(--space-3);">Track your outcomes</a>
                 </section>
 
             </div>
@@ -1136,6 +1198,11 @@
             html += renderMetrics(stage);
             html += renderWorkbook(stage);
 
+            // Feedback Loops (if this stage feeds back to others)
+            if (stage.feedbackLoops && stage.feedbackLoops.length > 0) {
+                html += renderFeedbackLoops(stage);
+            }
+
             // Prev / Next navigation
             html += renderStageNav(stage);
 
@@ -1292,6 +1359,29 @@
             html += '</div>';
             html += '</div>';
 
+            return html;
+        }
+
+        /* --- Feedback Loops --- */
+        function renderFeedbackLoops(stage) {
+            var html = '<div class="feedback-loops">';
+            html += '<div class="feedback-loops__title">';
+            html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>';
+            html += 'Feedback Loops — What This Stage Updates';
+            html += '</div>';
+            for (var i = 0; i < stage.feedbackLoops.length; i++) {
+                var loop = stage.feedbackLoops[i];
+                var targetStage = getStage(loop.targetStage);
+                var targetLabel = targetStage ? targetStage.title : 'Stage ' + loop.targetStage;
+                html += '<div class="feedback-loop-item">';
+                html += '<div class="feedback-loop-item__arrow" data-nav-stage="' + loop.targetStage + '" title="Go to Stage ' + loop.targetStage + ': ' + targetLabel + '">' + loop.targetStage + '</div>';
+                html += '<div class="feedback-loop-item__body">';
+                html += '<div class="feedback-loop-item__label">' + escapeHtml(loop.label) + ' (Stage ' + loop.targetStage + ')</div>';
+                html += '<div class="feedback-loop-item__trigger">' + escapeHtml(loop.trigger) + '</div>';
+                html += '</div>';
+                html += '</div>';
+            }
+            html += '</div>';
             return html;
         }
 

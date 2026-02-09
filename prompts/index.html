@@ -519,6 +519,7 @@
     <script src="../shared/sidebar.js"></script>
     <script src="../shared/v2-footer.js"></script>
     <script src="../shared/export-utils.js"></script>
+    <script src="../shared/scripts/ai-usage-telemetry.js"></script>
     <script src="../shared/ai-service.js"></script>
 
     <script>
@@ -786,6 +787,14 @@
                     const prompt = allPrompts.find(function(p) { return p.id === id; });
                     if (prompt) {
                         ExportUtils.copyToClipboard(prompt.content, copyBtn);
+                        if (window.AIUsageTelemetry && typeof window.AIUsageTelemetry.logPromptUsage === 'function') {
+                            window.AIUsageTelemetry.logPromptUsage({
+                                id: prompt.id,
+                                title: prompt.title,
+                                stage: 'Stage ' + prompt.stage,
+                                action: 'copy'
+                            });
+                        }
                     }
                 }
 

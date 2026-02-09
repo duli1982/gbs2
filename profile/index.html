@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <title>My Profile | AI Hub v2.0 — The Confidence Engine | Randstad GBS</title>
+    <title>My Profile | AI Hub v2.0 — The Confidence Engine</title>
 
     <meta name="description" content="AI-Ready Sourcer Badge, skill assessment, and team certification tracking.">
-    <meta name="author" content="Randstad GBS">
+    <meta name="author" content="AI Hub v2.0">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -145,6 +145,20 @@
         .showcase-member__team { font-size: var(--font-xs); color: var(--text-muted); margin-top: 2px; }
         .showcase-member__date { font-size: var(--font-xs); color: var(--signal-strong); margin-top: var(--space-2); }
 
+        /* Manager Verification */
+        .verify-header { font-size: var(--font-sm); font-weight: var(--weight-semibold); color: var(--text-primary); margin-bottom: var(--space-2); display: flex; align-items: center; gap: var(--space-2); }
+        .verify-header svg { width: 16px; height: 16px; color: var(--accent-cyan); }
+        .verify-desc { font-size: var(--font-xs); color: var(--text-muted); margin-bottom: var(--space-4); line-height: 1.5; }
+        .verify-form { display: flex; gap: var(--space-3); align-items: flex-end; flex-wrap: wrap; }
+        .verify-form__group { display: flex; flex-direction: column; gap: var(--space-1); }
+        .verify-form__label { font-size: var(--font-xs); color: var(--text-muted); font-weight: var(--weight-medium); }
+        .verify-form__input { padding: 8px 12px; background: var(--bg-primary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-primary); font-size: var(--font-sm); font-family: inherit; outline: none; }
+        .verify-form__input:focus { border-color: var(--accent-cyan); }
+        .verify-btn { padding: 8px 16px; background: var(--accent-cyan); color: var(--bg-primary); border: none; border-radius: var(--radius-md); font-size: var(--font-sm); font-weight: var(--weight-semibold); cursor: pointer; font-family: inherit; white-space: nowrap; }
+        .verify-status { margin-top: var(--space-3); font-size: var(--font-sm); }
+        .verify-status--verified { color: var(--signal-strong); font-weight: var(--weight-semibold); }
+        .verify-status--self { color: var(--text-muted); }
+
         /* Toast */
         .toast { position: fixed; bottom: var(--space-6); right: var(--space-6); padding: var(--space-3) var(--space-5); background: var(--signal-strong); color: var(--bg-primary); border-radius: var(--radius-md); font-size: var(--font-sm); font-weight: var(--weight-medium); z-index: 1100; display: none; }
         .toast.show { display: block; animation: fadeInUp 0.2s ease; }
@@ -196,6 +210,9 @@
                         <button class="btn-primary" id="exportBadge">Export My Progress</button>
                         <button class="btn-secondary" id="printBadge">Print</button>
                     </div>
+
+                    <!-- Manager Verification -->
+                    <div id="managerVerify" style="margin-top:var(--space-8);padding:var(--space-5);background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);max-width:600px;"></div>
                 </div>
 
                 <!-- TAB: Skill Assessment -->
@@ -322,6 +339,7 @@
                     s[this.dataset.badge] = this.checked;
                     localStorage.setItem(BADGE_KEY, JSON.stringify(s));
                     renderBadge();
+                    renderVerification();
                 });
             });
         }
@@ -336,6 +354,12 @@
             });
             text += '\nCompleted: ' + completed.length + ' / ' + BADGE_ITEMS.length;
             text += '\nDate: ' + new Date().toLocaleDateString();
+            var vf = getVerification();
+            if (vf.verifiedBy) {
+                text += '\nVerified by: ' + vf.verifiedBy + ' on ' + new Date(vf.verifiedAt).toLocaleDateString();
+            } else {
+                text += '\nStatus: Self-reported (not yet manager-verified)';
+            }
             if (window.ExportUtils) ExportUtils.copyToClipboard(text, this);
             else navigator.clipboard.writeText(text);
             showToast('Copied to clipboard');
@@ -352,6 +376,80 @@
         });
 
         renderBadge();
+
+        /* ============================================
+           MANAGER VERIFICATION
+           ============================================ */
+        var VERIFY_KEY = 'profile-verification';
+
+        function getVerification() {
+            try { return JSON.parse(localStorage.getItem(VERIFY_KEY)) || {}; } catch(e) { return {}; }
+        }
+
+        function renderVerification() {
+            var container = document.getElementById('managerVerify');
+            var state = getBadgeState();
+            var completed = BADGE_ITEMS.filter(function(i) { return state[i.id]; }).length;
+            var verification = getVerification();
+
+            var html = '<div class="verify-header">';
+            html += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+            html += 'Manager Verification';
+            html += '</div>';
+            html += '<div class="verify-desc">Self-reported badges build habit. Manager-verified badges build trust. Have your team lead verify your completed items to move from "self-reported" to "verified" status.</div>';
+
+            if (verification.verifiedBy) {
+                // Already verified
+                html += '<div class="verify-status verify-status--verified">';
+                html += '&#10003; Verified by ' + esc(verification.verifiedBy) + ' on ' + new Date(verification.verifiedAt).toLocaleDateString();
+                html += ' (' + verification.verifiedCount + '/' + BADGE_ITEMS.length + ' items at time of verification)';
+                html += '</div>';
+                if (completed > verification.verifiedCount) {
+                    html += '<div class="verify-status verify-status--self" style="margin-top:var(--space-2);">';
+                    html += 'You have completed ' + (completed - verification.verifiedCount) + ' additional items since verification. Request re-verification to update.';
+                    html += '</div>';
+                    html += '<div class="verify-form" style="margin-top:var(--space-3);">';
+                    html += '<div class="verify-form__group"><label class="verify-form__label">Manager Name</label><input class="verify-form__input" id="verifyName" placeholder="Team lead name" value="' + esc(verification.verifiedBy) + '"></div>';
+                    html += '<div class="verify-form__group"><label class="verify-form__label">Verification Code</label><input class="verify-form__input" id="verifyCode" placeholder="Enter code" style="max-width:120px;"></div>';
+                    html += '<button class="verify-btn" id="verifyBtn">Re-verify</button>';
+                    html += '</div>';
+                }
+            } else if (completed >= 1) {
+                // Has progress, can verify
+                html += '<div class="verify-status verify-status--self">Status: Self-reported (' + completed + '/' + BADGE_ITEMS.length + ' complete)</div>';
+                html += '<div class="verify-form" style="margin-top:var(--space-3);">';
+                html += '<div class="verify-form__group"><label class="verify-form__label">Manager Name</label><input class="verify-form__input" id="verifyName" placeholder="Team lead name"></div>';
+                html += '<div class="verify-form__group"><label class="verify-form__label">Verification Code</label><input class="verify-form__input" id="verifyCode" placeholder="Enter code" style="max-width:120px;"></div>';
+                html += '<button class="verify-btn" id="verifyBtn">Verify</button>';
+                html += '</div>';
+                html += '<div style="font-size:var(--font-xs);color:var(--text-muted);margin-top:var(--space-2);">Verification code: ask your manager to confirm in person, then enter their initials + today\'s date (e.g., JD0209).</div>';
+            } else {
+                html += '<div class="verify-status verify-status--self">Complete at least 1 badge item before requesting verification.</div>';
+            }
+
+            container.innerHTML = html;
+
+            var verifyBtn = document.getElementById('verifyBtn');
+            if (verifyBtn) {
+                verifyBtn.addEventListener('click', function() {
+                    var name = document.getElementById('verifyName').value.trim();
+                    var code = document.getElementById('verifyCode').value.trim();
+                    if (!name) { showToast('Enter manager name'); return; }
+                    if (!code || code.length < 4) { showToast('Enter a valid verification code (min 4 characters)'); return; }
+                    var v = {
+                        verifiedBy: name,
+                        verifiedAt: new Date().toISOString(),
+                        verifiedCount: completed,
+                        code: code
+                    };
+                    localStorage.setItem(VERIFY_KEY, JSON.stringify(v));
+                    renderVerification();
+                    showToast('Badge verified by ' + name);
+                });
+            }
+        }
+
+        renderVerification();
 
         /* ============================================
            SKILL ASSESSMENT
@@ -690,19 +788,19 @@
                 submission: {
                     title: 'Elevate Your Submissions',
                     text: score < 50
-                        ? 'Start with Academy Week 5: Confidence Packs. Convert your next candidate submission into the Confidence Pack format. Focus on 3 evidence-based match reasons.'
+                        ? 'Start with Academy Week 6: Confidence Packs. Convert your next candidate submission into the Confidence Pack format. Focus on 3 evidence-based match reasons.'
                         : 'Use the Confidence Pack Builder for every submission. Practice writing trade-off proposals when HMs push back. Check the Asset Library for the Trade-off Playbooks.'
                 },
                 operations: {
                     title: 'Automate Your Workflows',
                     text: score < 50
-                        ? 'Start with Academy Week 6: AI for Ops Acceleration. List your top 3 most repetitive tasks and write an AI prompt that handles 80% of the first one.'
+                        ? 'Start with Academy Week 7: AI for Ops Acceleration. List your top 3 most repetitive tasks and write an AI prompt that handles 80% of the first one.'
                         : 'Identify 2 more workflows to templatize. Use the HM Update Draft template from the Asset Library. Contribute at least one reusable asset to the library.'
                 },
                 coaching: {
                     title: 'Develop Your Influence',
                     text: score < 50
-                        ? 'Start with Academy Week 7: Coaching. Practice explaining a pass decision using only evidence. Write one trade-off proposal for a current role.'
+                        ? 'Start with Academy Week 8: Coaching. Practice explaining a pass decision using only evidence. Write one trade-off proposal for a current role.'
                         : 'Challenge yourself to present all decisions evidence-first. Use the Trade-off Playbooks from the Asset Library when requirements conflict. Mentor a teammate through the Academy program.'
                 }
             };

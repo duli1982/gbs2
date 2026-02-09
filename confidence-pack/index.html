@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <title>Confidence Pack Builder | AI Hub v2.0 — The Confidence Engine | Randstad GBS</title>
+    <title>Confidence Pack Builder | AI Hub v2.0 — The Confidence Engine</title>
 
     <meta name="description" content="Turn screened candidates into evidence-backed submission packages that hiring managers trust. Every claim has proof. Every risk has a plan.">
-    <meta name="author" content="Randstad GBS">
+    <meta name="author" content="AI Hub v2.0">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="Confidence Pack Builder — AI Hub v2.0">
@@ -337,6 +337,67 @@
             letter-spacing: 0.04em;
             margin-bottom: var(--space-1);
             margin-top: var(--space-3);
+        }
+
+        .cp-match-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+            margin-top: var(--space-3);
+        }
+
+        .cp-meta-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-primary);
+            color: var(--text-muted);
+            font-size: 11px;
+            font-family: var(--font-mono);
+            line-height: 1.2;
+        }
+
+        .cp-meta-pill--confidence-high {
+            border-color: rgba(52, 211, 153, 0.25);
+            color: var(--accent-green);
+            background: rgba(52, 211, 153, 0.08);
+        }
+
+        .cp-meta-pill--confidence-medium {
+            border-color: rgba(251, 191, 36, 0.25);
+            color: var(--accent-amber);
+            background: rgba(251, 191, 36, 0.08);
+        }
+
+        .cp-meta-pill--confidence-low {
+            border-color: rgba(248, 113, 113, 0.25);
+            color: var(--accent-red);
+            background: rgba(248, 113, 113, 0.08);
+        }
+
+        .cp-quality-alert {
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            background: rgba(251, 191, 36, 0.08);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            margin-bottom: var(--space-4);
+        }
+
+        .cp-quality-alert__title {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            color: var(--accent-amber);
+            margin-bottom: var(--space-2);
+        }
+
+        .cp-quality-alert ul {
+            margin: 0;
+            padding-left: var(--space-4);
+            color: var(--text-secondary);
+            font-size: var(--font-xs);
+            line-height: var(--leading-relaxed);
         }
 
         /* --- Risk Card --- */
@@ -694,6 +755,7 @@
 
                     <!-- Pack Content -->
                     <div id="cpPackContent">
+                        <div id="cpQualityAlert" style="display:none;"></div>
 
                         <!-- 1. WHY THIS CANDIDATE -->
                         <div class="cp-pack-section">
@@ -738,6 +800,14 @@
                     <div class="cp-error-card">
                         <div class="cp-error-title">Generation Failed</div>
                         <div class="cp-error-message" id="cpErrorMessage">Something went wrong while generating the Confidence Pack. Please try again.</div>
+                        <div style="font-size:var(--font-xs);color:var(--text-muted);line-height:1.6;margin-bottom:var(--space-4);">
+                            Troubleshooting:
+                            <ul style="margin:var(--space-2) 0 0 var(--space-4);">
+                                <li>If output looks generic, add specific screen evidence and role must-haves.</li>
+                                <li>If citations are missing, paste clearer Truth Check line items.</li>
+                                <li>If you suspect hallucination, regenerate and manually verify each claim before sending.</li>
+                            </ul>
+                        </div>
                         <button class="btn btn-primary" id="cpRetryBtn" type="button">Retry</button>
                     </div>
                 </div>
@@ -809,6 +879,7 @@
         const resultCandidate = document.getElementById('cpResultCandidate');
         const resultRole      = document.getElementById('cpResultRole');
         const resultDate      = document.getElementById('cpResultDate');
+        const qualityAlertEl  = document.getElementById('cpQualityAlert');
         const matchCards      = document.getElementById('cpMatchCards');
         const riskCard        = document.getElementById('cpRiskCard');
         const nextStep        = document.getElementById('cpNextStep');
@@ -929,6 +1000,10 @@
                 parts.push('');
             }
 
+            parts.push('CITATION REQUIREMENT:');
+            parts.push('For each match reason, provide explicit source links back to Role Passport must-have lines and Truth Check / screen-note line items.');
+            parts.push('If a source link cannot be found, output "Unknown" and flag it for reviewer follow-up.');
+            parts.push('');
             parts.push('Based on this information, generate the Confidence Pack as specified. Return ONLY valid JSON, no markdown code blocks, no additional text.');
 
             return parts.join('\n');
@@ -940,9 +1015,15 @@
             'Return a JSON object with this EXACT structure:',
             '{',
             '  "matchReasons": [',
-            '    { "requirement": "The must-have requirement this addresses", "evidence": "Specific evidence from the screening notes proving the match" },',
-            '    { "requirement": "...", "evidence": "..." },',
-            '    { "requirement": "...", "evidence": "..." }',
+            '    {',
+            '      "requirement": "The must-have requirement this addresses",',
+            '      "evidence": "Specific evidence from the screening notes proving the match",',
+            '      "rolePassportSource": "Exact role-passport line/item this maps to",',
+            '      "truthCheckSource": "Exact truth-check/screen note line-item this relies on",',
+            '      "confidence": "High | Medium | Low"',
+            '    },',
+            '    { "requirement": "...", "evidence": "...", "rolePassportSource": "...", "truthCheckSource": "...", "confidence": "..." },',
+            '    { "requirement": "...", "evidence": "...", "rolePassportSource": "...", "truthCheckSource": "...", "confidence": "..." }',
             '  ],',
             '  "risk": {',
             '    "title": "The key risk or concern",',
@@ -960,11 +1041,17 @@
             '    "compensation": "Known comp expectations, or Unknown if not mentioned",',
             '    "motivation": "Summary of what motivates this candidate to move",',
             '    "flags": ["List of unknowns or items that need follow-up"]',
+            '  },',
+            '  "qualityChecks": {',
+            '    "hallucinationRisk": "Low | Medium | High",',
+            '    "reviewNotes": ["Short notes about uncertainty, missing citations, or facts that require human validation"]',
             '  }',
             '}',
             '',
             'Rules:',
             '- Every match reason MUST cite specific evidence from the screening notes. Do not fabricate evidence.',
+            '- Every match reason MUST include rolePassportSource and truthCheckSource. If missing, mark Unknown and add a review note.',
+            '- Confidence should be High only when evidence is explicit and directly job-related.',
             '- The risk must be honest and real, not superficial.',
             '- Recommendations must be actionable and specific.',
             '- If information is missing, flag it clearly in the snapshot flags.',
@@ -994,6 +1081,25 @@
             return JSON.parse(cleaned);
         }
 
+        function normalizePack(pack) {
+            if (!pack || typeof pack !== 'object') return {};
+            var normalized = Object.assign({}, pack);
+            normalized.matchReasons = Array.isArray(pack.matchReasons) ? pack.matchReasons.map(function(match) {
+                return {
+                    requirement: match && match.requirement ? String(match.requirement) : '',
+                    evidence: match && match.evidence ? String(match.evidence) : '',
+                    rolePassportSource: match && match.rolePassportSource ? String(match.rolePassportSource) : 'Unknown',
+                    truthCheckSource: match && match.truthCheckSource ? String(match.truthCheckSource) : 'Unknown',
+                    confidence: normalizeConfidence(match && match.confidence)
+                };
+            }) : [];
+            if (!normalized.qualityChecks || typeof normalized.qualityChecks !== 'object') {
+                normalized.qualityChecks = { hallucinationRisk: 'Medium', reviewNotes: [] };
+            }
+            if (!Array.isArray(normalized.qualityChecks.reviewNotes)) normalized.qualityChecks.reviewNotes = [];
+            return normalized;
+        }
+
         /* ============================================
            Render Result
            ============================================ */
@@ -1004,7 +1110,90 @@
             return div.innerHTML;
         }
 
+        function normalizeConfidence(value) {
+            var cleaned = String(value || '').trim().toLowerCase();
+            if (cleaned === 'high') return 'High';
+            if (cleaned === 'low') return 'Low';
+            return 'Medium';
+        }
+
+        function tokenizeForEvidence(text) {
+            return String(text || '')
+                .toLowerCase()
+                .replace(/[^a-z0-9\s]/g, ' ')
+                .split(/\s+/)
+                .filter(function(token) { return token.length >= 5; });
+        }
+
+        function hasMeaningfulOverlap(evidence, sourceText) {
+            var eTokens = tokenizeForEvidence(evidence);
+            if (eTokens.length === 0) return true;
+            var sourceSet = new Set(tokenizeForEvidence(sourceText));
+            var matchCount = 0;
+            eTokens.forEach(function(token) {
+                if (sourceSet.has(token)) matchCount++;
+            });
+            return (matchCount / eTokens.length) >= 0.2;
+        }
+
+        function buildQualityWarnings(data, pack) {
+            var warnings = [];
+            var matches = Array.isArray(pack.matchReasons) ? pack.matchReasons : [];
+            var sourceCorpus = [
+                data.rolePassport || '',
+                data.screenNotes || '',
+                data.strengths || '',
+                data.concerns || '',
+                data.additional || ''
+            ].join('\n');
+
+            var missingPassportLinks = matches.filter(function(m) {
+                return !m || !String(m.rolePassportSource || '').trim() || String(m.rolePassportSource || '').trim().toLowerCase() === 'unknown';
+            }).length;
+            var missingTruthLinks = matches.filter(function(m) {
+                return !m || !String(m.truthCheckSource || '').trim() || String(m.truthCheckSource || '').trim().toLowerCase() === 'unknown';
+            }).length;
+            if (missingPassportLinks > 0) warnings.push(missingPassportLinks + ' of ' + matches.length + ' match reasons are missing Role Passport source links.');
+            if (missingTruthLinks > 0) warnings.push(missingTruthLinks + ' of ' + matches.length + ' match reasons are missing Truth Check source links.');
+
+            var weakEvidenceCount = matches.filter(function(m) {
+                return m && m.evidence && !hasMeaningfulOverlap(m.evidence, sourceCorpus);
+            }).length;
+            if (weakEvidenceCount > 0) warnings.push(weakEvidenceCount + ' evidence statements do not strongly overlap with your provided notes. Verify for hallucination risk.');
+
+            if (pack.qualityChecks && String(pack.qualityChecks.hallucinationRisk || '').toLowerCase() === 'high') {
+                warnings.push('Model self-reported HIGH hallucination risk. Run manual source verification before submission.');
+            }
+
+            return warnings;
+        }
+
+        function renderQualityAlert(warnings, pack) {
+            if (!qualityAlertEl) return;
+            if (!warnings || warnings.length === 0) {
+                qualityAlertEl.style.display = 'none';
+                qualityAlertEl.innerHTML = '';
+                return;
+            }
+
+            var modelNotes = (pack && pack.qualityChecks && Array.isArray(pack.qualityChecks.reviewNotes)) ? pack.qualityChecks.reviewNotes : [];
+            var html = '<div class="cp-quality-alert">';
+            html += '<div class="cp-quality-alert__title">Verification Warning — Review Before Sending</div>';
+            html += '<ul>';
+            warnings.forEach(function(w) { html += '<li>' + escapeHtml(w) + '</li>'; });
+            modelNotes.slice(0, 4).forEach(function(note) {
+                if (note && note.trim()) html += '<li>' + escapeHtml(note) + '</li>';
+            });
+            html += '</ul>';
+            html += '</div>';
+            qualityAlertEl.style.display = 'block';
+            qualityAlertEl.innerHTML = html;
+        }
+
         function renderResult(data, pack) {
+            var qualityWarnings = buildQualityWarnings(data, pack);
+            renderQualityAlert(qualityWarnings, pack);
+
             // Top bar
             var candidateDisplay = escapeHtml(data.candidateName);
             if (data.currentTitle) {
@@ -1022,11 +1211,20 @@
             var matchHtml = '';
             if (pack.matchReasons && pack.matchReasons.length > 0) {
                 pack.matchReasons.forEach(function(match, i) {
+                    var confidence = normalizeConfidence(match && match.confidence);
+                    var confidenceClass = 'cp-meta-pill--confidence-' + confidence.toLowerCase();
+                    var passportSource = match && match.rolePassportSource ? match.rolePassportSource : 'Unknown';
+                    var truthSource = match && match.truthCheckSource ? match.truthCheckSource : 'Unknown';
                     matchHtml += '<div class="cp-match-card">';
                     matchHtml += '  <div class="cp-match-label">Match #' + (i + 1) + '</div>';
                     matchHtml += '  <div class="cp-match-requirement">' + escapeHtml(match.requirement) + '</div>';
                     matchHtml += '  <div class="cp-match-evidence-label">Evidence</div>';
                     matchHtml += '  <div class="cp-match-evidence">' + escapeHtml(match.evidence) + '</div>';
+                    matchHtml += '  <div class="cp-match-meta">';
+                    matchHtml += '    <span class="cp-meta-pill">Role Passport: ' + escapeHtml(passportSource) + '</span>';
+                    matchHtml += '    <span class="cp-meta-pill">Truth Check: ' + escapeHtml(truthSource) + '</span>';
+                    matchHtml += '    <span class="cp-meta-pill ' + confidenceClass + '">Confidence: ' + confidence + '</span>';
+                    matchHtml += '  </div>';
                     matchHtml += '</div>';
                 });
             }
@@ -1126,6 +1324,9 @@
                     lines.push('');
                     lines.push('Match #' + (i + 1) + ': ' + m.requirement);
                     lines.push('Evidence: ' + m.evidence);
+                    lines.push('Role Passport Source: ' + (m.rolePassportSource || 'Unknown'));
+                    lines.push('Truth Check Source: ' + (m.truthCheckSource || 'Unknown'));
+                    lines.push('Confidence: ' + normalizeConfidence(m.confidence));
                 });
             }
             lines.push('');
@@ -1188,6 +1389,9 @@
                     lines.push('');
                     lines.push('### Match #' + (i + 1) + ': ' + m.requirement);
                     lines.push('**Evidence:** ' + m.evidence);
+                    lines.push('**Role Passport Source:** ' + (m.rolePassportSource || 'Unknown'));
+                    lines.push('**Truth Check Source:** ' + (m.truthCheckSource || 'Unknown'));
+                    lines.push('**Confidence:** ' + normalizeConfidence(m.confidence));
                 });
             }
             lines.push('');
@@ -1252,6 +1456,9 @@
                     html += '<div class="section">';
                     html += '<h3><span class="badge badge--strong">Match #' + (i + 1) + '</span> ' + escapeHtml(m.requirement) + '</h3>';
                     html += '<p><strong>Evidence:</strong> ' + escapeHtml(m.evidence) + '</p>';
+                    html += '<p><strong>Role Passport Source:</strong> ' + escapeHtml(m.rolePassportSource || 'Unknown') + '</p>';
+                    html += '<p><strong>Truth Check Source:</strong> ' + escapeHtml(m.truthCheckSource || 'Unknown') + '</p>';
+                    html += '<p><strong>Confidence:</strong> ' + escapeHtml(normalizeConfidence(m.confidence)) + '</p>';
                     html += '</div>';
                 });
             }
@@ -1314,6 +1521,7 @@
             if (packResult.matchReasons) {
                 packResult.matchReasons.forEach(function(m, i) {
                     lines.push((i + 1) + '. ' + m.requirement + ' -- ' + m.evidence);
+                    lines.push('   Sources: RP=' + (m.rolePassportSource || 'Unknown') + ' | TC=' + (m.truthCheckSource || 'Unknown') + ' | Confidence=' + normalizeConfidence(m.confidence));
                 });
             }
             lines.push('');
@@ -1371,7 +1579,7 @@
                     throw new Error('No response received from AI service.');
                 }
 
-                packResult = parseAIResponse(result.text);
+                packResult = normalizePack(parseAIResponse(result.text));
                 renderResult(data, packResult);
                 showLoading(false);
                 showView('result');

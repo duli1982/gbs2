@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <title>Truth Check — AI Hub v2.0 | Randstad GBS</title>
+    <title>Truth Check — AI Hub v2.0</title>
 
     <meta name="description" content="Structured pre-HM screening tool. 10-12 minutes. Evidence over impression. Consistent quality across the team.">
-    <meta name="author" content="Randstad GBS">
+    <meta name="author" content="AI Hub v2.0">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="Truth Check — AI Hub v2.0">
@@ -1238,7 +1238,7 @@
             sgOutput.classList.remove('visible');
             btnGenerate.disabled = true;
 
-            var systemPrompt = 'You are a senior recruiting strategist for Randstad GBS. Generate a structured pre-HM screening script. Return ONLY valid JSON with this exact structure: {"opening":{"script":"...","duration":"1 min"},"evidenceQuestions":[{"question":"...","strongAnswer":"...","weakAnswer":"...","followUp":"..."}],"constraintQuestions":[{"question":"..."}],"motivationQuestions":[{"question":"..."}],"close":{"script":"...","duration":"1 min"}}. The evidenceQuestions array must have exactly 3 items. constraintQuestions should have 3 items (location, comp expectations, notice period). motivationQuestions should have 2 items. All questions must be specific to the role type, seniority, and domain. Do not include markdown formatting, code fences, or any text outside the JSON object.';
+            var systemPrompt = 'You are a senior recruiting strategist for AI Hub v2.0 teams. Generate a structured pre-HM screening script. Return ONLY valid JSON with this exact structure: {"opening":{"script":"...","duration":"1 min"},"evidenceQuestions":[{"question":"...","strongAnswer":"...","weakAnswer":"...","followUp":"..."}],"constraintQuestions":[{"question":"..."}],"motivationQuestions":[{"question":"..."}],"close":{"script":"...","duration":"1 min"}}. The evidenceQuestions array must have exactly 3 items. constraintQuestions should have 3 items (location, comp expectations, notice period). motivationQuestions should have 2 items. All questions must be specific to the role type, seniority, and domain. Do not include markdown formatting, code fences, or any text outside the JSON object.';
 
             var userPrompt = 'Generate a truth check screening script for:\n- Role Type: ' + roleType + '\n- Seniority: ' + seniority + '\n- Domain: ' + (domain || 'General') + (passport ? '\n- Key must-haves from Role Passport: ' + passport : '') + '\n\nMake the evidence questions highly specific to this role and seniority level. For strong/weak answer indicators, be concrete about what to listen for.';
 

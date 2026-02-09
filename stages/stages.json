@@ -97,16 +97,20 @@
     "whatAIDoes": [
       "Builds Boolean strings + variants.",
       "Creates a target list with companies, adjacent industries, and bridge profiles.",
-      "Produces a profile scoring rubric for shortlist consistency."
+      "Produces a profile scoring rubric for shortlist consistency.",
+      "Audits sourcing lanes for diversity blind spots and pipeline depth gaps."
     ],
     "agentBehavior": [
-      "After 20\u201330 profiles reviewed, updates the blueprint with what\u2019s working and what\u2019s not."
+      "After 20\u201330 profiles reviewed, updates the blueprint with what\u2019s working and what\u2019s not.",
+      "Flags when pipeline depth falls below contingency thresholds."
     ],
     "teamAdvantage": "New sourcers ramp faster. Sourcing becomes a system, not an art form.",
     "metrics": [
       "Sourcing channel effectiveness",
       "Profile-to-screen conversion",
-      "Blueprint reuse rate"
+      "Blueprint reuse rate",
+      "Pipeline depth vs. target ratio",
+      "Sourcing lane diversity breadth"
     ],
     "tools": [
       {
@@ -155,16 +159,20 @@
     "whatAIDoes": [
       "Generates screen scripts aligned to must-haves.",
       "Produces real-time note structuring separating evidence from interpretation.",
-      "Flags red flags and identifies candidate motivators."
+      "Flags red flags and identifies candidate motivators.",
+      "Drafts empathetic, brand-positive rejection messages for candidates not advancing."
     ],
     "agentBehavior": [
-      "After the call, outputs hire/no-hire recommendation, confidence score with reasons, and missing evidence list."
+      "After the call, outputs hire/no-hire recommendation, confidence score with reasons, and missing evidence list.",
+      "Ensures every screened candidate receives a personalized response within 48 hours."
     ],
     "teamAdvantage": "Screening quality becomes consistent across the team.",
     "metrics": [
       "Screen quality score",
       "Interviewer calibration rate",
-      "Evidence capture completeness"
+      "Evidence capture completeness",
+      "Candidate rejection response time (hours)",
+      "Silver medalist capture rate"
     ],
     "tools": [
       {
@@ -188,16 +196,20 @@
     "verificationFocus": "Block submission unless every claim has proof attached and every known risk has a mitigation plan.",
     "whatAIDoes": [
       "Writes a one-page candidate narrative with match to must-haves, risks, mitigations.",
-      "Generates HM briefing questions so the HM tests the right things."
+      "Generates HM briefing questions so the HM tests the right things.",
+      "Tracks silver medalists — strong candidates not selected — for future pipeline reuse."
     ],
     "agentBehavior": [
-      "Blocks submission if key evidence is missing, or labels unknowns clearly."
+      "Blocks submission if key evidence is missing, or labels unknowns clearly.",
+      "Flags strong non-selected candidates for silver medalist tracking."
     ],
     "teamAdvantage": "Higher pass-through to HM interview. Less back-and-forth.",
     "metrics": [
       "HM pass-through rate",
       "Time-to-HM-feedback",
-      "Submission quality score"
+      "Submission quality score",
+      "Silver medalist pipeline size",
+      "Silver medalist re-engagement rate"
     ],
     "tools": [
       {
@@ -221,16 +233,19 @@
     "verificationFocus": "Ensure each interviewer tests a distinct competency with anchored scoring — no duplicated or unstructured questions.",
     "whatAIDoes": [
       "Converts competencies into structured interview plans, consistent question banks, and scorecards with strong/okay/weak anchors.",
-      "Creates interviewer-specific guidance."
+      "Creates interviewer-specific guidance.",
+      "Audits interview loops for structural bias, accessibility barriers, and inclusive design."
     ],
     "agentBehavior": [
-      "Detects duplicated questions across interviewers and fixes the loop."
+      "Detects duplicated questions across interviewers and fixes the loop.",
+      "Flags questions that test format performance rather than actual competency."
     ],
     "teamAdvantage": "Cleaner signal, faster decisions, fewer false negatives.",
     "metrics": [
       "Interview signal quality",
       "Cross-interviewer consistency",
-      "Decision confidence score"
+      "Decision confidence score",
+      "Inclusive design audit pass rate"
     ],
     "tools": [
       {
@@ -249,16 +264,20 @@
     "verificationFocus": "Force every hiring opinion into observable evidence — flag vibe language and surface contradictions between interviewers.",
     "whatAIDoes": [
       "Summarizes notes into evidence matrix per competency, surfaces contradictions between interviewers, and produces decision options with tradeoffs.",
-      "Generates \"What would change my mind?\" triggers."
+      "Generates \"What would change my mind?\" triggers.",
+      "Composes post-interview rejection messages with specific, growth-oriented feedback."
     ],
     "agentBehavior": [
-      "Flags \"vibe language\" and forces translation into observable evidence."
+      "Flags \"vibe language\" and forces translation into observable evidence.",
+      "Ensures rejected candidates receive evidence-based feedback within 48 hours of the decision."
     ],
     "teamAdvantage": "Decisions become defensible. Fewer regret hires.",
     "metrics": [
       "Decision defensibility score",
       "Regret hire rate",
-      "Debrief completion rate"
+      "Debrief completion rate",
+      "Post-interview feedback delivery rate",
+      "Candidate experience score"
     ],
     "tools": [
       {
@@ -278,16 +297,20 @@
     "whatAIDoes": [
       "Builds an Offer Mini Evidence Pack with top motivators, likely objections, and counters.",
       "Produces a close plan timeline.",
-      "Assigns Loss Reason Code for declines."
+      "Assigns Loss Reason Code for declines.",
+      "Builds structured negotiation playbooks for counter-offers, competing offers, and term adjustments."
     ],
     "agentBehavior": [
-      "Enforces single-CTA messaging and clean next steps."
+      "Enforces single-CTA messaging and clean next steps.",
+      "Pre-empts counter-offers with data-driven retention statistics before candidate gives notice."
     ],
     "teamAdvantage": "Higher acceptance rate plus reusable learning from declines.",
     "metrics": [
       "Offer acceptance rate",
       "Decline reason distribution",
-      "Close plan adherence"
+      "Close plan adherence",
+      "Negotiation success rate",
+      "Counter-offer loss rate"
     ],
     "tools": [
       {
@@ -343,7 +366,31 @@
     "metrics": [
       "Monthly learning entries captured",
       "Template update frequency",
-      "Stage bottleneck reduction rate"
+      "Stage bottleneck reduction rate",
+      "CP-to-offer conversion trend",
+      "Truth Check accuracy (No-Go calls validated)"
+    ],
+    "feedbackLoops": [
+      {
+        "targetStage": 1,
+        "label": "Update Role Passport",
+        "trigger": "When postmortem reveals recurring requirement misalignment, update the Role Passport template and must-have criteria."
+      },
+      {
+        "targetStage": 4,
+        "label": "Refine Sourcing Blueprint",
+        "trigger": "When postmortem shows sourcing channels underperforming, update the sourcing plan lanes and target company list."
+      },
+      {
+        "targetStage": 6,
+        "label": "Calibrate Screen Rubric",
+        "trigger": "When late-stage failures trace back to screening gaps, tighten the Truth Check evidence questions and scoring anchors."
+      },
+      {
+        "targetStage": 5,
+        "label": "Adjust Outreach Angles",
+        "trigger": "When decline reasons cluster around motivation or role mismatch, revise outreach messaging and angle codes."
+      }
     ],
     "tools": [
       {

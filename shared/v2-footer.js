@@ -15,7 +15,7 @@
       '    <span class="v2-footer__separator">|</span>',
       '    <span class="v2-footer__tagline">The Confidence Engine</span>',
       '    <span class="v2-footer__separator">|</span>',
-      '    <span class="v2-footer__org">Built for Randstad GBS</span>',
+      '    <span class="v2-footer__org">Built for AI Hub v2.0 teams</span>',
       '  </div>',
       '  <div class="v2-footer__right">',
       '    <a href="/ai-governance/" class="v2-footer__link">AI Governance</a>',

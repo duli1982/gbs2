@@ -1,7 +1,7 @@
 {
   "name": "gbs-emea-ai-hub-v2",
   "version": "2.0.0",
-  "description": "AI Hub v2.0 — The Confidence Engine | Randstad GBS EMEA",
+  "description": "AI Hub v2.0 - The Confidence Engine for EMEA recruiting teams",
   "type": "module",
   "engines": {
     "node": "22.x"

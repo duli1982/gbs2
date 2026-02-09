@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <title>Team Rituals | AI Hub v2.0 — The Confidence Engine | Randstad GBS</title>
+    <title>Team Rituals | AI Hub v2.0 — The Confidence Engine</title>
 
     <meta name="description" content="Team Rituals — Structured weekly ceremonies for Monday kickoff, Wednesday pipeline truth check, and Friday proof & learn.">
-    <meta name="author" content="Randstad GBS">
+    <meta name="author" content="AI Hub v2.0">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -112,6 +112,28 @@
         .log-item.expanded .log-item__body { display: block; }
         .log-empty { text-align: center; padding: var(--space-8); color: var(--text-muted); font-size: var(--font-sm); }
 
+        /* Pattern Detection */
+        .patterns-section { margin-top: var(--space-10); padding-top: var(--space-8); border-top: 1px solid var(--border-subtle); }
+        .patterns-section__title { font-size: var(--font-lg); font-weight: var(--weight-semibold); color: var(--text-primary); margin-bottom: var(--space-2); }
+        .patterns-section__subtitle { font-size: var(--font-sm); color: var(--text-secondary); margin-bottom: var(--space-6); max-width: 640px; line-height: 1.5; }
+        .pattern-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); max-width: 900px; }
+        .pattern-card { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--space-5); }
+        .pattern-card__title { font-size: var(--font-xs); font-weight: var(--weight-semibold); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--space-3); display: flex; align-items: center; gap: var(--space-2); }
+        .pattern-card__title .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .dot--cyan { background: var(--accent-cyan); }
+        .dot--amber { background: var(--signal-amber); }
+        .dot--green { background: var(--signal-strong); }
+        .dot--red { background: var(--signal-risk); }
+        .pattern-stat { font-size: var(--font-3xl); font-weight: var(--weight-bold); color: var(--text-primary); font-family: var(--font-mono); }
+        .pattern-stat__label { font-size: var(--font-xs); color: var(--text-muted); margin-top: var(--space-1); }
+        .pattern-item { font-size: var(--font-sm); color: var(--text-secondary); padding: var(--space-2) 0; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: var(--space-2); }
+        .pattern-item:last-child { border-bottom: none; }
+        .pattern-badge { font-family: var(--font-mono); font-size: 10px; font-weight: var(--weight-bold); padding: 2px 6px; border-radius: var(--radius-full); flex-shrink: 0; }
+        .pattern-badge--count { background: rgba(0,229,255,0.1); color: var(--accent-cyan); }
+        .pattern-badge--pct { background: rgba(251,191,36,0.1); color: var(--signal-amber); }
+        .pattern-empty { font-size: var(--font-sm); color: var(--text-muted); padding: var(--space-4); text-align: center; }
+        @media (max-width: 768px) { .pattern-grid { grid-template-columns: 1fr; } }
+
         /* Toast */
         .toast { position: fixed; bottom: var(--space-6); right: var(--space-6); padding: var(--space-3) var(--space-5); background: var(--signal-strong); color: var(--bg-primary); border-radius: var(--radius-md); font-size: var(--font-sm); font-weight: var(--weight-medium); z-index: 1100; display: none; }
         .toast.show { display: block; animation: fadeInUp 0.2s ease; }
@@ -164,6 +186,13 @@
                             <button class="btn-save" id="savePostmortem">Save Postmortem</button>
                         </div>
                     </div>
+                </section>
+
+                <!-- Team Pattern Detection -->
+                <section class="patterns-section fade-in-up">
+                    <h2 class="patterns-section__title">Team Patterns</h2>
+                    <p class="patterns-section__subtitle">Automatically detected from your ritual history. Patterns that repeat 2+ weeks become signals — not noise.</p>
+                    <div class="pattern-grid" id="patternGrid"></div>
                 </section>
 
                 <!-- Ritual Log -->
@@ -257,6 +286,7 @@
 
         renderRituals();
         renderLog();
+        renderPatterns();
 
         document.getElementById('ritualWeek').addEventListener('change', function() {
             currentWeek = this.value;
@@ -438,6 +468,7 @@
 
             saveSaved(currentWeek, saved);
             renderLog();
+            renderPatterns();
             showToast('Ritual saved');
         }
 
@@ -535,6 +566,139 @@
             localStorage.setItem(POSTMORTEM_KEY, JSON.stringify(list));
             showToast('Postmortem saved');
         });
+
+        /* --- Pattern Detection --- */
+        function renderPatterns() {
+            var all;
+            try { all = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch(e) { all = {}; }
+            var weeks = Object.keys(all);
+            var container = document.getElementById('patternGrid');
+
+            if (weeks.length < 2) {
+                container.innerHTML = '<div class="pattern-empty" style="grid-column:1/-1;">Complete at least 2 weeks of rituals to see team patterns emerge here.</div>';
+                return;
+            }
+
+            // Aggregate data
+            var blockers = {};
+            var diagVolume = 0, diagRelevance = 0;
+            var totalStuck = 0;
+            var completionRate = { mon: 0, wed: 0, fri: 0 };
+            var winCount = 0, missCount = 0, assetCount = 0;
+            var stopDoingItems = {};
+
+            weeks.forEach(function(wk) {
+                var data = all[wk];
+                // Monday
+                if (data.monday) {
+                    if (data.monday._done) completionRate.mon++;
+                    if (data.monday.topBlocker && data.monday.topBlocker.trim()) {
+                        var b = data.monday.topBlocker.trim();
+                        blockers[b] = (blockers[b] || 0) + 1;
+                    }
+                    if (data.monday.stopDoing && data.monday.stopDoing.trim()) {
+                        var s = data.monday.stopDoing.trim();
+                        stopDoingItems[s] = (stopDoingItems[s] || 0) + 1;
+                    }
+                }
+                // Wednesday
+                if (data.wednesday) {
+                    if (data.wednesday._done) completionRate.wed++;
+                    var roles = data.wednesday.stuckRoles || [];
+                    var diags = data.wednesday.diagnoses || [];
+                    roles.forEach(function(r, i) {
+                        if (r && r.trim()) {
+                            totalStuck++;
+                            if (diags[i] === 'volume') diagVolume++;
+                            if (diags[i] === 'relevance') diagRelevance++;
+                        }
+                    });
+                }
+                // Friday
+                if (data.friday) {
+                    if (data.friday._done) completionRate.fri++;
+                    if (data.friday.winDemo && data.friday.winDemo.trim()) winCount++;
+                    if (data.friday.missShare && data.friday.missShare.trim()) missCount++;
+                    if (data.friday.assetCapture && data.friday.assetCapture.trim()) assetCount++;
+                }
+            });
+
+            var totalWeeks = weeks.length;
+            var html = '';
+
+            // Card 1: Ritual Discipline
+            html += '<div class="pattern-card">';
+            html += '<div class="pattern-card__title"><span class="dot dot--cyan"></span>Ritual Discipline</div>';
+            html += '<div class="pattern-stat">' + Math.round((completionRate.mon + completionRate.wed + completionRate.fri) / (totalWeeks * 3) * 100) + '%</div>';
+            html += '<div class="pattern-stat__label">Completion rate across ' + totalWeeks + ' weeks</div>';
+            html += '<div style="margin-top:var(--space-3);">';
+            html += '<div class="pattern-item"><span class="pattern-badge pattern-badge--pct">' + Math.round(completionRate.mon / totalWeeks * 100) + '%</span> Monday Kickoff</div>';
+            html += '<div class="pattern-item"><span class="pattern-badge pattern-badge--pct">' + Math.round(completionRate.wed / totalWeeks * 100) + '%</span> Wednesday Truth Check</div>';
+            html += '<div class="pattern-item"><span class="pattern-badge pattern-badge--pct">' + Math.round(completionRate.fri / totalWeeks * 100) + '%</span> Friday Proof & Learn</div>';
+            html += '</div></div>';
+
+            // Card 2: Pipeline Health (stuck roles diagnosis)
+            html += '<div class="pattern-card">';
+            html += '<div class="pattern-card__title"><span class="dot dot--amber"></span>Pipeline Diagnosis</div>';
+            if (totalStuck > 0) {
+                var totalDiag = diagVolume + diagRelevance;
+                html += '<div class="pattern-stat">' + totalStuck + '</div>';
+                html += '<div class="pattern-stat__label">Stuck roles flagged across all weeks</div>';
+                if (totalDiag > 0) {
+                    var volPct = Math.round(diagVolume / totalDiag * 100);
+                    html += '<div style="margin-top:var(--space-3);">';
+                    html += '<div class="pattern-item"><span class="pattern-badge pattern-badge--pct">' + volPct + '%</span> Volume problems (not enough candidates)</div>';
+                    html += '<div class="pattern-item"><span class="pattern-badge pattern-badge--pct">' + (100 - volPct) + '%</span> Relevance problems (wrong candidates)</div>';
+                    html += '</div>';
+                    if (volPct > 65) {
+                        html += '<p style="font-size:var(--font-xs);color:var(--signal-amber);margin-top:var(--space-2);">Dominant pattern: Volume. Focus on Stage 4 (Sourcing) and expand channels.</p>';
+                    } else if (volPct < 35) {
+                        html += '<p style="font-size:var(--font-xs);color:var(--signal-amber);margin-top:var(--space-2);">Dominant pattern: Relevance. Focus on Stage 1 (Role Passport) and Stage 6 (Screening).</p>';
+                    }
+                }
+            } else {
+                html += '<div class="pattern-empty">No stuck roles flagged yet.</div>';
+            }
+            html += '</div>';
+
+            // Card 3: Recurring Blockers
+            html += '<div class="pattern-card">';
+            html += '<div class="pattern-card__title"><span class="dot dot--red"></span>Recurring Blockers</div>';
+            var blockerList = Object.keys(blockers).map(function(k) { return { text: k, count: blockers[k] }; });
+            blockerList.sort(function(a, b) { return b.count - a.count; });
+            var recurring = blockerList.filter(function(b) { return b.count >= 2; });
+            if (recurring.length > 0) {
+                html += '<div>';
+                recurring.slice(0, 5).forEach(function(b) {
+                    html += '<div class="pattern-item"><span class="pattern-badge pattern-badge--count">' + b.count + 'x</span> ' + esc(b.text) + '</div>';
+                });
+                html += '</div>';
+                html += '<p style="font-size:var(--font-xs);color:var(--text-muted);margin-top:var(--space-2);">Blockers appearing 2+ weeks are systemic, not situational. Address at the process level.</p>';
+            } else if (blockerList.length > 0) {
+                html += '<p style="font-size:var(--font-xs);color:var(--text-muted);padding:var(--space-2) 0;">' + blockerList.length + ' blockers logged but none repeated yet. Keep tracking.</p>';
+            } else {
+                html += '<div class="pattern-empty">No blockers logged yet.</div>';
+            }
+            html += '</div>';
+
+            // Card 4: Learning Velocity
+            html += '<div class="pattern-card">';
+            html += '<div class="pattern-card__title"><span class="dot dot--green"></span>Learning Velocity</div>';
+            html += '<div class="pattern-stat">' + assetCount + '</div>';
+            html += '<div class="pattern-stat__label">Assets captured from ' + totalWeeks + ' weeks of rituals</div>';
+            html += '<div style="margin-top:var(--space-3);">';
+            html += '<div class="pattern-item"><span class="pattern-badge pattern-badge--count">' + winCount + '</span> Wins shared (Friday demos)</div>';
+            html += '<div class="pattern-item"><span class="pattern-badge pattern-badge--count">' + missCount + '</span> Misses analyzed (Friday root causes)</div>';
+            html += '<div class="pattern-item"><span class="pattern-badge pattern-badge--count">' + assetCount + '</span> Reusable assets documented</div>';
+            html += '</div>';
+            var assetsPerWeek = assetCount / totalWeeks;
+            if (assetsPerWeek < 0.5) {
+                html += '<p style="font-size:var(--font-xs);color:var(--signal-amber);margin-top:var(--space-2);">Less than 1 asset every 2 weeks. Challenge the team: every win or miss should produce a template, checklist, or learning entry.</p>';
+            }
+            html += '</div>';
+
+            container.innerHTML = html;
+        }
 
         /* --- Helpers --- */
         function getWeekNumber(d) {

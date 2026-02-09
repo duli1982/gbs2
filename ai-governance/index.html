@@ -223,6 +223,72 @@
                         </ul>
                     </div>
 
+                    <div class="section-card">
+                        <h2 style="font-size: var(--font-xl); margin-bottom: var(--space-4);">Jurisdiction-specific compliance quick map</h2>
+                        <p style="margin-bottom: var(--space-4); color: var(--text-secondary);">Use this as an operational checklist, then confirm with legal/privacy teams for your exact client-country setup.</p>
+                        <div class="checklist-grid">
+                            <div class="checklist-card">
+                                <div class="checklist-card__title">EU / EEA (GDPR)</div>
+                                <ul class="content-list content-list--cyan">
+                                    <li>Define lawful basis for candidate data processing and keep records.</li>
+                                    <li>Run data minimization by default and enforce retention limits.</li>
+                                    <li>Provide transparency: where AI assists and how human review is applied.</li>
+                                    <li>Support data-subject rights workflows (access, deletion, correction).</li>
+                                </ul>
+                            </div>
+                            <div class="checklist-card">
+                                <div class="checklist-card__title">UK (UK GDPR + DPA 2018)</div>
+                                <ul class="content-list content-list--cyan">
+                                    <li>Apply GDPR-style controls plus UK-specific policy requirements.</li>
+                                    <li>Document human-in-the-loop decisions for recruitment outcomes.</li>
+                                    <li>Validate any cross-border transfer mechanisms before tool use.</li>
+                                    <li>Escalate high-risk AI use cases for DPIA-style review.</li>
+                                </ul>
+                            </div>
+                            <div class="checklist-card">
+                                <div class="checklist-card__title">California (CCPA/CPRA)</div>
+                                <ul class="content-list content-list--cyan">
+                                    <li>Map personal information categories used in hiring workflows.</li>
+                                    <li>Honor notice and rights requirements for applicants/employees.</li>
+                                    <li>Limit use/sharing beyond disclosed purposes.</li>
+                                    <li>Keep vendor contracts aligned to service-provider/data-processing terms.</li>
+                                </ul>
+                            </div>
+                            <div class="checklist-card">
+                                <div class="checklist-card__title">Multi-country hiring</div>
+                                <ul class="content-list content-list--cyan">
+                                    <li>Use the strictest applicable rule as default baseline.</li>
+                                    <li>Store region-specific data only in approved systems/regions.</li>
+                                    <li>Separate policy by requisition geography, not recruiter location.</li>
+                                    <li>When unsure, pause automation and escalate before processing.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-card">
+                        <h2 style="font-size: var(--font-xl); margin-bottom: var(--space-4);">When to Adapt the Standard Process</h2>
+                        <p style="margin-bottom: var(--space-4); color: var(--text-secondary);">The process is strict by default. You can accelerate or simplify when context is documented and risk controls stay intact.</p>
+                        <ul class="content-list content-list--cyan">
+                            <li><strong>Urgent backfill:</strong> compress timelines, but keep Truth Check + source-cited Confidence Pack mandatory.</li>
+                            <li><strong>High-volume hiring:</strong> simplify non-critical narrative fields, but keep structured criteria and audit sampling.</li>
+                            <li><strong>Strategic leadership hire:</strong> add extra verification depth (panel calibration, evidence references, risk memo).</li>
+                            <li><strong>Startup/greenfield roles:</strong> allow broader adjacent backgrounds, but require explicit trade-off documentation.</li>
+                            <li><strong>When data is sparse:</strong> mark unknowns transparently; do not backfill assumptions with AI.</li>
+                        </ul>
+                    </div>
+
+                    <div class="section-card">
+                        <h2 style="font-size: var(--font-xl); margin-bottom: var(--space-4);">Troubleshooting & Recovery Playbook</h2>
+                        <ul class="content-list content-list--cyan">
+                            <li><strong>Boolean returns zero results:</strong> widen constraints one variable at a time (location, seniority, adjacent titles) and log what changed.</li>
+                            <li><strong>HM rejects everything:</strong> run immediate calibration with Role Passport must-haves and review rejection reason patterns.</li>
+                            <li><strong>AI hallucinates in Confidence Pack:</strong> block submission, regenerate with richer evidence, and require line-by-line source verification.</li>
+                            <li><strong>Risk flags too conservative/permissive:</strong> run manager audit sampling and cross-review consistency checks.</li>
+                            <li><strong>Team outputs inconsistent:</strong> run a weekly calibration session with shared examples and anchored scoring.</li>
+                        </ul>
+                    </div>
+
                     <!-- Safe Prompt Pack -->
                     <div id="safe-prompts" class="section-card">
                         <h2 style="font-size: var(--font-2xl); margin-bottom: var(--space-3);">Safe Prompt Pack (copy-ready)</h2>

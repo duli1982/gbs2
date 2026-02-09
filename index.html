@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <title>AI Hub v2.0 — The Confidence Engine | Randstad GBS</title>
+    <title>AI Hub v2.0 — The Confidence Engine</title>
 
-    <meta name="description" content="AI-powered recruiting operating system for Randstad GBS. Decision quality infrastructure for sourcing, screening, and hiring.">
-    <meta name="author" content="Randstad GBS">
+    <meta name="description" content="AI-powered recruiting operating system for AI Hub v2.0 teams. Decision quality infrastructure for sourcing, screening, and hiring.">
+    <meta name="author" content="AI Hub v2.0">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="AI Hub v2.0 — The Confidence Engine">
-    <meta property="og:description" content="AI-powered recruiting operating system for Randstad GBS.">
+    <meta property="og:description" content="AI-powered recruiting operating system for AI Hub v2.0 teams.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -139,6 +139,34 @@
             gap: var(--space-2);
             font-size: var(--font-xs);
             color: var(--text-muted);
+        }
+
+        .pipeline-empty-state {
+            margin-top: var(--space-4);
+            padding: var(--space-4);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            background: var(--bg-surface);
+        }
+
+        .pipeline-empty-state__title {
+            font-size: var(--font-sm);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-1);
+        }
+
+        .pipeline-empty-state__text {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            margin-bottom: var(--space-3);
+            line-height: 1.6;
+        }
+
+        .pipeline-empty-state__actions {
+            display: flex;
+            gap: var(--space-2);
+            flex-wrap: wrap;
         }
 
         /* Rituals Section */
@@ -351,29 +379,29 @@
                     <div class="card-grid card-grid--4">
                         <div class="card card--stat">
                             <div class="stat__label">Active Roles</div>
-                            <div class="stat__value">--</div>
-                            <div class="stat__change text-muted">Track in Telemetry</div>
+                            <div class="stat__value" id="kpiActiveRolesValue">--</div>
+                            <div class="stat__change text-muted" id="kpiActiveRolesHint">Track in Telemetry</div>
                         </div>
                         <div class="card card--stat">
                             <div class="stat__label">Shortlists Sent</div>
-                            <div class="stat__value">--</div>
-                            <div class="stat__change text-muted">This week</div>
+                            <div class="stat__value" id="kpiShortlistsValue">--</div>
+                            <div class="stat__change text-muted" id="kpiShortlistsHint">This week</div>
                         </div>
                         <div class="card card--stat">
                             <div class="stat__label">HM Pass-through</div>
-                            <div class="stat__value">--</div>
-                            <div class="stat__change text-muted">Acceptance rate</div>
+                            <div class="stat__value" id="kpiPassThroughValue">--</div>
+                            <div class="stat__change text-muted" id="kpiPassThroughHint">Acceptance rate</div>
                         </div>
                         <div class="card card--stat">
                             <div class="stat__label">Truth Checks Run</div>
-                            <div class="stat__value">--</div>
-                            <div class="stat__change text-muted">This week</div>
+                            <div class="stat__value" id="kpiTruthChecksValue">--</div>
+                            <div class="stat__change text-muted" id="kpiTruthChecksHint">This week</div>
                         </div>
                     </div>
                     <div class="pipeline-bar" aria-label="Pipeline health indicator">
-                        <div class="pipeline-bar__segment pipeline-bar__segment--green" style="width: 50%"></div>
-                        <div class="pipeline-bar__segment pipeline-bar__segment--amber" style="width: 30%"></div>
-                        <div class="pipeline-bar__segment pipeline-bar__segment--red" style="width: 20%"></div>
+                        <div class="pipeline-bar__segment pipeline-bar__segment--green" id="pipelineSegmentGreen" style="width: 50%"></div>
+                        <div class="pipeline-bar__segment pipeline-bar__segment--amber" id="pipelineSegmentAmber" style="width: 30%"></div>
+                        <div class="pipeline-bar__segment pipeline-bar__segment--red" id="pipelineSegmentRed" style="width: 20%"></div>
                     </div>
                     <div class="pipeline-legend">
                         <div class="pipeline-legend__item">
@@ -384,6 +412,14 @@
                         </div>
                         <div class="pipeline-legend__item">
                             <span class="signal-dot signal-dot--red"></span> At Risk
+                        </div>
+                    </div>
+                    <div class="pipeline-empty-state" id="pipelineEmptyState" hidden>
+                        <div class="pipeline-empty-state__title">No KPI data yet</div>
+                        <div class="pipeline-empty-state__text">This dashboard is not broken. KPI cards populate after your first Telemetry entry with Outcome Tracking (CP Sent, HM Interviews, Truth Checks).</div>
+                        <div class="pipeline-empty-state__actions">
+                            <a href="/telemetry/" class="btn btn-primary">Log First Telemetry Entry</a>
+                            <a href="/stages/" class="btn btn-secondary">Open 12 Stages</a>
                         </div>
                     </div>
                 </section>
@@ -474,7 +510,7 @@
                                 </div>
                                 <div class="recent-item__info">
                                     <div class="recent-item__title">Academy</div>
-                                    <div class="recent-item__meta">8-week AI-Ready Sourcer program</div>
+                                    <div class="recent-item__meta">9-week AI-Ready Sourcer program</div>
                                 </div>
                             </a>
                             <a href="/telemetry/" class="recent-item">
@@ -557,6 +593,146 @@
                 });
             });
 
+            function toNumber(value) {
+                const parsed = typeof value === 'number' ? value : parseFloat(value);
+                return Number.isFinite(parsed) ? parsed : null;
+            }
+
+            function getTelemetryEntries() {
+                try {
+                    const raw = localStorage.getItem('telemetry-entries');
+                    const list = raw ? JSON.parse(raw) : [];
+                    return Array.isArray(list) ? list.filter(function(item) { return item && typeof item === 'object'; }) : [];
+                } catch (e) {
+                    return [];
+                }
+            }
+
+            function setText(id, text) {
+                const el = document.getElementById(id);
+                if (el) el.textContent = text;
+            }
+
+            function setSignalBar(green, amber, red) {
+                const g = document.getElementById('pipelineSegmentGreen');
+                const a = document.getElementById('pipelineSegmentAmber');
+                const r = document.getElementById('pipelineSegmentRed');
+                if (g) g.style.width = green + '%';
+                if (a) a.style.width = amber + '%';
+                if (r) r.style.width = red + '%';
+            }
+
+            function renderPipelineEmptyState() {
+                setText('kpiActiveRolesValue', '--');
+                setText('kpiShortlistsValue', '--');
+                setText('kpiPassThroughValue', '--');
+                setText('kpiTruthChecksValue', '--');
+                setText('kpiActiveRolesHint', 'Start in Telemetry');
+                setText('kpiShortlistsHint', 'No outcomes logged yet');
+                setText('kpiPassThroughHint', 'No outcomes logged yet');
+                setText('kpiTruthChecksHint', 'No outcomes logged yet');
+                setSignalBar(34, 33, 33);
+                const emptyState = document.getElementById('pipelineEmptyState');
+                if (emptyState) emptyState.hidden = false;
+            }
+
+            function classifySignal(entry) {
+                const hmReject = toNumber(entry.hmReject);
+                const replyRate = toNumber(entry.replyRate);
+                if (hmReject !== null && replyRate !== null) {
+                    if (hmReject <= 25 && replyRate >= 20) return 'green';
+                    if (hmReject > 40 || replyRate < 15) return 'red';
+                    return 'amber';
+                }
+                if (hmReject !== null) {
+                    if (hmReject <= 25) return 'green';
+                    if (hmReject > 40) return 'red';
+                }
+                if (replyRate !== null) {
+                    if (replyRate >= 20) return 'green';
+                    if (replyRate < 15) return 'red';
+                }
+                return 'amber';
+            }
+
+            function renderPipelineSignal() {
+                const entries = getTelemetryEntries();
+                if (!entries.length) {
+                    renderPipelineEmptyState();
+                    return;
+                }
+
+                const latestPeriod = entries
+                    .map(function(e) { return typeof e.period === 'string' ? e.period : ''; })
+                    .filter(Boolean)
+                    .sort()
+                    .pop();
+
+                if (!latestPeriod) {
+                    renderPipelineEmptyState();
+                    return;
+                }
+
+                const periodEntries = entries.filter(function(e) { return e.period === latestPeriod; });
+                if (!periodEntries.length) {
+                    renderPipelineEmptyState();
+                    return;
+                }
+
+                const teams = {};
+                let shortlists = 0;
+                let interviews = 0;
+                let truthChecks = 0;
+                const signal = { green: 0, amber: 0, red: 0 };
+
+                periodEntries.forEach(function(entry) {
+                    const team = String(entry.team || '').trim();
+                    if (team) teams[team] = true;
+
+                    const outcomes = entry.outcomes || {};
+                    const cpSent = toNumber(outcomes.cpSent);
+                    const cpInterviews = toNumber(outcomes.cpInterviews);
+                    const tcDone = toNumber(outcomes.tcDone);
+
+                    if (cpSent !== null) shortlists += cpSent;
+                    if (cpInterviews !== null) interviews += cpInterviews;
+                    if (tcDone !== null) truthChecks += tcDone;
+
+                    signal[classifySignal(entry)] += 1;
+                });
+
+                const activeRoles = Object.keys(teams).length || periodEntries.length;
+                const passThrough = shortlists > 0 ? Math.round((interviews / shortlists) * 100) : null;
+
+                setText('kpiActiveRolesValue', String(activeRoles));
+                setText('kpiActiveRolesHint', 'Teams reporting in ' + latestPeriod);
+                setText('kpiShortlistsValue', String(shortlists));
+                setText('kpiShortlistsHint', latestPeriod);
+                setText('kpiTruthChecksValue', String(truthChecks));
+                setText('kpiTruthChecksHint', latestPeriod);
+
+                if (passThrough === null) {
+                    setText('kpiPassThroughValue', '--');
+                    setText('kpiPassThroughHint', 'Log CP Sent and HM Interviews in Telemetry');
+                } else {
+                    setText('kpiPassThroughValue', passThrough + '%');
+                    setText('kpiPassThroughHint', interviews + '/' + shortlists + ' CP to interview');
+                }
+
+                const totalSignals = signal.green + signal.amber + signal.red;
+                if (!totalSignals) {
+                    setSignalBar(34, 33, 33);
+                } else {
+                    const greenPct = Math.round((signal.green / totalSignals) * 100);
+                    const amberPct = Math.round((signal.amber / totalSignals) * 100);
+                    const redPct = Math.max(0, 100 - greenPct - amberPct);
+                    setSignalBar(greenPct, amberPct, redPct);
+                }
+
+                const emptyState = document.getElementById('pipelineEmptyState');
+                if (emptyState) emptyState.hidden = true;
+            }
+
             function getNextWorkbookStage() {
                 try {
                     const raw = localStorage.getItem('aihub-stage-workbook-v1');
@@ -581,6 +757,14 @@
                     workbookLink.textContent = 'Continue 12-Stage Workbook (Stage ' + nextStage + ')';
                 }
             }
+
+            renderPipelineSignal();
+
+            window.addEventListener('storage', function(event) {
+                if (event.key === 'telemetry-entries') {
+                    renderPipelineSignal();
+                }
+            });
         })();
     </script>
 </body>

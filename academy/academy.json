@@ -1,7 +1,7 @@
 {
   "program": {
     "title": "AI-Ready Sourcer Program",
-    "subtitle": "8 weeks from task-doer to outcome-owner",
+    "subtitle": "9 weeks from task-doer to outcome-owner",
     "description": "A structured program that produces behavior change and reusable assets. Each week builds on the last. By the end, every participant can diagnose what matters, design a plan, execute with AI, verify with evidence, and influence hiring managers with confidence."
   },
   "weeks": [
@@ -63,6 +63,22 @@
     },
     {
       "id": 5,
+      "title": "Verification: The Skill That Makes the Difference",
+      "shortLabel": "Verification",
+      "outcome": "Everyone understands that verification is the core competitive skill — not speed, not AI access, but the discipline to prove what you claim and catch what AI gets wrong.",
+      "focus": "Teach verification as a standalone methodology: Error detection in AI-generated recruiting content (hallucinated skills, fabricated company details, inflated tenure). False positive vs false negative analysis (candidates who look good but aren't vs candidates who look weak but are strong). Structured verification workflow: Source → Generate → Verify → Document. AI hallucination patterns specific to recruiting (phantom certifications, merged candidate profiles, invented metrics). Evidence quality scoring: Strong (first-hand, specific, measurable), OK (plausible but unverified), Risk (vague, assumed, or AI-generated without source).",
+      "howToRun": "Run a live 'verification drill': give the team 3 AI-generated candidate summaries — one accurate, one with subtle hallucinations, one with a critical error buried in plausible text. Teams must identify which is which and explain how they caught each issue. Then reverse it: give them a real candidate profile and an AI-generated assessment. Have them verify every claim against source material.",
+      "deliverable": "Personal Verification Checklist (5-item minimum) added to each person's workflow. Team Verification Quality Standard added to the Asset Library.",
+      "exercises": [
+        "Take 3 AI-generated candidate summaries and identify every claim that cannot be verified from the source profile — mark each as Verified, Unverifiable, or Fabricated",
+        "Run the Screen Decision Validator prompt on your last 3 screening recommendations — note which biases it catches",
+        "Build a personal 'verification red flag' list: the 5 most common errors you've seen in AI-generated recruiting content",
+        "Compare an AI-generated Confidence Pack against the raw screen notes — identify every claim that has no evidence behind it",
+        "Case study: review a real 'what went wrong' scenario where insufficient verification led to a bad hire or missed candidate"
+      ]
+    },
+    {
+      "id": 6,
       "title": "Shortlist Writing: The Confidence Pack",
       "shortLabel": "Confidence Pack",
       "outcome": "Hiring managers trust you more because your shortlists are decisive.",
@@ -76,7 +92,7 @@
       ]
     },
     {
-      "id": 6,
+      "id": 7,
       "title": "AI for Ops Acceleration",
       "shortLabel": "Ops",
       "outcome": "Team removes busywork and makes flow smoother without losing quality.",
@@ -90,7 +106,7 @@
       ]
     },
     {
-      "id": 7,
+      "id": 8,
       "title": "Coaching: From 'Do This' to 'Think Like This'",
       "shortLabel": "Coaching",
       "outcome": "You build leaders, not doers. Each person can explain decisions, challenge requirements, and propose trade-offs.",
@@ -104,7 +120,7 @@
       ]
     },
     {
-      "id": 8,
+      "id": 9,
       "title": "Certification + Showcase",
       "shortLabel": "Certification",
       "outcome": "Adoption becomes identity and pride. The team has proof of capability.",
@@ -114,7 +130,7 @@
       "exercises": [
         "Compile your portfolio of 5 required deliverables",
         "Present your best piece of work to the team — explain the impact",
-        "Write a one-paragraph reflection: what changed in how you work over 8 weeks"
+        "Write a one-paragraph reflection: what changed in how you work over 9 weeks"
       ]
     }
   ],
